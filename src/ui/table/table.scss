@@ -3,7 +3,9 @@
 @use "@material/icon-button"; // Required only for data table with column sorting.
 @use "@material/data-table/data-table";
 
+@use "@material/icon-button/mdc-icon-button";
+
 @include checkbox.core-styles;
-//@include icon-button.core-styles;
+// @include icon-button.core-styles;
 @include data-table.core-styles;
 @include data-table.theme-baseline;

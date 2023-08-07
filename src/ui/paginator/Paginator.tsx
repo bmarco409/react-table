@@ -1,13 +1,15 @@
-import { FC, ReactElement, memo } from "react";
+import { FC, ReactElement, memo } from 'react';
 
-interface IPaginator{
+interface IPaginator {
     readonly pageSize: number;
 }
 
-const Paginator : FC<IPaginator> = ({pageSize}): ReactElement =>{
-    return<><div>
-        paginator
-        </div></>
-}
+const Paginator: FC<IPaginator> = ({ pageSize }): ReactElement => {
+    return (
+        <>
+            <div>paginator</div>
+        </>
+    );
+};
 
 export const PaginatorComponent = memo(Paginator);
