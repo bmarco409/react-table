@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@material/data-table": "^14.0.0",
+    "@material/icon-button": "^14.0.0",
     "ramda": "^0.29.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

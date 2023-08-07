@@ -2,7 +2,8 @@ import { compose, curry, map, pluck } from 'ramda';
 import { FC, ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { primitive } from '../../utils/customTypes';
-import { CheckBox } from '../checkbox/checkbox';
+import { CheckBoxInputComponent } from '../input/CheckBoxInput';
+import { PaginatorComponent } from '../paginator/Paginator';
 import './table.scss';
 
 interface ITableComponent {
@@ -31,12 +32,7 @@ const Table: FC<ITableComponent> = ({ columnsDefinitions, data, pagSize, checkbo
         return (
             <td className="mdc-data-table__cell mdc-data-table__cell--checkbox">
                 <div className="mdc-checkbox mdc-data-table__row-checkbox">
-                    <input type="checkbox" className="mdc-checkbox__native-control" aria-labelledby="u0" />
-                    <div className="mdc-checkbox__background">
-                        <CheckBox />
-                        <div className="mdc-checkbox__mixedmark"></div>
-                    </div>
-                    <div className="mdc-checkbox__ripple"></div>
+                    <CheckBoxInputComponent />
                 </div>
             </td>
         );
@@ -73,12 +69,7 @@ const Table: FC<ITableComponent> = ({ columnsDefinitions, data, pagSize, checkbo
                 scope="col"
             >
                 <div className="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
-                    <input type="checkbox" className="mdc-checkbox__native-control" aria-label="Toggle all rows" />
-                    <div className="mdc-checkbox__background">
-                        <CheckBox />
-                        <div className="mdc-checkbox__mixedmark"></div>
-                    </div>
-                    <div className="mdc-checkbox__ripple"></div>
+                    <CheckBoxInputComponent />
                 </div>
             </th>
         );
@@ -99,8 +90,8 @@ const Table: FC<ITableComponent> = ({ columnsDefinitions, data, pagSize, checkbo
                         </thead>
                         <tbody className="mdc-data-table__content">{renderRows}</tbody>
                     </table>
-                    {/* <PaginatorComponent pageSize={pagSize}/> */}
                 </div>
+                <PaginatorComponent pageSize={pagSize} />
             </div>
         </>
     );
