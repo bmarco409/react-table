@@ -1,50 +1,9 @@
 @use '../../assets/color.scss' as colors;
+@use "@material/checkbox"; // Required only for data table with row selection.
+@use "@material/icon-button"; // Required only for data table with column sorting.
+@use "@material/data-table/data-table";
 
-table {
-
-    &.rounded-corners {
-        border-spacing: 0;
-        border-collapse: separate;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        border: 1px solid colors.$grey100;
-        overflow: hidden;
-
-        &,
-        th {
-            border: 1px solid colors.$grey100;
-
-            &:not(:last-child) {
-                border-right: 1px solid colors.$grey100;
-            }
-        }
-
-        &,
-        td:not(:last-child) {
-            border-right: 1px solid colors.$grey100;
-        }
-
-    }
-
-
-}
-
-td,
-th {
-    padding: 12px 20px;
-}
-
-/* Apply a border to the bottom of all but the last row */
-table.rounded-corners>thead>tr:not(:last-child)>th,
-table.rounded-corners>thead>tr:not(:last-child)>td,
-table.rounded-corners>tbody>tr:not(:last-child)>th,
-table.rounded-corners>tbody>tr:not(:last-child)>td,
-table.rounded-corners>tfoot>tr:not(:last-child)>th,
-table.rounded-corners>tfoot>tr:not(:last-child)>td,
-table.rounded-corners>tr:not(:last-child)>td,
-table.rounded-corners>tr:not(:last-child)>th,
-table.rounded-corners>thead:not(:last-child),
-table.rounded-corners>tbody:not(:last-child),
-table.rounded-corners>tfoot:not(:last-child) {
-    border: 1px solid colors.$grey100;
-}
+@include checkbox.core-styles;
+//@include icon-button.core-styles;
+@include data-table.core-styles;
+@include data-table.theme-baseline;

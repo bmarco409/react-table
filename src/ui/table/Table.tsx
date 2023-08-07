@@ -1,9 +1,8 @@
-import { ReactElement, FC, memo, ReactNode } from 'react';
+import { compose, curry, map, pluck } from 'ramda';
+import { FC, ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
-import {map, pluck, compose, curry, T} from 'ramda';
-import './table.scss'
 import { primitive } from '../../utils/customTypes';
-import { PaginatorComponent } from '../paginator/Paginator';
+import './table.scss';
 
 interface ITableComponent {
     readonly columnsDefinitions: ICoulmDefinition[];
@@ -18,7 +17,8 @@ const Table: FC<ITableComponent> = ({ columnsDefinitions, data, pagSize }): Reac
     const headerNames = pluck('headerName',columnsDefinitions);
 
 
-    const renderHeaderCell  = (name: string): ReactElement => <th key={name}>{name}</th>;
+    const renderHeaderCell  = (name: string): ReactElement => 
+        <th className="mdc-data-table__header-cell" role="columnheader" scope="col" key={name}>{name}</th>;
 
     const renderHeader = map(renderHeaderCell,headerNames);
 
@@ -28,7 +28,8 @@ const Table: FC<ITableComponent> = ({ columnsDefinitions, data, pagSize }): Reac
 
     const getValue = (element: object,key: string): primitive => element[key as keyof typeof element];
 
-    const prepareCell = (value: primitive): ReactElement => <td key={value}>{value}</td>
+    const prepareCell = (value: primitive): ReactElement => 
+        <td className='mdc-data-table__cell' key={value}>{value}</td>
 
     const renderCell = curry(compose(prepareCell, getValue))
 
@@ -37,7 +38,7 @@ const Table: FC<ITableComponent> = ({ columnsDefinitions, data, pagSize }): Reac
 
     const renderRows = data.map((element, index) => {
             return (
-                <tr key={index}>
+                <tr className='mdc-data-table__row'  key={index}>
                     <>
                         {prepareRow(element)}
                     </>
@@ -50,18 +51,22 @@ const Table: FC<ITableComponent> = ({ columnsDefinitions, data, pagSize }): Reac
 
     return (
         <>
-        
-            <table className='rounded-corners'>
-                <thead>
-                    <tr key={'header'}>
-                        {renderHeader}
-                    </tr>
-                </thead>
-                <tbody>
-                    {renderRows}
-                </tbody>
-            </table>
-            <PaginatorComponent pageSize={pagSize}/>
+            <div className="mdc-data-table">
+                <div className="mdc-data-table__table-container">
+                    <table className="mdc-data-table__table">
+                        <thead>
+                            <tr className="mdc-data-table__header-row" key={'header'}>
+                                {renderHeader}
+                            </tr>
+                        </thead>
+                        <tbody className="mdc-data-table__content">
+                            {renderRows}
+                        </tbody>
+                    </table>
+                    {/* <PaginatorComponent pageSize={pagSize}/> */}
+                </div>
+            </div>
+    
         </>
     );
 };
