@@ -1,7 +1,8 @@
-import { compose, curry, map, pluck } from 'ramda';
+import { always, anyPass, compose, curry, equals, ifElse, isNil, map, pick, pluck } from 'ramda';
 import { FC, ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
-import { primitive } from '../../utils/customTypes';
+import { Maybe, primitive } from '../../utils/customTypes';
+import { SortButton } from '../header/SortButton';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
 import { Paginator } from '../paginator/Paginator';
 import './table.scss';
@@ -12,6 +13,10 @@ interface ITableComponent {
     readonly pagSize: number;
     readonly checkboxSelection?: boolean;
 }
+interface IHeaderCell {
+    readonly headerName: string;
+    readonly sortable?: boolean;
+}
 
 const TableComponent: FC<ITableComponent> = ({
     columnsDefinitions,
@@ -21,15 +26,27 @@ const TableComponent: FC<ITableComponent> = ({
 }): ReactElement => {
     /***render header (HeaderComponent) */
 
-    const headerNames = pluck('headerName', columnsDefinitions);
+    const pickHeaderAndSortable: (data: ICoulmDefinition) => IHeaderCell = pick(['headerName', 'sortable']);
 
-    const renderHeaderCell = (name: string): ReactElement => (
-        <th className="mdc-data-table__header-cell" role="columnheader" scope="col" key={name}>
-            {name}
+    const getHeaderAndSortable = map(pickHeaderAndSortable)(columnsDefinitions);
+
+    const isSortable = anyPass([isNil, equals(true)]) as  (value: Maybe<boolean>) => boolean;
+
+    const setSortableClass = ifElse(isSortable, always('mdc-data-table__header-cell--with-sort'), always(''));
+
+    const renderHeaderCell = (data: IHeaderCell): ReactElement => (
+        <th
+            className={`mdc-data-table__header-cell ${setSortableClass(data.sortable)}`}
+            role="columnheader"
+            scope="col"
+            key={data.headerName}
+        >
+           {isSortable(data.sortable)  ? <SortButton label={data.headerName}/> : data.headerName}
+
         </th>
     );
 
-    const renderHeader = map(renderHeaderCell, headerNames);
+    const renderHeader = map(renderHeaderCell, getHeaderAndSortable);
 
     /**** render Body (BodyComponent)*/
 
@@ -73,7 +90,7 @@ const TableComponent: FC<ITableComponent> = ({
                 role="columnheader"
                 scope="col"
             >
-                <div className="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
+                <div className="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox">
                     <CheckBoxInputComponent />
                 </div>
             </th>
@@ -98,7 +115,6 @@ const TableComponent: FC<ITableComponent> = ({
                 </div>
                 <Paginator pageSize={pagSize} />
             </div>
-
         </>
     );
 };

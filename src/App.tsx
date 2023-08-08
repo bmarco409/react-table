@@ -14,6 +14,7 @@ function App(): ReactElement {
             field: 'email',
             headerName: 'email',
             type: 'string',
+            sortable: false,
         },
         {
             field: 'name',

@@ -7,7 +7,7 @@ interface IPaginatorComponent {
 }
 
 const PaginatorButtonComponent: FC<IPaginatorComponent> = ({ children }): ReactElement => {
-    const [ripple, event] = useRipple({ color: '#9E9E9E' , duration: 1200});
+    const [ripple, event] = useRipple({ color: '#9E9E9E', duration: 1200 });
 
     return (
         <>
@@ -19,10 +19,6 @@ const PaginatorButtonComponent: FC<IPaginatorComponent> = ({ children }): ReactE
                 {children}
             </button>
         </>
-
-        
-
-
     );
 };
 
