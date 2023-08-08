@@ -3,7 +3,7 @@ import { FC, ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { primitive } from '../../utils/customTypes';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
-import { PaginatorComponent } from '../paginator/Paginator';
+import { Paginator } from '../paginator/Paginator';
 import './table.scss';
 
 interface ITableComponent {
@@ -13,7 +13,7 @@ interface ITableComponent {
     readonly checkboxSelection?: boolean;
 }
 
-const Table: FC<ITableComponent> = ({ columnsDefinitions, data, pagSize, checkboxSelection }): ReactElement => {
+const TableComponent: FC<ITableComponent> = ({ columnsDefinitions, data, pagSize, checkboxSelection }): ReactElement => {
     /***render header (HeaderComponent) */
 
     const headerNames = pluck('headerName', columnsDefinitions);
@@ -91,10 +91,10 @@ const Table: FC<ITableComponent> = ({ columnsDefinitions, data, pagSize, checkbo
                         <tbody className="mdc-data-table__content">{renderRows}</tbody>
                     </table>
                 </div>
-                <PaginatorComponent pageSize={pagSize} />
+                <Paginator pageSize={pagSize} />
             </div>
         </>
     );
 };
 
-export const TableComponent = memo(Table);
+export const Table = memo(TableComponent);

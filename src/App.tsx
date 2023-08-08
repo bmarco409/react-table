@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import './App.css';
 import { ICoulmDefinition } from './interfaces/column-def.interface';
-import { TableComponent } from './ui/table/Table';
+import { Table } from './ui/table/Table';
 
 function App(): ReactElement {
     const columns: ICoulmDefinition[] = [
@@ -65,7 +65,7 @@ function App(): ReactElement {
 
     return (
         <>
-            <TableComponent columnsDefinitions={columns} data={data} pagSize={5} checkboxSelection></TableComponent>
+            <Table columnsDefinitions={columns} data={data} pagSize={5} checkboxSelection></Table>
         </>
     );
 }

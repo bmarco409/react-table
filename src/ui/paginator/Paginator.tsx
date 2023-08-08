@@ -1,11 +1,15 @@
 import { FC, ReactElement, memo } from 'react';
+import { LeftIcon } from '../icons/LeftIcon';
 import { PageFirstIcon } from '../icons/PageFIrst';
+import { PageLastIcon } from '../icons/PageLast';
+import { RightIcon } from '../icons/RightIcon';
+import { PaginatorButton } from './PaginatorButton';
 
 interface IPaginator {
     readonly pageSize: number;
 }
 
-const Paginator: FC<IPaginator> = ({ pageSize }): ReactElement => {
+const PaginatorComponent: FC<IPaginator> = ({ pageSize }): ReactElement => {
     return (
         <>
             {/* <div className="mdc-data-table__pagination">paginator</div> */}
@@ -76,28 +80,18 @@ const Paginator: FC<IPaginator> = ({ pageSize }): ReactElement => {
 
                     <div className="mdc-data-table__pagination-navigation">
                         <div className="mdc-data-table__pagination-total">1‑10 of 100</div>
-                        <button className="mdc-data-table__pagination-button" style={{ background: 'none' }}>
+                        <PaginatorButton>
                             <PageFirstIcon className="mdc-button__icon" width={'24'} height={'auto'} />
-                        </button>
-                        <button
-                            className="mdc-icon-button material-icons mdc-data-table__pagination-button"
-                            data-prev-page="true"
-                            disabled
-                        >
-                            <div className="mdc-button__icon">chevron_left</div>
-                        </button>
-                        <button
-                            className="mdc-icon-button material-icons mdc-data-table__pagination-button"
-                            data-next-page="true"
-                        >
-                            <div className="mdc-button__icon">chevron_right</div>
-                        </button>
-                        <button
-                            className="mdc-icon-button material-icons mdc-data-table__pagination-button"
-                            data-last-page="true"
-                        >
-                            <div className="mdc-button__icon">last_page</div>
-                        </button>
+                        </PaginatorButton>
+                        <PaginatorButton>
+                            <LeftIcon className="mdc-button__icon" width={'24'} height={'auto'} />
+                        </PaginatorButton>
+                        <PaginatorButton>
+                            <RightIcon className="mdc-button__icon" width={'24'} height={'auto'} />
+                        </PaginatorButton>
+                        <PaginatorButton>
+                            <PageLastIcon className="mdc-button__icon" width={'24'} height={'auto'} />
+                        </PaginatorButton>
                     </div>
                 </div>
             </div>
@@ -105,4 +99,4 @@ const Paginator: FC<IPaginator> = ({ pageSize }): ReactElement => {
     );
 };
 
-export const PaginatorComponent = memo(Paginator);
+export const Paginator = memo(PaginatorComponent);
