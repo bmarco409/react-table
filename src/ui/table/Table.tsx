@@ -13,7 +13,12 @@ interface ITableComponent {
     readonly checkboxSelection?: boolean;
 }
 
-const TableComponent: FC<ITableComponent> = ({ columnsDefinitions, data, pagSize, checkboxSelection }): ReactElement => {
+const TableComponent: FC<ITableComponent> = ({
+    columnsDefinitions,
+    data,
+    pagSize,
+    checkboxSelection,
+}): ReactElement => {
     /***render header (HeaderComponent) */
 
     const headerNames = pluck('headerName', columnsDefinitions);
