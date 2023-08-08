@@ -19,6 +19,10 @@ const PaginatorButtonComponent: FC<IPaginatorComponent> = ({ children }): ReactE
                 {children}
             </button>
         </>
+
+        
+
+
     );
 };
 

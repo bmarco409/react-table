@@ -98,6 +98,7 @@ const TableComponent: FC<ITableComponent> = ({
                 </div>
                 <Paginator pageSize={pagSize} />
             </div>
+
         </>
     );
 };
