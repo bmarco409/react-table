@@ -4,6 +4,7 @@ import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { Maybe, primitive } from '../../utils/customTypes';
 import { SortButton } from '../header/SortButton';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
+import { Menu } from '../menu/Menu';
 import { Paginator } from '../paginator/Paginator';
 import './table.scss';
 
@@ -30,7 +31,7 @@ const TableComponent: FC<ITableComponent> = ({
 
     const getHeaderAndSortable = map(pickHeaderAndSortable)(columnsDefinitions);
 
-    const isSortable = anyPass([isNil, equals(true)]) as  (value: Maybe<boolean>) => boolean;
+    const isSortable = anyPass([isNil, equals(true)]) as (value: Maybe<boolean>) => boolean;
 
     const setSortableClass = ifElse(isSortable, always('mdc-data-table__header-cell--with-sort'), always(''));
 
@@ -41,8 +42,8 @@ const TableComponent: FC<ITableComponent> = ({
             scope="col"
             key={data.headerName}
         >
-           {isSortable(data.sortable)  ? <SortButton label={data.headerName}/> : data.headerName}
-
+            {isSortable(data.sortable) ? <SortButton label={data.headerName} /> : data.headerName}
+            <Menu  />
         </th>
     );
 
