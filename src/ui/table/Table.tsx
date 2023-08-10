@@ -2,9 +2,8 @@ import { always, anyPass, compose, curry, equals, ifElse, isNil, map, pick, pluc
 import { FC, ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { Maybe, primitive } from '../../utils/customTypes';
-import { SortButton } from '../header/SortButton';
+import { HeaderCell } from '../header/HeaderCell';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
-import { Menu } from '../menu/Menu';
 import { Paginator } from '../paginator/Paginator';
 import './table.scss';
 
@@ -42,8 +41,8 @@ const TableComponent: FC<ITableComponent> = ({
             scope="col"
             key={data.headerName}
         >
-            {isSortable(data.sortable) ? <SortButton label={data.headerName} /> : data.headerName}
-            <Menu  />
+            {isSortable(data.sortable) ? <HeaderCell label={data.headerName} /> : data.headerName}
+            
         </th>
     );
 
