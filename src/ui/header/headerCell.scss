@@ -1,4 +1,30 @@
+@use "@material/icon-button";
+
+.no-border {
+    border: 0px;
+    outline: 0px;
+}
+
+
 .mdc-custom-sort-button {
+    background-color: transparent;
+    @extend .no-border;
+
+    &:focus {
+        @extend .no-border;
+    }
+}
+
+
+.mdc-custom-sort-icon {
     color: #000000;
     opacity: 0.5;
+}
+
+.mdc-custom-wrapper {
+    width: 100%;
+}
+
+.margin-left-auto {
+    margin-left: auto;
 }

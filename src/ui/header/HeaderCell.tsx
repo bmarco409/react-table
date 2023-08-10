@@ -12,11 +12,12 @@ export interface IHeaderCell {
 const HeaderCellComponent: FC<IHeaderCell> = ({ label }): ReactElement => {
     return (
         <>
-            <div className="mdc-data-table__header-cell-wrapper">
+            <div className="mdc-data-table__header-cell-wrapper mdc-custom-wrapper">
                 <div className="mdc-data-table__header-cell-label">{label}</div>
-                <UpArrowIcon width={18} height={'auto'} className="mdc-custom-sort-button" />
-                <div className="mdc-data-table__sort-status-label" aria-hidden="true"></div>
-                <Menu  />
+                <button className="mdc-icon-button material-icons mdc-data-table__sort-icon-button mdc-custom-sort-button">
+                        <UpArrowIcon width={18} height={'auto'} className="mdc-custom-sort-icon" />
+                </button>
+                <Menu className='margin-left-auto'/>
             </div>
         </>
     );

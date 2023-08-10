@@ -1,9 +1,12 @@
 import { MDCMenu } from '@material/menu/component';
-import { ReactElement, memo, useRef } from 'react';
+import { FC, ReactElement, memo, useRef } from 'react';
+import { BaseComponentInterface } from '../../shared/baseComponentInterface';
 import { DotsIcon } from '../icons/DotsIcon';
 import './menu.scss';
 
-const MenuComponent = (): ReactElement => {
+type IMenuInterface = BaseComponentInterface;
+
+const MenuComponent : FC<IMenuInterface> = ({ className}): ReactElement => {
     const refMenu = useRef<HTMLDivElement>(null);
     const refButton = useRef<HTMLButtonElement>(null);
 
@@ -17,7 +20,7 @@ const MenuComponent = (): ReactElement => {
 
     return (
         <>
-            <button onClick={openMenu} className="mdc-custom-dots-button" ref={refButton}>
+            <button onClick={openMenu} className={`mdc-custom-dots-button ${className}`} ref={refButton}>
                 <DotsIcon  width={18} height={'auto'}/>
             </button>
             <div className="mdc-menu-surface--anchor">
