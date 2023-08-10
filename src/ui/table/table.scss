@@ -6,3 +6,7 @@
 @include checkbox.core-styles;
 @include data-table.core-styles;
 @include data-table.theme-baseline;
+
+.mdc-custom-header-cell:hover .mdc-custom-wrapper .mdc-custom-dots-button {
+    visibility: visible;
+}

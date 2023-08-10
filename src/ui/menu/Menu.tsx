@@ -4,9 +4,9 @@ import { BaseComponentInterface } from '../../shared/baseComponentInterface';
 import { DotsIcon } from '../icons/DotsIcon';
 import './menu.scss';
 
-type IMenuInterface = BaseComponentInterface;
+type IMenuComponent = BaseComponentInterface
 
-const MenuComponent : FC<IMenuInterface> = ({ className}): ReactElement => {
+const MenuComponent : FC<IMenuComponent> = ({ className}): ReactElement => {
     const refMenu = useRef<HTMLDivElement>(null);
     const refButton = useRef<HTMLButtonElement>(null);
 
@@ -14,7 +14,6 @@ const MenuComponent : FC<IMenuInterface> = ({ className}): ReactElement => {
         if (refMenu.current && refButton.current) {
             const menu = new MDCMenu(refMenu.current);
             menu.open = true;
-            //menu.setAbsolutePosition(refButton.current.offsetHeight,refButton.current.offsetTop + refButton.current.offsetHeight)
         }
     };
 
@@ -24,7 +23,7 @@ const MenuComponent : FC<IMenuInterface> = ({ className}): ReactElement => {
                 <DotsIcon  width={18} height={'auto'}/>
             </button>
             <div className="mdc-menu-surface--anchor">
-                <div className="mdc-menu mdc-menu-surface" id="demo-menu" ref={refMenu}>
+                <div className="mdc-menu mdc-menu-surface" id="demo-menu" ref={refMenu} style={{ left: '70px !important'}}>
                     <ul className="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabIndex={-1}>
                         <li>
                             <ul className="mdc-menu__selection-group">

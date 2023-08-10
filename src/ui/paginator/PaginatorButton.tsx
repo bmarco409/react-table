@@ -1,5 +1,5 @@
-import { FC, ReactElement, ReactNode, memo } from 'react';
-import useRipple from 'use-ripple-hook';
+import { MDCRipple } from '@material/ripple/component';
+import { FC, ReactElement, ReactNode, memo, useRef } from 'react';
 import './paginatorButton.scss';
 
 interface IPaginatorComponent {
@@ -7,14 +7,19 @@ interface IPaginatorComponent {
 }
 
 const PaginatorButtonComponent: FC<IPaginatorComponent> = ({ children }): ReactElement => {
-    const [ripple, event] = useRipple({ color: '#9E9E9E', duration: 1200 });
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
+    if (buttonRef.current) {
+        const rippleButton = new MDCRipple(buttonRef.current);
+        rippleButton.activate;
+        rippleButton.unbounded = true;
+    }
 
     return (
         <>
             <button
-                ref={ripple}
-                className="mdc-data-table__pagination-button mdc-custom-pagination-button"
-                onMouseDown={event}
+                className="mdc-data-table__pagination-button mdc-custom-pagination-button mdc-ripple-surface"
+                ref={buttonRef}
             >
                 {children}
             </button>

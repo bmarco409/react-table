@@ -66,7 +66,7 @@ function App(): ReactElement {
 
     return (
         <>
-            <Table columnsDefinitions={columns} data={data} pagSize={5} checkboxSelection></Table>
+            <Table columnsDefinitions={columns} data={data} pagSize={5} checkboxSelection showHeaderMenu></Table>
         </>
     );
 }
