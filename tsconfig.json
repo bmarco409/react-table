@@ -27,6 +27,7 @@
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src"
