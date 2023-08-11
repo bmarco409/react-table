@@ -28,7 +28,7 @@ const TableComponent: FC<ITableComponent> = ({
     pagSize,
     checkboxSelection,
     showHeaderMenu,
-    loading
+    loading,
 }): ReactElement => {
     /***render header (HeaderComponent) */
 
