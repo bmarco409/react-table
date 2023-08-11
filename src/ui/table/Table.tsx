@@ -14,6 +14,7 @@ interface ITableComponent {
     readonly pagSize: number;
     readonly checkboxSelection?: boolean;
     readonly showHeaderMenu?: boolean;
+    readonly loading?: boolean;
 }
 interface IHeader {
     readonly headerName: string;
@@ -27,6 +28,7 @@ const TableComponent: FC<ITableComponent> = ({
     pagSize,
     checkboxSelection,
     showHeaderMenu,
+    loading
 }): ReactElement => {
     /***render header (HeaderComponent) */
 
@@ -104,11 +106,7 @@ const TableComponent: FC<ITableComponent> = ({
 
     return (
         <>
-        <div style={{ width: '100%'}}>
-            <LinearProgressBar  open={true}/>
-        </div>
-       
-            <div className="mdc-data-table" style={{ display: 'none'}}>
+            <div className="mdc-data-table">
                 <div className="mdc-data-table__table-container">
                     <table className="mdc-data-table__table">
                         <thead>
@@ -120,7 +118,7 @@ const TableComponent: FC<ITableComponent> = ({
                         <tbody className="mdc-data-table__content">{renderRows}</tbody>
                     </table>
                 </div>
-                {/* <LinearProgress/> */}
+                {loading && <LinearProgressBar />}
                 <Paginator pageSize={pagSize} />
             </div>
         </>
