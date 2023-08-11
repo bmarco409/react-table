@@ -4,9 +4,9 @@ import { BaseComponentInterface } from '../../shared/baseComponentInterface';
 import { DotsIcon } from '../icons/DotsIcon';
 import './menu.scss';
 
-type IMenuComponent = BaseComponentInterface
+type IMenuComponent = BaseComponentInterface;
 
-const MenuComponent : FC<IMenuComponent> = ({ className}): ReactElement => {
+const MenuComponent: FC<IMenuComponent> = ({ className }): ReactElement => {
     const refMenu = useRef<HTMLDivElement>(null);
     const refButton = useRef<HTMLButtonElement>(null);
 
@@ -20,10 +20,15 @@ const MenuComponent : FC<IMenuComponent> = ({ className}): ReactElement => {
     return (
         <>
             <button onClick={openMenu} className={`mdc-custom-dots-button ${className}`} ref={refButton}>
-                <DotsIcon  width={18} height={'auto'}/>
+                <DotsIcon width={18} height={'auto'} />
             </button>
             <div className="mdc-menu-surface--anchor">
-                <div className="mdc-menu mdc-menu-surface" id="demo-menu" ref={refMenu} style={{ left: '70px !important'}}>
+                <div
+                    className="mdc-menu mdc-menu-surface"
+                    id="demo-menu"
+                    ref={refMenu}
+                    style={{ left: '70px !important' }}
+                >
                     <ul className="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabIndex={-1}>
                         <li>
                             <ul className="mdc-menu__selection-group">

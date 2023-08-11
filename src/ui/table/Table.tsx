@@ -5,6 +5,7 @@ import { Maybe, primitive } from '../../utils/customTypes';
 import { HeaderCell } from '../header/HeaderCell';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
 import { Paginator } from '../paginator/Paginator';
+import { LinearProgressBar } from '../progressBar/LinearProgressBar';
 import './table.scss';
 
 interface ITableComponent {
@@ -25,7 +26,7 @@ const TableComponent: FC<ITableComponent> = ({
     data,
     pagSize,
     checkboxSelection,
-    showHeaderMenu
+    showHeaderMenu,
 }): ReactElement => {
     /***render header (HeaderComponent) */
 
@@ -36,18 +37,15 @@ const TableComponent: FC<ITableComponent> = ({
     const isSortable = anyPass([isNil, equals(true)]) as (value: Maybe<boolean>) => boolean;
 
     const setSortableClass = ifElse(isSortable, always('mdc-data-table__header-cell--with-sort'), always(''));
-  
+
     const renderHeaderCell = (data: IHeader): ReactElement => (
-
-
         <th
             className={`mdc-data-table__header-cell ${setSortableClass(data.sortable)} mdc-custom-header-cell`}
             role="columnheader"
             scope="col"
             key={data.headerName}
-           
         >
-            <HeaderCell label={data.headerName} showSortable={isSortable(data.sortable)}  showMenu={showHeaderMenu}/>
+            <HeaderCell label={data.headerName} showSortable={isSortable(data.sortable)} showMenu={showHeaderMenu} />
         </th>
     );
 
@@ -104,10 +102,13 @@ const TableComponent: FC<ITableComponent> = ({
 
     /****** */
 
-
     return (
         <>
-            <div className="mdc-data-table">
+        <div style={{ width: '100%'}}>
+            <LinearProgressBar  open={true}/>
+        </div>
+       
+            <div className="mdc-data-table" style={{ display: 'none'}}>
                 <div className="mdc-data-table__table-container">
                     <table className="mdc-data-table__table">
                         <thead>
@@ -119,6 +120,7 @@ const TableComponent: FC<ITableComponent> = ({
                         <tbody className="mdc-data-table__content">{renderRows}</tbody>
                     </table>
                 </div>
+                {/* <LinearProgress/> */}
                 <Paginator pageSize={pagSize} />
             </div>
         </>
