@@ -11,7 +11,7 @@ const OPEN_MENU_CLASS = 'mdc-menu-surface--is-open-below mdc-menu-surface--open'
 
 const MenuComponent: FC<IMenuComponent> = ({ className }): ReactElement => {
     const refMenu = useRef<HTMLDivElement>(null);
-    const refButton = useRef<HTMLButtonElement>(null);
+  
 
     const handleClickOutside = (): void => {
         setOpen(false);
@@ -30,7 +30,7 @@ const MenuComponent: FC<IMenuComponent> = ({ className }): ReactElement => {
     return (
         <>
             <div className="mdc-custom-manu-container" ref={refMenu}>
-                <button onClick={openMenu} className={`mdc-custom-dots-button ${className}`} ref={refButton}>
+                <button onClick={openMenu} className={`mdc-custom-dots-button ${className}`} >
                     <DotsIcon width={18} height={'auto'} />
                 </button>
                 <div className="mdc-menu-surface--anchor">

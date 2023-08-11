@@ -1,6 +1,7 @@
 import { always, anyPass, compose, curry, equals, ifElse, isNil, map, pick, pluck } from 'ramda';
 import { FC, ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
+import { useTableContext } from '../../shared/TableContext';
 import { Maybe, primitive } from '../../utils/customTypes';
 import { HeaderCell } from '../header/HeaderCell';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
@@ -8,10 +9,11 @@ import { Paginator } from '../paginator/Paginator';
 import { LinearProgressBar } from '../progressBar/LinearProgressBar';
 import './table.scss';
 
-interface ITableComponent {
+export interface ITableComponent {
     readonly columnsDefinitions: ICoulmDefinition[];
     readonly data: object[];
     readonly pagSize: number;
+    readonly pageSizeOptions: number[];
     readonly checkboxSelection?: boolean;
     readonly showHeaderMenu?: boolean;
     readonly loading?: boolean;
@@ -27,10 +29,15 @@ const TableComponent: FC<ITableComponent> = ({
     data,
     pagSize,
     checkboxSelection,
+    pageSizeOptions,
     showHeaderMenu,
     loading,
 }): ReactElement => {
     /***render header (HeaderComponent) */
+
+    const tableContext = useTableContext();
+
+    tableContext.setPageSizeOptions(pageSizeOptions)
 
     const pickHeaderAndSortable: (data: ICoulmDefinition) => IHeader = pick(['headerName', 'sortable']);
 
