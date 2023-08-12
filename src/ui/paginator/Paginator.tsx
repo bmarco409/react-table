@@ -1,4 +1,5 @@
 import { FC, ReactElement, memo } from 'react';
+import { useTableContext } from '../../shared/TableContext';
 import { LeftIcon } from '../icons/LeftIcon';
 import { PageFirstIcon } from '../icons/PageFIrst';
 import { PageLastIcon } from '../icons/PageLast';
@@ -11,6 +12,7 @@ interface IPaginator {
 }
 
 const PaginatorComponent: FC<IPaginator> = ({ pageSize }): ReactElement => {
+    const tableContext = useTableContext();
     return (
         <>
             <div className="mdc-data-table__pagination">
@@ -18,7 +20,7 @@ const PaginatorComponent: FC<IPaginator> = ({ pageSize }): ReactElement => {
                     <div className="mdc-data-table__pagination-rows-per-page">
                         <div className="mdc-data-table__pagination-rows-per-page-label">Righe per pagina</div>
 
-                        <Select />
+                        <Select values={tableContext.pageSizeOptions ?? []} />
                     </div>
 
                     <div className="mdc-data-table__pagination-navigation">

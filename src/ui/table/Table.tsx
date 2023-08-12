@@ -25,8 +25,8 @@ interface IHeader {
 }
 
 interface CellValue {
-    value: primitive; 
-    key: string 
+    value: primitive;
+    key: string;
 }
 
 const TableComponent: FC<ITableComponent> = ({
@@ -42,11 +42,9 @@ const TableComponent: FC<ITableComponent> = ({
 
     const tableContext = useTableContext();
 
-    useEffect(() =>{
+    useEffect(() => {
         tableContext.setPageSizeOptions(pageSizeOptions);
-    },[])
-
-  
+    }, []);
 
     const pickHeaderAndSortable: (data: ICoulmDefinition<unknown>) => IHeader = pick(['headerName', 'sortable']);
 
@@ -83,12 +81,12 @@ const TableComponent: FC<ITableComponent> = ({
 
     const valueKeys = pluck('field', columnsDefinitions);
 
-    const getValue = (element: object, key: string): CellValue=> {
-        return { value: element[key as keyof typeof element] , key}
+    const getValue = (element: object, key: string): CellValue => {
+        return { value: element[key as keyof typeof element], key };
     };
 
     const prepareCell = (data: CellValue): ReactElement => (
-        <td className="mdc-data-table__cell" key={`${data.key}_${data.value}`}>
+        <td className="mdc-data-table__cell" key={`${data.key}_${data.value}`} title={data.value.toString()}>
             {data.value}
         </td>
     );

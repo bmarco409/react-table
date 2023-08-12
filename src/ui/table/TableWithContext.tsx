@@ -1,8 +1,8 @@
-import { FC, ReactElement, memo } from "react";
-import TableContextProvider from "../../shared/TableContext";
-import { ITableComponent, Table } from "./Table";
+import { FC, ReactElement, memo } from 'react';
+import TableContextProvider from '../../shared/TableContext';
+import { ITableComponent, Table } from './Table';
 
-const DataTableComponent :FC<ITableComponent> = ({
+const DataTableComponent: FC<ITableComponent> = ({
     columnsDefinitions,
     data,
     pagSize,
@@ -10,21 +10,22 @@ const DataTableComponent :FC<ITableComponent> = ({
     checkboxSelection,
     showHeaderMenu,
     loading,
-}): ReactElement =>{
-    return(
+}): ReactElement => {
+    return (
         <>
             <TableContextProvider>
-            <Table 
-                columnsDefinitions={columnsDefinitions} 
-                data={data} 
-                pagSize={pagSize} 
-                pageSizeOptions={pageSizeOptions}
-                checkboxSelection={checkboxSelection}
-                showHeaderMenu={showHeaderMenu}
-                loading={loading} />
+                <Table
+                    columnsDefinitions={columnsDefinitions}
+                    data={data}
+                    pagSize={pagSize}
+                    pageSizeOptions={pageSizeOptions}
+                    checkboxSelection={checkboxSelection}
+                    showHeaderMenu={showHeaderMenu}
+                    loading={loading}
+                />
             </TableContextProvider>
         </>
-    )
-}
+    );
+};
 
-export const DataTable = memo(DataTableComponent)
+export const DataTable = memo(DataTableComponent);

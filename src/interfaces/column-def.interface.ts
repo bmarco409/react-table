@@ -1,5 +1,3 @@
-
-
 export interface ICoulmDefinition<T> {
     readonly field: string;
     readonly headerName: string;

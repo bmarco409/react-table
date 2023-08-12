@@ -3,7 +3,7 @@ import './App.css';
 import { ICoulmDefinition } from './interfaces/column-def.interface';
 import { DataTable } from './ui/table/TableWithContext';
 
-interface User{
+interface User {
     readonly id: number;
     readonly email: string;
     readonly name: string;
@@ -74,13 +74,14 @@ function App(): ReactElement {
 
     return (
         <>
-            <DataTable 
-                columnsDefinitions={columns} 
-                data={data} 
-                pagSize={5} 
+            <DataTable
+                columnsDefinitions={columns}
+                data={data}
+                pagSize={5}
                 pageSizeOptions={[5, 10, 15]}
-                checkboxSelection 
-                showHeaderMenu />
+                checkboxSelection
+                showHeaderMenu
+            />
         </>
     );
 }

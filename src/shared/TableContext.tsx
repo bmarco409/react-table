@@ -1,14 +1,10 @@
 import { createContext, ReactElement, ReactNode, useContext, useMemo, useState } from 'react';
 import { Maybe, Setter } from '../utils/customTypes';
 
-
-
 export interface ITableContext {
     pageSizeOptions: Maybe<number[]>;
     setPageSizeOptions: (values: number[]) => void;
 }
-
-
 
 export const TableContext = createContext<ITableContext>({
     pageSizeOptions: undefined,
@@ -25,7 +21,6 @@ const usePageSizeOptions = (values: Maybe<number[]>): [Maybe<number[]>, Setter<M
     const [pageSizeOptions, setPageSizeOptions] = useState<Maybe<number[]>>(values);
     return [pageSizeOptions, setPageSizeOptions];
 };
-
 
 const TableContextProvider = ({ children }: { children: ReactNode }): ReactElement => {
     const [pageSizeOptions, setPageSizeOptions] = usePageSizeOptions([]);
