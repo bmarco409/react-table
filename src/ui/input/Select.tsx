@@ -86,34 +86,16 @@ const SelectComponent: FC<ISelectComponent> = ({ values }): ReactElement => {
                             ></polygon>
                         </svg>
                     </span>
-                    <span className="mdc-notched-outline mdc-notched-outline--notched">
-                        <span className="mdc-notched-outline__leading"></span>
-                        <span className="mdc-notched-outline__trailing"></span>
-                    </span>
                 </div>
 
                 <div
-                    className={`mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth ${setListClassName(
+                    className={`mdc-select__menu mdc-menu mdc-menu-surface items ${setListClassName(
                         open,
                     )}`}
                     role="listbox"
                 >
                     <ul className="mdc-list">
                         {renderItems}
-                        {/* <li
-                            className="mdc-list-item mdc-list-item--selected"
-                            aria-selected="true"
-                            role="option"
-                            data-value="10"
-                        >
-                            <span className="mdc-list-item__text">10</span>
-                        </li>
-                        <li className="mdc-list-item" role="option" data-value="25">
-                            <span className="mdc-list-item__text">25</span>
-                        </li>
-                        <li className="mdc-list-item" role="option" data-value="100">
-                            <span className="mdc-list-item__text">100</span>
-                        </li> */}
                     </ul>
                 </div>
             </div>
