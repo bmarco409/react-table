@@ -11,6 +11,7 @@
     "format": "prettier --config .prettierrc 'src/**/*.{ts,tsx}' --write"
   },
   "dependencies": {
+    "@material/button": "^14.0.0",
     "@material/data-table": "^14.0.0",
     "@material/icon-button": "^14.0.0",
     "@material/linear-progress": "^14.0.0",

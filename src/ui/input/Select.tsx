@@ -89,14 +89,10 @@ const SelectComponent: FC<ISelectComponent> = ({ values }): ReactElement => {
                 </div>
 
                 <div
-                    className={`mdc-select__menu mdc-menu mdc-menu-surface items ${setListClassName(
-                        open,
-                    )}`}
+                    className={`mdc-select__menu mdc-menu mdc-menu-surface items ${setListClassName(open)}`}
                     role="listbox"
                 >
-                    <ul className="mdc-list">
-                        {renderItems}
-                    </ul>
+                    <ul className="mdc-list">{renderItems}</ul>
                 </div>
             </div>
         </>
