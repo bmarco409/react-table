@@ -3,8 +3,16 @@ import './App.css';
 import { ICoulmDefinition } from './interfaces/column-def.interface';
 import { DataTable } from './ui/table/TableWithContext';
 
+interface User{
+    readonly id: number;
+    readonly email: string;
+    readonly name: string;
+    readonly surname: string;
+    readonly age: number;
+}
+
 function App(): ReactElement {
-    const columns: ICoulmDefinition[] = [
+    const columns: ICoulmDefinition<User>[] = [
         {
             field: 'id',
             headerName: 'id',

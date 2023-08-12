@@ -10,7 +10,7 @@ import { LinearProgressBar } from '../progressBar/LinearProgressBar';
 import './table.scss';
 
 export interface ITableComponent {
-    readonly columnsDefinitions: ICoulmDefinition[];
+    readonly columnsDefinitions: ICoulmDefinition<unknown>[];
     readonly data: object[];
     readonly pagSize: number;
     readonly pageSizeOptions: number[];
@@ -48,7 +48,7 @@ const TableComponent: FC<ITableComponent> = ({
 
   
 
-    const pickHeaderAndSortable: (data: ICoulmDefinition) => IHeader = pick(['headerName', 'sortable']);
+    const pickHeaderAndSortable: (data: ICoulmDefinition<unknown>) => IHeader = pick(['headerName', 'sortable']);
 
     const getHeaderAndSortable = map(pickHeaderAndSortable)(columnsDefinitions);
 
