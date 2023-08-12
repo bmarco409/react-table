@@ -1,5 +1,5 @@
 import { always, anyPass, compose, curry, equals, ifElse, isNil, map, pick, pluck } from 'ramda';
-import { FC, ReactElement, memo } from 'react';
+import { FC, ReactElement, memo, useEffect } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { useTableContext } from '../../shared/TableContext';
 import { Maybe, primitive } from '../../utils/customTypes';
@@ -24,6 +24,11 @@ interface IHeader {
     readonly showHeaderMenu?: boolean;
 }
 
+interface CellValue {
+    value: primitive; 
+    key: string 
+}
+
 const TableComponent: FC<ITableComponent> = ({
     columnsDefinitions,
     data,
@@ -37,7 +42,11 @@ const TableComponent: FC<ITableComponent> = ({
 
     const tableContext = useTableContext();
 
-    tableContext.setPageSizeOptions(pageSizeOptions)
+    useEffect(() =>{
+        tableContext.setPageSizeOptions(pageSizeOptions);
+    },[])
+
+  
 
     const pickHeaderAndSortable: (data: ICoulmDefinition) => IHeader = pick(['headerName', 'sortable']);
 
@@ -74,11 +83,13 @@ const TableComponent: FC<ITableComponent> = ({
 
     const valueKeys = pluck('field', columnsDefinitions);
 
-    const getValue = (element: object, key: string): primitive => element[key as keyof typeof element];
+    const getValue = (element: object, key: string): CellValue=> {
+        return { value: element[key as keyof typeof element] , key}
+    };
 
-    const prepareCell = (value: primitive): ReactElement => (
-        <td className="mdc-data-table__cell" key={value}>
-            {value}
+    const prepareCell = (data: CellValue): ReactElement => (
+        <td className="mdc-data-table__cell" key={`${data.key}_${data.value}`}>
+            {data.value}
         </td>
     );
 
