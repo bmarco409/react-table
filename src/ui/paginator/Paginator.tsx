@@ -1,3 +1,4 @@
+import { equals } from 'ramda';
 import { FC, ReactElement, memo } from 'react';
 import { useTableContext } from '../../shared/TableContext';
 import { LeftIcon } from '../icons/LeftIcon';
@@ -8,11 +9,17 @@ import { Select } from '../input/Select';
 import { PaginatorButton } from './PaginatorButton';
 
 interface IPaginator {
-    readonly pageSize: number;
+    readonly total?: number;
 }
 
-const PaginatorComponent: FC<IPaginator> = ({ pageSize }): ReactElement => {
+const PaginatorComponent: FC<IPaginator> = ({ total }): ReactElement => {
     const tableContext = useTableContext();
+
+    console.info(tableContext.pagination)
+
+    const isFirstPage = equals(tableContext.pagination?.page,0);
+    const isLastPage = equals(tableContext.pagination?.page,0);
+
     return (
         <>
             <div className="mdc-data-table__pagination">
@@ -24,8 +31,9 @@ const PaginatorComponent: FC<IPaginator> = ({ pageSize }): ReactElement => {
                     </div>
 
                     <div className="mdc-data-table__pagination-navigation">
-                        <div className="mdc-data-table__pagination-total">1‑10 of 100</div>
-                        <PaginatorButton>
+                        <div className="mdc-data-table__pagination-total">
+                            {(tableContext.pagination?.page ?? 0) +1}‑{tableContext.pagination?.pageSize ?? 0} di {total}</div>
+                        <PaginatorButton disabled={isFirstPage}>
                             <PageFirstIcon className="mdc-button__icon" width={'24'} height={'auto'} />
                         </PaginatorButton>
                         <PaginatorButton>

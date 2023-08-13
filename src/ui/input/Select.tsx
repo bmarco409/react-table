@@ -33,14 +33,14 @@ const SelectComponent: FC<ISelectComponent> = ({ values }): ReactElement => {
     const onClickSelect = (): void => {
         setOpen((oldState) => !oldState);
     };
-    const setSelectedClassName = ifElse(equals(true), always(SELECT_ITEM_CLASS), always(``));
+    const setItemSelectedClassName = ifElse(equals(true), always(SELECT_ITEM_CLASS), always(``));
 
     const onClickItem = (value: primitive): void => {
         setSelected(value);
     };
 
     const generateListItem = (value: primitive, index: number): ReactElement => {
-        const selectedClass = setSelectClassName(value === selected);
+        const selectedClass = setItemSelectedClassName(value === selected);
         return (
             <li
                 className={`mdc-list-item ${selectedClass}`}

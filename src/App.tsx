@@ -1,6 +1,10 @@
-import { ReactElement } from 'react';
+import { ReactElement, useMemo, useState } from 'react';
 import './App.css';
+import { fakeData } from './fakeData';
 import { ICoulmDefinition } from './interfaces/column-def.interface';
+import { Pagination } from './interfaces/pagination';
+import { TableQueryParams } from './interfaces/tableQueryParam';
+import { OutlinedButton } from './ui/button/OutLinedButton';
 import { DataTable } from './ui/table/TableWithContext';
 
 interface User {
@@ -11,7 +15,26 @@ interface User {
     readonly age: number;
 }
 
+
+
 function App(): ReactElement {
+    const [paginationModel, setPaginationModel] = useState<Pagination>({ page: 0, pageSize: 2 });
+
+    const onPageChange = (model: Pagination): void =>{
+        console.info('page change', model);
+    }
+
+    const params: TableQueryParams = useMemo(
+        () => ({
+            pagination: {
+                ...paginationModel,
+            },
+            queryOptions: [],
+            orders: []
+    
+        }),
+        [paginationModel],
+    );
     const columns: ICoulmDefinition<User>[] = [
         {
             field: 'id',
@@ -41,46 +64,22 @@ function App(): ReactElement {
         },
     ];
 
-    const data: object[] = [
-        {
-            id: 1,
-            email: 'puddu@email.com',
-            name: 'puddu',
-            surname: 'mimmo3',
-            age: 1,
-        },
-        {
-            id: 2,
-            email: 'puddu2@email.com',
-            name: 'puddu22',
-            surname: 'mimmo2',
-            age: 2,
-        },
-        {
-            id: 3,
-            email: 'puddu3@email.com',
-            name: 'puddu24',
-            surname: 'mimmo1',
-            age: 3,
-        },
-        {
-            id: 4,
-            email: 'puddu4@email.com',
-            name: '4442e2',
-            surname: 'ewewew',
-            age: 4,
-        },
-    ];
-
     return (
         <>
+            <div style={{ width: '100%' , marginBottom: 20 , display: 'flex'}}>
+                 <OutlinedButton label={'Colonne'} />
+            </div>
+            
             <DataTable
                 columnsDefinitions={columns}
-                data={data}
+                rows={fakeData}
                 pagSize={5}
-                pageSizeOptions={[5, 10, 15]}
+                pageSizeOptions={[1, 2, 4]}
                 checkboxSelection
                 showHeaderMenu
+                rowCount={fakeData.length}
+                paginationModel={params.pagination}
+                onPaginationModelChange={onPageChange}
             />
         </>
     );

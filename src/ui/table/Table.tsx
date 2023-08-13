@@ -1,6 +1,7 @@
 import { always, anyPass, compose, curry, equals, ifElse, isNil, map, pick, pluck } from 'ramda';
 import { FC, ReactElement, memo, useEffect } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
+import { Pagination } from '../../interfaces/pagination';
 import { useTableContext } from '../../shared/TableContext';
 import { Maybe, primitive } from '../../utils/customTypes';
 import { HeaderCell } from '../header/HeaderCell';
@@ -11,12 +12,15 @@ import './table.scss';
 
 export interface ITableComponent {
     readonly columnsDefinitions: ICoulmDefinition<unknown>[];
-    readonly data: object[];
+    readonly rows: object[];
     readonly pagSize: number;
     readonly pageSizeOptions: number[];
     readonly checkboxSelection?: boolean;
     readonly showHeaderMenu?: boolean;
     readonly loading?: boolean;
+    readonly rowCount?: number;
+    readonly paginationModel?: Pagination;
+    readonly onPaginationModelChange?: (model: Pagination) =>void;
 }
 interface IHeader {
     readonly headerName: string;
@@ -31,12 +35,13 @@ interface CellValue {
 
 const TableComponent: FC<ITableComponent> = ({
     columnsDefinitions,
-    data,
-    pagSize,
+    rows,
+    paginationModel,
     checkboxSelection,
     pageSizeOptions,
     showHeaderMenu,
     loading,
+    rowCount
 }): ReactElement => {
     /***render header (HeaderComponent) */
 
@@ -44,6 +49,7 @@ const TableComponent: FC<ITableComponent> = ({
 
     useEffect(() => {
         tableContext.setPageSizeOptions(pageSizeOptions);
+        tableContext.setPagination(paginationModel)
     }, []);
 
     const pickHeaderAndSortable: (data: ICoulmDefinition<unknown>) => IHeader = pick(['headerName', 'sortable']);
@@ -95,7 +101,7 @@ const TableComponent: FC<ITableComponent> = ({
 
     const prepareRow = (obj: object): unknown => map(renderCell(obj), valueKeys);
 
-    const renderRows = data.map((element, index) => {
+    const renderRows = rows.map((element, index) => {
         return (
             <tr className="mdc-data-table__row" key={index}>
                 {checkboxSelection && rowCheckBox()}
@@ -135,7 +141,7 @@ const TableComponent: FC<ITableComponent> = ({
                     </table>
                 </div>
                 {loading && <LinearProgressBar />}
-                <Paginator pageSize={pagSize} />
+                <Paginator total={rowCount} />
             </div>
         </>
     );

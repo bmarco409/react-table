@@ -4,24 +4,30 @@ import { ITableComponent, Table } from './Table';
 
 const DataTableComponent: FC<ITableComponent> = ({
     columnsDefinitions,
-    data,
+    rows,
     pagSize,
     pageSizeOptions,
     checkboxSelection,
     showHeaderMenu,
     loading,
+    rowCount,
+    paginationModel,
+    onPaginationModelChange,
 }): ReactElement => {
     return (
         <>
             <TableContextProvider>
                 <Table
                     columnsDefinitions={columnsDefinitions}
-                    data={data}
+                    rows={rows}
                     pagSize={pagSize}
                     pageSizeOptions={pageSizeOptions}
                     checkboxSelection={checkboxSelection}
                     showHeaderMenu={showHeaderMenu}
                     loading={loading}
+                    rowCount={rowCount}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={onPaginationModelChange}
                 />
             </TableContextProvider>
         </>
