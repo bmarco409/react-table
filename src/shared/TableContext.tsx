@@ -50,7 +50,7 @@ const TableContextProvider = ({ children }: { children: ReactNode }): ReactEleme
             pagination,
             setPagination
         }),
-        [pageSizeOptions],
+        [pageSizeOptions,pagination],
     );
     return <TableContext.Provider value={memoizedPageSizeContext}>{children}</TableContext.Provider>;
 };

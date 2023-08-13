@@ -1,6 +1,7 @@
-import { addIndex, always, equals, head, ifElse, map } from 'ramda';
+import { addIndex, always, equals, ifElse, map } from 'ramda';
 import { FC, ReactElement, memo, useEffect, useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
+import { useTableContext } from '../../shared/TableContext';
 import { Maybe, primitive } from '../../utils/customTypes';
 import './select.scss';
 
@@ -10,7 +11,7 @@ const OPEN_SELECT_CLASS = `mdc-select--activated`;
 const SELECT_ITEM_CLASS = `mdc-list-item--selected`;
 
 interface ISelectComponent {
-    readonly values: primitive[];
+    readonly values: number[];
 }
 
 const SelectComponent: FC<ISelectComponent> = ({ values }): ReactElement => {
@@ -18,16 +19,16 @@ const SelectComponent: FC<ISelectComponent> = ({ values }): ReactElement => {
     const [open, setOpen] = useState<boolean>(false);
     const setSelectClassName = ifElse(equals(true), always(OPEN_SELECT_CLASS), always(``));
     const setListClassName = ifElse(equals(true), always(OPEN_SELECT_LIST_CLASS), always(``));
-
-    const [selected, setSelected] = useState<Maybe<primitive>>(head(values));
+    const tableContext = useTableContext();
+    const [selected, setSelected] = useState<Maybe<primitive>>(tableContext.pagination?.pageSize);
+    
 
     useEffect(() => {
-        setSelected(head(values));
-    }, [values]);
+        setSelected(tableContext.pagination?.pageSize);
+    }, [tableContext.pagination]);
 
     const handleClickOutside = (): void => {
         setOpen(false);
-        values;
     };
 
     const onClickSelect = (): void => {
@@ -35,11 +36,15 @@ const SelectComponent: FC<ISelectComponent> = ({ values }): ReactElement => {
     };
     const setItemSelectedClassName = ifElse(equals(true), always(SELECT_ITEM_CLASS), always(``));
 
-    const onClickItem = (value: primitive): void => {
+    const onClickItem = (value: number): void => {
         setSelected(value);
+        tableContext.setPagination(tableContext.pagination && {
+            ...tableContext.pagination,
+            pageSize: value
+        })
     };
 
-    const generateListItem = (value: primitive, index: number): ReactElement => {
+    const generateListItem = (value: number, index: number): ReactElement => {
         const selectedClass = setItemSelectedClassName(value === selected);
         return (
             <li
@@ -53,7 +58,7 @@ const SelectComponent: FC<ISelectComponent> = ({ values }): ReactElement => {
         );
     };
 
-    const mapIndex = addIndex<primitive, ReactElement>(map);
+    const mapIndex = addIndex<number, ReactElement>(map);
 
     const renderItems: ReactElement[] = mapIndex(generateListItem, values);
 

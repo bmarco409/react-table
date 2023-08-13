@@ -1,4 +1,4 @@
-import { always, anyPass, compose, curry, equals, ifElse, isNil, map, pick, pluck } from 'ramda';
+import { always, anyPass, compose, curry, equals, ifElse, isNil, map, pick, pluck, take } from 'ramda';
 import { FC, ReactElement, memo, useEffect } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { Pagination } from '../../interfaces/pagination';
@@ -41,16 +41,24 @@ const TableComponent: FC<ITableComponent> = ({
     pageSizeOptions,
     showHeaderMenu,
     loading,
-    rowCount
+    rowCount,
+    onPaginationModelChange
 }): ReactElement => {
     /***render header (HeaderComponent) */
 
     const tableContext = useTableContext();
 
+
     useEffect(() => {
         tableContext.setPageSizeOptions(pageSizeOptions);
         tableContext.setPagination(paginationModel)
     }, []);
+    
+
+    useEffect(() =>{
+        console.log('test')
+        tableContext.pagination && onPaginationModelChange?.(tableContext.pagination)
+    },[tableContext])
 
     const pickHeaderAndSortable: (data: ICoulmDefinition<unknown>) => IHeader = pick(['headerName', 'sortable']);
 
@@ -110,6 +118,9 @@ const TableComponent: FC<ITableComponent> = ({
         );
     });
 
+    const showRowsByPageSize =  take(tableContext.pagination?.pageSize ?? 0, renderRows)
+
+
     const headerCheckBox = (): ReactElement => {
         return (
             <th
@@ -137,7 +148,7 @@ const TableComponent: FC<ITableComponent> = ({
                                 {renderHeader}
                             </tr>
                         </thead>
-                        <tbody className="mdc-data-table__content">{renderRows}</tbody>
+                        <tbody className="mdc-data-table__content">{showRowsByPageSize}</tbody>
                     </table>
                 </div>
                 {loading && <LinearProgressBar />}

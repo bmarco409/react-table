@@ -15,8 +15,6 @@ interface IPaginator {
 const PaginatorComponent: FC<IPaginator> = ({ total }): ReactElement => {
     const tableContext = useTableContext();
 
-    console.info(tableContext.pagination)
-
     const isFirstPage = equals(tableContext.pagination?.page,0);
     const isLastPage = equals(tableContext.pagination?.page,0);
 
