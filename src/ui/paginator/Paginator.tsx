@@ -1,6 +1,6 @@
 import { equals } from 'ramda';
 import { FC, ReactElement, memo } from 'react';
-import { useTableContext } from '../../shared/TableContext';
+import { Pagination } from '../../interfaces/pagination';
 import { LeftIcon } from '../icons/LeftIcon';
 import { PageFirstIcon } from '../icons/PageFIrst';
 import { PageLastIcon } from '../icons/PageLast';
@@ -9,14 +9,23 @@ import { Select } from '../input/Select';
 import { PaginatorButton } from './PaginatorButton';
 
 interface IPaginator {
-    readonly total?: number;
+    readonly pagination: Pagination;
+    readonly pageSizeOptions: number[];
+    readonly total: number;
+    readonly onPaginationModelChange?: (model: Pagination) =>void;
 }
 
-const PaginatorComponent: FC<IPaginator> = ({ total }): ReactElement => {
-    const tableContext = useTableContext();
+const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOptions, onPaginationModelChange }): ReactElement => {
+    
+    const isFirstPage = equals(pagination?.page,0);
+    const isLastPage = equals(pagination?.page,0);
 
-    const isFirstPage = equals(tableContext.pagination?.page,0);
-    const isLastPage = equals(tableContext.pagination?.page,0);
+    const onPageSizeOptionsValueChange = (value: number): void =>{
+        onPaginationModelChange?.({
+            ...pagination,
+            pageSize: value
+        })
+    }
 
     return (
         <>
@@ -25,12 +34,12 @@ const PaginatorComponent: FC<IPaginator> = ({ total }): ReactElement => {
                     <div className="mdc-data-table__pagination-rows-per-page">
                         <div className="mdc-data-table__pagination-rows-per-page-label">Righe per pagina</div>
 
-                        <Select values={tableContext.pageSizeOptions ?? []} />
+                        <Select values={pageSizeOptions ?? [10,20,30]} />
                     </div>
 
                     <div className="mdc-data-table__pagination-navigation">
                         <div className="mdc-data-table__pagination-total">
-                            {(tableContext.pagination?.page ?? 0) +1}‑{tableContext.pagination?.pageSize ?? 0} di {total}</div>
+                            {(pagination?.page ?? 0)  +1}‑{pagination?.pageSize} di {total}</div>
                         <PaginatorButton disabled={isFirstPage}>
                             <PageFirstIcon className="mdc-button__icon" width={'24'} height={'auto'} />
                         </PaginatorButton>

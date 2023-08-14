@@ -5,7 +5,7 @@ import { ICoulmDefinition } from './interfaces/column-def.interface';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
 import { OutlinedButton } from './ui/button/OutLinedButton';
-import { DataTable } from './ui/table/TableWithContext';
+import { Table } from './ui/table/Table';
 
 interface User {
     readonly id: number;
@@ -70,7 +70,7 @@ function App(): ReactElement {
                  <OutlinedButton label={'Colonne'} />
             </div>
             
-            <DataTable
+            <Table
                 columnsDefinitions={columns}
                 rows={fakeData}
                 pagSize={5}

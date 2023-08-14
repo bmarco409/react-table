@@ -1,8 +1,7 @@
-import { always, anyPass, compose, curry, equals, ifElse, isNil, map, pick, pluck, take } from 'ramda';
-import { FC, ReactElement, memo, useEffect } from 'react';
+import { always, anyPass, compose, curry, equals, ifElse, isNil, map, pick, pluck } from 'ramda';
+import { FC, ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { Pagination } from '../../interfaces/pagination';
-import { useTableContext } from '../../shared/TableContext';
 import { Maybe, primitive } from '../../utils/customTypes';
 import { HeaderCell } from '../header/HeaderCell';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
@@ -15,11 +14,11 @@ export interface ITableComponent {
     readonly rows: object[];
     readonly pagSize: number;
     readonly pageSizeOptions: number[];
+    readonly paginationModel: Pagination;
     readonly checkboxSelection?: boolean;
     readonly showHeaderMenu?: boolean;
     readonly loading?: boolean;
     readonly rowCount?: number;
-    readonly paginationModel?: Pagination;
     readonly onPaginationModelChange?: (model: Pagination) =>void;
 }
 interface IHeader {
@@ -46,19 +45,8 @@ const TableComponent: FC<ITableComponent> = ({
 }): ReactElement => {
     /***render header (HeaderComponent) */
 
-    const tableContext = useTableContext();
-
-
-    useEffect(() => {
-        tableContext.setPageSizeOptions(pageSizeOptions);
-        tableContext.setPagination(paginationModel)
-    }, []);
     
-
-    useEffect(() =>{
-        console.log('test')
-        tableContext.pagination && onPaginationModelChange?.(tableContext.pagination)
-    },[tableContext])
+   
 
     const pickHeaderAndSortable: (data: ICoulmDefinition<unknown>) => IHeader = pick(['headerName', 'sortable']);
 
@@ -118,9 +106,6 @@ const TableComponent: FC<ITableComponent> = ({
         );
     });
 
-    const showRowsByPageSize =  take(tableContext.pagination?.pageSize ?? 0, renderRows)
-
-
     const headerCheckBox = (): ReactElement => {
         return (
             <th
@@ -148,11 +133,11 @@ const TableComponent: FC<ITableComponent> = ({
                                 {renderHeader}
                             </tr>
                         </thead>
-                        <tbody className="mdc-data-table__content">{showRowsByPageSize}</tbody>
+                        <tbody className="mdc-data-table__content">{renderRows}</tbody>
                     </table>
                 </div>
                 {loading && <LinearProgressBar />}
-                <Paginator total={rowCount} />
+                <Paginator total={rowCount ?? 0}  pagination={paginationModel} pageSizeOptions={pageSizeOptions} onPaginationModelChange={onPaginationModelChange}/>
             </div>
         </>
     );

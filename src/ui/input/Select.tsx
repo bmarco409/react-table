@@ -1,7 +1,6 @@
-import { addIndex, always, equals, ifElse, map } from 'ramda';
-import { FC, ReactElement, memo, useEffect, useRef, useState } from 'react';
+import { addIndex, always, equals, head, ifElse, map } from 'ramda';
+import { FC, ReactElement, memo, useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
-import { useTableContext } from '../../shared/TableContext';
 import { Maybe, primitive } from '../../utils/customTypes';
 import './select.scss';
 
@@ -12,20 +11,17 @@ const SELECT_ITEM_CLASS = `mdc-list-item--selected`;
 
 interface ISelectComponent {
     readonly values: number[];
+    readonly onValueChange?: (value: number) => void;
 }
 
-const SelectComponent: FC<ISelectComponent> = ({ values }): ReactElement => {
+const SelectComponent: FC<ISelectComponent> = ({ values , onValueChange}): ReactElement => {
     const refSelect = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState<boolean>(false);
     const setSelectClassName = ifElse(equals(true), always(OPEN_SELECT_CLASS), always(``));
     const setListClassName = ifElse(equals(true), always(OPEN_SELECT_LIST_CLASS), always(``));
-    const tableContext = useTableContext();
-    const [selected, setSelected] = useState<Maybe<primitive>>(tableContext.pagination?.pageSize);
-    
 
-    useEffect(() => {
-        setSelected(tableContext.pagination?.pageSize);
-    }, [tableContext.pagination]);
+    const [selected, setSelected] = useState<Maybe<primitive>>(head(values));
+
 
     const handleClickOutside = (): void => {
         setOpen(false);
@@ -38,10 +34,7 @@ const SelectComponent: FC<ISelectComponent> = ({ values }): ReactElement => {
 
     const onClickItem = (value: number): void => {
         setSelected(value);
-        tableContext.setPagination(tableContext.pagination && {
-            ...tableContext.pagination,
-            pageSize: value
-        })
+        onValueChange?.(value);
     };
 
     const generateListItem = (value: number, index: number): ReactElement => {
