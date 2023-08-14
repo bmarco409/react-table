@@ -1,4 +1,4 @@
-import { addIndex, always, equals, head, ifElse, map } from 'ramda';
+import { addIndex, always, equals, ifElse, map } from 'ramda';
 import { FC, ReactElement, memo, useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
 import { Maybe, primitive } from '../../utils/customTypes';
@@ -11,17 +11,18 @@ const SELECT_ITEM_CLASS = `mdc-list-item--selected`;
 
 interface ISelectComponent {
     readonly values: number[];
+    readonly selectedValue: number;
     readonly onValueChange?: (value: number) => void;
+    
 }
 
-const SelectComponent: FC<ISelectComponent> = ({ values , onValueChange}): ReactElement => {
+const SelectComponent: FC<ISelectComponent> = ({ values , onValueChange , selectedValue}): ReactElement => {
     const refSelect = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState<boolean>(false);
     const setSelectClassName = ifElse(equals(true), always(OPEN_SELECT_CLASS), always(``));
     const setListClassName = ifElse(equals(true), always(OPEN_SELECT_LIST_CLASS), always(``));
 
-    const [selected, setSelected] = useState<Maybe<primitive>>(head(values));
-
+    const [selected, setSelected] = useState<Maybe<primitive>>(selectedValue);
 
     const handleClickOutside = (): void => {
         setOpen(false);

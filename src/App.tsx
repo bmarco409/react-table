@@ -1,4 +1,5 @@
-import { ReactElement, useMemo, useState } from 'react';
+import { splitEvery } from 'ramda';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { fakeData } from './fakeData';
 import { ICoulmDefinition } from './interfaces/column-def.interface';
@@ -20,8 +21,12 @@ interface User {
 function App(): ReactElement {
     const [paginationModel, setPaginationModel] = useState<Pagination>({ page: 0, pageSize: 2 });
 
+    
+
+    const [data, setData] = useState(splitEvery(paginationModel.pageSize,fakeData)[paginationModel.page]);
+
     const onPageChange = (model: Pagination): void =>{
-        console.info('page change', model);
+        setPaginationModel(model);
     }
 
     const params: TableQueryParams = useMemo(
@@ -35,6 +40,13 @@ function App(): ReactElement {
         }),
         [paginationModel],
     );
+
+    useEffect(() =>{
+        console.log('params ',params)
+        setData(splitEvery(paginationModel.pageSize,fakeData)[paginationModel.page] ?? [])
+    },[params])
+
+
     const columns: ICoulmDefinition<User>[] = [
         {
             field: 'id',
@@ -72,8 +84,7 @@ function App(): ReactElement {
             
             <Table
                 columnsDefinitions={columns}
-                rows={fakeData}
-                pagSize={5}
+                rows={data}
                 pageSizeOptions={[1, 2, 4]}
                 checkboxSelection
                 showHeaderMenu

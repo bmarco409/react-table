@@ -12,7 +12,6 @@ import './table.scss';
 export interface ITableComponent {
     readonly columnsDefinitions: ICoulmDefinition<unknown>[];
     readonly rows: object[];
-    readonly pagSize: number;
     readonly pageSizeOptions: number[];
     readonly paginationModel: Pagination;
     readonly checkboxSelection?: boolean;

@@ -1,6 +1,7 @@
 import { equals } from 'ramda';
 import { FC, ReactElement, memo } from 'react';
 import { Pagination } from '../../interfaces/pagination';
+import { add1, subtract1 } from '../../utils/function';
 import { LeftIcon } from '../icons/LeftIcon';
 import { PageFirstIcon } from '../icons/PageFIrst';
 import { PageLastIcon } from '../icons/PageLast';
@@ -17,13 +18,35 @@ interface IPaginator {
 
 const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOptions, onPaginationModelChange }): ReactElement => {
     
+
+    const lastPage = Math.ceil( total / pagination.pageSize);
+
+    console.info('last page', subtract1(lastPage));
+    console.info('current page', pagination.page)
+
     const isFirstPage = equals(pagination?.page,0);
-    const isLastPage = equals(pagination?.page,0);
+    const isLastPage = equals(pagination?.page,subtract1(lastPage));
+
+    console.info('isLastPage', isLastPage)
 
     const onPageSizeOptionsValueChange = (value: number): void =>{
         onPaginationModelChange?.({
             ...pagination,
             pageSize: value
+        })
+    }
+
+    const onNextPageClick = (): void =>{
+        onPaginationModelChange?.({
+            ...pagination,
+            page: add1(pagination.page)
+        })
+    }
+
+    const onPrevPageClick = ():void =>{
+        onPaginationModelChange?.({
+            ...pagination,
+            page: subtract1(pagination.page)
         })
     }
 
@@ -34,7 +57,10 @@ const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOption
                     <div className="mdc-data-table__pagination-rows-per-page">
                         <div className="mdc-data-table__pagination-rows-per-page-label">Righe per pagina</div>
 
-                        <Select values={pageSizeOptions ?? [10,20,30]} />
+                        <Select 
+                            values={pageSizeOptions ?? [10,20,30]}
+                            onValueChange={onPageSizeOptionsValueChange} 
+                            selectedValue={pagination.pageSize}/>
                     </div>
 
                     <div className="mdc-data-table__pagination-navigation">
@@ -43,13 +69,13 @@ const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOption
                         <PaginatorButton disabled={isFirstPage}>
                             <PageFirstIcon className="mdc-button__icon" width={'24'} height={'auto'} />
                         </PaginatorButton>
-                        <PaginatorButton>
+                        <PaginatorButton onClick={onPrevPageClick} disabled={isFirstPage}>
                             <LeftIcon className="mdc-button__icon" width={'24'} height={'auto'} />
                         </PaginatorButton>
-                        <PaginatorButton>
+                        <PaginatorButton onClick={onNextPageClick} disabled={isLastPage}>
                             <RightIcon className="mdc-button__icon" width={'24'} height={'auto'} />
                         </PaginatorButton>
-                        <PaginatorButton>
+                        <PaginatorButton disabled={isLastPage}>
                             <PageLastIcon className="mdc-button__icon" width={'24'} height={'auto'} />
                         </PaginatorButton>
                     </div>

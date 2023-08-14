@@ -5,9 +5,10 @@ import './paginatorButton.scss';
 interface IPaginatorComponent {
     readonly children: ReactNode;
     readonly disabled?: boolean;
+    readonly onClick?: () => void;
 }
 
-const PaginatorButtonComponent: FC<IPaginatorComponent> = ({ children , disabled}): ReactElement => {
+const PaginatorButtonComponent: FC<IPaginatorComponent> = ({ children , disabled, onClick}): ReactElement => {
     const buttonRef = useRef<HTMLButtonElement>(null);
 
     if (buttonRef.current) {
@@ -22,6 +23,7 @@ const PaginatorButtonComponent: FC<IPaginatorComponent> = ({ children , disabled
                 className="mdc-data-table__pagination-button mdc-custom-pagination-button mdc-ripple-surface"
                 ref={buttonRef}
                 disabled={disabled}
+                onClick={onClick}
             >
                 {children}
             </button>
