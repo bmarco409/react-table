@@ -1,4 +1,4 @@
-import { equals } from 'ramda';
+import { add, always, equals, ifElse, subtract } from 'ramda';
 import { FC, ReactElement, memo } from 'react';
 import { Pagination } from '../../interfaces/pagination';
 import { add1, subtract1 } from '../../utils/function';
@@ -21,13 +21,16 @@ const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOption
 
     const lastPage = Math.ceil( total / pagination.pageSize);
 
-    console.info('last page', subtract1(lastPage));
-    console.info('current page', pagination.page)
 
     const isFirstPage = equals(pagination?.page,0);
     const isLastPage = equals(pagination?.page,subtract1(lastPage));
 
-    console.info('isLastPage', isLastPage)
+    const firstElementPage = ifElse(equals(true), always(add1(pagination.page)),
+        always(add1(pagination.page* pagination.pageSize)))(isFirstPage);
+
+    const lastElementPage = ifElse(equals(true),always(total),
+        always(subtract(add(firstElementPage,+pagination.pageSize),1)))(isLastPage);
+
 
     const onPageSizeOptionsValueChange = (value: number): void =>{
         onPaginationModelChange?.({
@@ -65,7 +68,7 @@ const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOption
 
                     <div className="mdc-data-table__pagination-navigation">
                         <div className="mdc-data-table__pagination-total">
-                            {(pagination?.page ?? 0)  +1}‑{pagination?.pageSize} di {total}</div>
+                            {firstElementPage}‑{lastElementPage} di {total}</div>
                         <PaginatorButton disabled={isFirstPage}>
                             <PageFirstIcon className="mdc-button__icon" width={'24'} height={'auto'} />
                         </PaginatorButton>
