@@ -57,7 +57,7 @@ const TableComponent: FC<ITableComponent> = ({
 
     const renderHeaderCell = (data: IHeader): ReactElement => (
         <th
-            className={`mdc-data-table__header-cell ${setSortableClass(data.sortable)} mdc-custom-header-cell`}
+            className={`mdc-data-table__header-cell ${setSortableClass(data.sortable)} mdc-custom-header-cell secondary-background`}
             role="columnheader"
             scope="col"
             key={data.headerName}
@@ -108,7 +108,7 @@ const TableComponent: FC<ITableComponent> = ({
     const headerCheckBox = (): ReactElement => {
         return (
             <th
-                className="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox"
+                className="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox secondary-background"
                 role="columnheader"
                 scope="col"
             >

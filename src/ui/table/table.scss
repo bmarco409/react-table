@@ -1,3 +1,15 @@
+$theme-primary: #ff0000;
+$theme-secondary: #373E78;
+$theme-on-primary: #ffffff;
+$theme-on-secondary: #ffffff;
+
+@use "@material/theme" with ($primary: $theme-primary,
+    $secondary: $theme-secondary,
+    $on-primary: $theme-on-primary,
+    $on-secondary: $theme-on-secondary,
+);
+
+
 @use '../../assets/color.scss' as colors;
 @use "@material/checkbox"; // Required only for data table with row selection.
 @use "@material/data-table/data-table";
@@ -9,4 +21,9 @@
 
 .mdc-custom-header-cell:hover .mdc-custom-wrapper .mdc-custom-dots-button {
     visibility: visible;
+}
+
+.secondary-background {
+    background-color: $theme-secondary;
+    color: white;
 }
