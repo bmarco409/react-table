@@ -19,7 +19,7 @@ interface User {
 
 
 function App(): ReactElement {
-    const [paginationModel, setPaginationModel] = useState<Pagination>({ page: 0, pageSize: 2 });
+    const [paginationModel, setPaginationModel] = useState<Pagination>({ page: 0, pageSize: 10 });
 
     
 
@@ -85,7 +85,7 @@ function App(): ReactElement {
             <Table
                 columnsDefinitions={columns}
                 rows={data}
-                pageSizeOptions={[1, 2, 4]}
+                pageSizeOptions={[5,10, 15]}
                 checkboxSelection
                 showHeaderMenu
                 rowCount={fakeData.length}

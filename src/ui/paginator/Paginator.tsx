@@ -3,7 +3,7 @@ import { FC, ReactElement, memo } from 'react';
 import { Pagination } from '../../interfaces/pagination';
 import { add1, subtract1 } from '../../utils/function';
 import { LeftIcon } from '../icons/LeftIcon';
-import { PageFirstIcon } from '../icons/PageFIrst';
+import { PageFirstIcon } from '../icons/PageFirst';
 import { PageLastIcon } from '../icons/PageLast';
 import { RightIcon } from '../icons/RightIcon';
 import { Select } from '../input/Select';
