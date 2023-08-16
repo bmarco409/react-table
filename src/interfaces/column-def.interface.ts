@@ -1,21 +1,22 @@
+import { IActionItemCell } from "../ui/actionsItemCell/ActionItemCell";
+
 export interface ICoulmDefinition<T> {
     readonly field: string;
     readonly headerName: string;
-    readonly type?: string;
+    readonly type?: ColumnType;
     readonly sortable?: boolean;
     readonly data?: T;
-    readonly getActions: (params: RowParams) => React.ReactElement<ActionsCellItemProps>[];
+    readonly getActions?: (params: RowParams) => React.ReactElement<IActionItemCell>[];
+    readonly cellClassName?: string;
 }
 
 
-export type ColumnType = 'string' | 'number' | 'date' | 'dateTime' | 'boolean' | 'singleSelect' | 'actions';
+export type ColumnType = 'string' | 'number' | 'date' | 'dateTime' | 'boolean' | 'singleSelect' | 'actions' | 'multiSelect';
 
-interface ActionsCellItemProps{
-    readonly label: string;
-    readonly icon?: React.ReactElement;
-}
+export type RowId = string | number;
 
 interface RowParams{
-    readonly id: number | string;
+    readonly id: RowId;
     readonly row: number;
 }
+

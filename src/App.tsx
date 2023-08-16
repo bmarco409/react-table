@@ -5,7 +5,9 @@ import { fakeData } from './fakeData';
 import { ICoulmDefinition } from './interfaces/column-def.interface';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
+import { ActionItemCell } from './ui/actionsItemCell/ActionItemCell';
 import { OutlinedButton } from './ui/button/OutLinedButton';
+import { LeftIcon, RightIcon } from './ui/icons';
 import { Table } from './ui/table/Table';
 
 interface User {
@@ -74,6 +76,32 @@ function App(): ReactElement {
             headerName: 'age',
             type: 'number',
         },
+        {
+            field: 'actions',
+            headerName: 'actions',
+            type: 'actions',
+            cellClassName: 'puddu',
+            getActions: ({ id, row }): ReactElement[] => {
+                const onLeftClick = (): void =>{
+                    console.log('Left click');
+                }
+                return [<ActionItemCell 
+                        label='test'
+                        key={`${id}_0`}
+                        icon={
+                            <LeftIcon width={'24'} height={'auto'} onClick={onLeftClick}/>
+                        }
+                        />,
+                        <ActionItemCell 
+                        label='test2'
+                        key={`${id}_1`}
+                        icon={
+                            <RightIcon width={'24'} height={'auto'}/>
+                        }
+                        />
+                    ]
+            }
+        }
     ];
 
     return (

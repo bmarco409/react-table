@@ -1,5 +1,5 @@
-import { always, anyPass, compose, curry, equals, ifElse, isNil, map, pick, pluck } from 'ramda';
-import { FC, ReactElement, memo } from 'react';
+import { always, anyPass, compose, curry, equals, find, ifElse, isNil, map, pick, pluck, whereEq } from 'ramda';
+import { ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { Pagination } from '../../interfaces/pagination';
 import { Maybe, primitive } from '../../utils/customTypes';
@@ -9,8 +9,8 @@ import { Paginator } from '../paginator/Paginator';
 import { LinearProgressBar } from '../progressBar/LinearProgressBar';
 import './table.scss';
 
-export interface ITableComponent {
-    readonly columnsDefinitions: ICoulmDefinition<unknown>[];
+export interface ITableComponent<T> {
+    readonly columnsDefinitions: ICoulmDefinition<T>[];
     readonly rows: object[];
     readonly pageSizeOptions: number[];
     readonly paginationModel: Pagination;
@@ -28,10 +28,10 @@ interface IHeader {
 
 interface CellValue {
     value: primitive;
-    key: string;
+    key: string; // is the field in ICoulmDefinition
 }
 
-const TableComponent: FC<ITableComponent> = ({
+const TableComponent = <T,>({
     columnsDefinitions,
     rows,
     paginationModel,
@@ -41,13 +41,11 @@ const TableComponent: FC<ITableComponent> = ({
     loading,
     rowCount,
     onPaginationModelChange
-}): ReactElement => {
+}: ITableComponent<T>): ReactElement => {
     /***render header (HeaderComponent) */
-
-    
    
 
-    const pickHeaderAndSortable: (data: ICoulmDefinition<unknown>) => IHeader = pick(['headerName', 'sortable']);
+    const pickHeaderAndSortable: (data: ICoulmDefinition<T>) => IHeader = pick(['headerName', 'sortable']);
 
     const getHeaderAndSortable = map(pickHeaderAndSortable)(columnsDefinitions);
 
@@ -82,15 +80,19 @@ const TableComponent: FC<ITableComponent> = ({
 
     const valueKeys = pluck('field', columnsDefinitions);
 
-    const getValue = (element: object, key: string): CellValue => {
-        return { value: element[key as keyof typeof element], key };
+    const getValue = (element: object, field: string): CellValue => {
+        return { value: element[field as keyof typeof element], key: field, }
     };
 
-    const prepareCell = (data: CellValue): ReactElement => (
-        <td className="mdc-data-table__cell" key={`${data.key}_${data.value}`} title={data.value.toString()}>
-            {data.value}
-        </td>
-    );
+    const prepareCell = (data: CellValue): ReactElement => {
+        const element = find(whereEq({ 'field': data.key}),columnsDefinitions);
+        const content = ifElse(equals('actions'),always(element?.getActions?.({id: element.field ,row: 1})), always(data.value))
+        return <td 
+                className={`mdc-data-table__cell ${element?.cellClassName}`} 
+                key={`${data.key}_${data.value}`} title={data.value?.toString()}>
+                {content(data.key)}
+            </td>
+    };
 
     const renderCell = curry(compose(prepareCell, getValue));
 
