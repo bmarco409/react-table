@@ -8,10 +8,12 @@ export interface ICoulmDefinition<T> {
     readonly data?: T;
     readonly getActions?: (params: RowParams) => React.ReactElement<IActionItemCell>[];
     readonly cellClassName?: string;
+    readonly valueGetter?: <K>(value: ValueGetter<T>) => K;
 }
 
 
-export type ColumnType = 'string' | 'number' | 'date' | 'dateTime' | 'boolean' | 'singleSelect' | 'actions' | 'multiSelect';
+export type ColumnType = 'string' | 'number' | 'date' | 'dateTime' | 
+    'boolean' | 'singleSelect' | 'actions' | 'multiSelect';
 
 export type RowId = string | number;
 
@@ -20,3 +22,6 @@ interface RowParams{
     readonly row: number;
 }
 
+export interface ValueGetter <T> {
+    readonly value: T;
+}

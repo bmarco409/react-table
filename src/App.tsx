@@ -1,7 +1,7 @@
 import { splitEvery } from 'ramda';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import './App.css';
-import { fakeData } from './fakeData';
+import { User, fakeData } from './fakeData';
 import { ICoulmDefinition } from './interfaces/column-def.interface';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
@@ -10,20 +10,11 @@ import { OutlinedButton } from './ui/button/OutLinedButton';
 import { LeftIcon, RightIcon } from './ui/icons';
 import { Table } from './ui/table/Table';
 
-interface User {
-    readonly id: number;
-    readonly email: string;
-    readonly name: string;
-    readonly surname: string;
-    readonly age: number;
-}
 
 
 
 function App(): ReactElement {
     const [paginationModel, setPaginationModel] = useState<Pagination>({ page: 0, pageSize: 10 });
-
-    
 
     const [data, setData] = useState(splitEvery(paginationModel.pageSize,fakeData)[paginationModel.page]);
 
@@ -44,9 +35,8 @@ function App(): ReactElement {
     );
 
     useEffect(() =>{
-        console.log('params ',params)
-        setData(splitEvery(paginationModel.pageSize,fakeData)[paginationModel.page] ?? [])
-    },[params])
+        setData(splitEvery(paginationModel.pageSize,fakeData)[paginationModel.page] ?? []);
+    },[params]);
 
 
     const columns: ICoulmDefinition<User>[] = [
@@ -75,6 +65,12 @@ function App(): ReactElement {
             field: 'age',
             headerName: 'age',
             type: 'number',
+        },
+        {
+            field: 'details.address',
+            headerName: 'address',
+            type: 'string'
+            //valueGetter: ()
         },
         {
             field: 'actions',
