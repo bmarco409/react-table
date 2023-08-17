@@ -5,16 +5,16 @@ import './actionItemCell.scss';
 export interface IActionItemCell {
     readonly label: string;
     readonly icon?: ReactElement;
-    readonly key?: RowId;
+    readonly rowId?: RowId;
     readonly onClick?: (value: RowId) => void;
 }
 
-const ActionItemCellComponent : FC<IActionItemCell> = ({ label, icon, key , onClick}) : ReactElement =>{
+const ActionItemCellComponent : FC<IActionItemCell> = ({ label, icon, rowId , onClick}) : ReactElement =>{
     const onRowClick = (): void =>{
-        key && onClick?.(key)
+        rowId && onClick?.(rowId)
     }
     return (
-            <div key={key} title={label} className="mdc-custom-action-cell" onClick={onRowClick}>
+            <div key={rowId} title={label} className="mdc-custom-action-cell" onClick={onRowClick}>
                 {icon}
             </div>
     )

@@ -2,7 +2,7 @@ import { splitEvery } from 'ramda';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { User, fakeData } from './fakeData';
-import { ICoulmDefinition } from './interfaces/column-def.interface';
+import { ICoulmDefinition, ValueGetter } from './interfaces/column-def.interface';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
 import { ActionItemCell } from './ui/actionsItemCell/ActionItemCell';
@@ -69,8 +69,10 @@ function App(): ReactElement {
         {
             field: 'details.address',
             headerName: 'address',
-            type: 'string'
-            //valueGetter: ()
+            type: 'string',
+            valueGetter: (data: ValueGetter<User>): string =>{
+                return data.row.details.address;
+            }
         },
         {
             field: 'actions',
@@ -84,6 +86,7 @@ function App(): ReactElement {
                 return [<ActionItemCell 
                         label='test'
                         key={`${id}_0`}
+                        rowId={id}
                         icon={
                             <LeftIcon width={'24'} height={'auto'} onClick={onLeftClick}/>
                         }

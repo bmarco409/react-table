@@ -1,4 +1,4 @@
-import { always, anyPass, compose, curry, equals, find, ifElse, isNil, map, pick, pluck, whereEq } from 'ramda';
+import { always, anyPass, compose, curry, equals, find, ifElse, isNil, isNotNil, map, pick, pluck, whereEq } from 'ramda';
 import { ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { Pagination } from '../../interfaces/pagination';
@@ -29,6 +29,7 @@ interface IHeader {
 interface CellValue {
     value: primitive;
     key: string; // is the field in ICoulmDefinition
+    row: number;
 }
 
 const TableComponent = <T,>({
@@ -80,29 +81,36 @@ const TableComponent = <T,>({
 
     const valueKeys = pluck('field', columnsDefinitions);
 
-    const getValue = (element: object, field: string): CellValue => {
-        return { value: element[field as keyof typeof element], key: field, }
+    const getValue = (element: object, row: number, field: string,): CellValue => {
+        return { value: element[field as keyof typeof element], key: field, row }
     };
 
     const prepareCell = (data: CellValue): ReactElement => {
         const element = find(whereEq({ 'field': data.key}),columnsDefinitions);
-        const content = ifElse(equals('actions'),always(element?.getActions?.({id: element.field ,row: 1})), always(data.value))
+        const renderActions = element?.getActions?.({id: data.row ,row: data.row});
+        const isValueGetter = isNotNil(element?.valueGetter );
+        //const renderValue = ifElse(equals(true), always(element?.valueGetter?.({ row: da })),always(data.value))(isValueGetter)
+
+        const isActions = ifElse(
+            equals('actions'),
+            always(renderActions),
+            always(data.value))
         return <td 
                 className={`mdc-data-table__cell ${element?.cellClassName}`} 
                 key={`${data.key}_${data.value}`} title={data.value?.toString()}>
-                {content(data.key)}
+                {isActions(data.key)}
             </td>
     };
 
     const renderCell = curry(compose(prepareCell, getValue));
 
-    const prepareRow = (obj: object): unknown => map(renderCell(obj), valueKeys);
+    const prepareRow = (obj: object, row: number): unknown => map(renderCell(obj, row), valueKeys);
 
     const renderRows = rows.map((element, index) => {
         return (
             <tr className="mdc-data-table__row" key={index}>
                 {checkboxSelection && rowCheckBox()}
-                <>{prepareRow(element)}</>
+                <>{prepareRow(element, index)}</>
             </tr>
         );
     });

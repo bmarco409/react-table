@@ -8,7 +8,7 @@ export interface ICoulmDefinition<T> {
     readonly data?: T;
     readonly getActions?: (params: RowParams) => React.ReactElement<IActionItemCell>[];
     readonly cellClassName?: string;
-    readonly valueGetter?: <K>(value: ValueGetter<T>) => K;
+    readonly valueGetter?: (value: ValueGetter<T>) => unknown;
 }
 
 
@@ -23,5 +23,5 @@ interface RowParams{
 }
 
 export interface ValueGetter <T> {
-    readonly value: T;
+    readonly row: T;
 }
