@@ -8,7 +8,7 @@ import { TableQueryParams } from './interfaces/tableQueryParam';
 import { ActionItemCell } from './ui/actionsItemCell/ActionItemCell';
 import { OutlinedButton } from './ui/button/OutLinedButton';
 import { LeftIcon, RightIcon } from './ui/icons';
-import { Table } from './ui/table/Table';
+import { TableComponent } from './ui/table/Table';
 
 
 
@@ -109,7 +109,7 @@ function App(): ReactElement {
                  <OutlinedButton label={'Colonne'} />
             </div>
             
-            <Table
+            <TableComponent
                 columnsDefinitions={columns}
                 rows={data}
                 pageSizeOptions={[5,10, 15]}

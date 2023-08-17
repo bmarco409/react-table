@@ -32,7 +32,7 @@ interface CellValue {
     row: number;
 }
 
-const TableComponent = <T,>({
+export const TableComponent = <T,>({
     columnsDefinitions,
     rows,
     paginationModel,
