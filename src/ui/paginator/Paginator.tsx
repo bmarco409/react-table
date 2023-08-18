@@ -19,11 +19,10 @@ interface IPaginator {
 const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOptions, onPaginationModelChange }): ReactElement => {
     
 
-    const lastPage = Math.ceil( total / pagination.pageSize);
-
+    const lastPage = subtract1(Math.ceil( total / pagination.pageSize));
 
     const isFirstPage = equals(pagination?.page,0);
-    const isLastPage = equals(pagination?.page,subtract1(lastPage));
+    const isLastPage = equals(pagination?.page,lastPage);
 
     const firstElementPage = ifElse(equals(true), always(add1(pagination.page)),
         always(add1(pagination.page* pagination.pageSize)))(isFirstPage);
@@ -53,6 +52,21 @@ const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOption
         })
     }
 
+    const onFirstPageClick =(): void =>{
+        onPaginationModelChange?.({
+            ...pagination,
+            page: 0
+        })
+    }
+
+    const onLastPageClick =(): void =>{
+        onPaginationModelChange?.({
+            ...pagination,
+            page: lastPage
+        })
+    }
+
+    
     return (
         <>
             <div className="mdc-data-table__pagination">
@@ -69,7 +83,7 @@ const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOption
                     <div className="mdc-data-table__pagination-navigation">
                         <div className="mdc-data-table__pagination-total">
                             {firstElementPage}‑{lastElementPage} di {total}</div>
-                        <PaginatorButton disabled={isFirstPage}>
+                        <PaginatorButton disabled={isFirstPage} onClick={onFirstPageClick}>
                             <PageFirstIcon className="mdc-button__icon" width={'24'} height={'auto'} />
                         </PaginatorButton>
                         <PaginatorButton onClick={onPrevPageClick} disabled={isFirstPage}>
@@ -78,7 +92,7 @@ const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOption
                         <PaginatorButton onClick={onNextPageClick} disabled={isLastPage}>
                             <RightIcon className="mdc-button__icon" width={'24'} height={'auto'} />
                         </PaginatorButton>
-                        <PaginatorButton disabled={isLastPage}>
+                        <PaginatorButton disabled={isLastPage} onClick={onLastPageClick}>
                             <PageLastIcon className="mdc-button__icon" width={'24'} height={'auto'} />
                         </PaginatorButton>
                     </div>
