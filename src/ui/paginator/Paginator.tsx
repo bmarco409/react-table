@@ -13,60 +13,67 @@ interface IPaginator {
     readonly pagination: Pagination;
     readonly pageSizeOptions: number[];
     readonly total: number;
-    readonly onPaginationModelChange?: (model: Pagination) =>void;
+    readonly onPaginationModelChange?: (model: Pagination) => void;
 }
 
-const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOptions, onPaginationModelChange }): ReactElement => {
-    
+const PaginatorComponent: FC<IPaginator> = ({
+    total,
+    pagination,
+    pageSizeOptions,
+    onPaginationModelChange,
+}): ReactElement => {
+    const lastPage = subtract1(Math.ceil(total / pagination.pageSize));
 
-    const lastPage = subtract1(Math.ceil( total / pagination.pageSize));
+    const isFirstPage = equals(pagination?.page, 0);
+    const isLastPage = equals(pagination?.page, lastPage);
 
-    const isFirstPage = equals(pagination?.page,0);
-    const isLastPage = equals(pagination?.page,lastPage);
+    const firstElementPage = ifElse(
+        equals(true),
+        always(add1(pagination.page)),
+        always(add1(pagination.page * pagination.pageSize)),
+    )(isFirstPage);
 
-    const firstElementPage = ifElse(equals(true), always(add1(pagination.page)),
-        always(add1(pagination.page* pagination.pageSize)))(isFirstPage);
+    const lastElementPage = ifElse(
+        equals(true),
+        always(total),
+        always(subtract(add(firstElementPage, +pagination.pageSize), 1)),
+    )(isLastPage);
 
-    const lastElementPage = ifElse(equals(true),always(total),
-        always(subtract(add(firstElementPage,+pagination.pageSize),1)))(isLastPage);
-
-
-    const onPageSizeOptionsValueChange = (value: number): void =>{
+    const onPageSizeOptionsValueChange = (value: number): void => {
         onPaginationModelChange?.({
             ...pagination,
-            pageSize: value
-        })
-    }
+            pageSize: value,
+        });
+    };
 
-    const onNextPageClick = (): void =>{
+    const onNextPageClick = (): void => {
         onPaginationModelChange?.({
             ...pagination,
-            page: add1(pagination.page)
-        })
-    }
+            page: add1(pagination.page),
+        });
+    };
 
-    const onPrevPageClick = ():void =>{
+    const onPrevPageClick = (): void => {
         onPaginationModelChange?.({
             ...pagination,
-            page: subtract1(pagination.page)
-        })
-    }
+            page: subtract1(pagination.page),
+        });
+    };
 
-    const onFirstPageClick =(): void =>{
+    const onFirstPageClick = (): void => {
         onPaginationModelChange?.({
             ...pagination,
-            page: 0
-        })
-    }
+            page: 0,
+        });
+    };
 
-    const onLastPageClick =(): void =>{
+    const onLastPageClick = (): void => {
         onPaginationModelChange?.({
             ...pagination,
-            page: lastPage
-        })
-    }
+            page: lastPage,
+        });
+    };
 
-    
     return (
         <>
             <div className="mdc-data-table__pagination">
@@ -74,15 +81,17 @@ const PaginatorComponent: FC<IPaginator> = ({ total , pagination, pageSizeOption
                     <div className="mdc-data-table__pagination-rows-per-page">
                         <div className="mdc-data-table__pagination-rows-per-page-label">Righe per pagina</div>
 
-                        <Select 
-                            values={pageSizeOptions ?? [10,20,30]}
-                            onValueChange={onPageSizeOptionsValueChange} 
-                            selectedValue={pagination.pageSize}/>
+                        <Select
+                            values={pageSizeOptions ?? [10, 20, 30]}
+                            onValueChange={onPageSizeOptionsValueChange}
+                            selectedValue={pagination.pageSize}
+                        />
                     </div>
 
                     <div className="mdc-data-table__pagination-navigation">
                         <div className="mdc-data-table__pagination-total">
-                            {firstElementPage}‑{lastElementPage} di {total}</div>
+                            {firstElementPage}‑{lastElementPage} di {total}
+                        </div>
                         <PaginatorButton disabled={isFirstPage} onClick={onFirstPageClick}>
                             <PageFirstIcon className="mdc-button__icon" width={'24'} height={'auto'} />
                         </PaginatorButton>

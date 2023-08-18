@@ -1,7 +1,22 @@
-import { always, anyPass, compose, curry, equals, find, ifElse, isNil, isNotNil, map, pick, pluck, whereEq } from 'ramda';
-import { ReactElement, memo } from 'react';
+import {
+    always,
+    anyPass,
+    compose,
+    curry,
+    equals,
+    find,
+    ifElse,
+    isNil,
+    isNotNil,
+    map,
+    pick,
+    pluck,
+    whereEq,
+} from 'ramda';
+import { CSSProperties, ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { Pagination } from '../../interfaces/pagination';
+import { CELL_DEFAULT_MIN_WIDTH, CELL_DEFAULT_WIDTH } from '../../utils/const';
 import { Maybe, primitive } from '../../utils/customTypes';
 import { HeaderCell } from '../header/HeaderCell';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
@@ -18,18 +33,12 @@ export interface ITableComponent<T> {
     readonly showHeaderMenu?: boolean;
     readonly loading?: boolean;
     readonly rowCount?: number;
-    readonly onPaginationModelChange?: (model: Pagination) =>void;
+    readonly onPaginationModelChange?: (model: Pagination) => void;
 }
 interface IHeader {
     readonly headerName: string;
     readonly sortable?: boolean;
     readonly showHeaderMenu?: boolean;
-}
-
-interface CellValue {
-    value: primitive;
-    key: string; // is the field in ICoulmDefinition
-    row: number;
 }
 
 export const TableComponent = <T,>({
@@ -41,10 +50,9 @@ export const TableComponent = <T,>({
     showHeaderMenu,
     loading,
     rowCount,
-    onPaginationModelChange
+    onPaginationModelChange,
 }: ITableComponent<T>): ReactElement => {
     /***render header (HeaderComponent) */
-   
 
     const pickHeaderAndSortable: (data: ICoulmDefinition<T>) => IHeader = pick(['headerName', 'sortable']);
 
@@ -67,6 +75,20 @@ export const TableComponent = <T,>({
 
     const renderHeader = map(renderHeaderCell, getHeaderAndSortable);
 
+    const headerCheckBox = (): ReactElement => {
+        return (
+            <th
+                className="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox"
+                role="columnheader"
+                scope="col"
+            >
+                <div className="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox">
+                    <CheckBoxInputComponent />
+                </div>
+            </th>
+        );
+    };
+
     /**** render Body (BodyComponent)*/
 
     const rowCheckBox = (): ReactElement => {
@@ -81,28 +103,40 @@ export const TableComponent = <T,>({
 
     const valueKeys = pluck('field', columnsDefinitions);
 
-    const getValue = (element: object, row: number, field: string,): CellValue => {
-        return { value: element[field as keyof typeof element], key: field, row }
-    };
+    const prepareCell = (element: object, row: number, field: string): ReactElement => {
+        const column = find(whereEq({ field: field }), columnsDefinitions);
+        const isValueGetter = isNotNil(column?.valueGetter);
 
-    const prepareCell = (data: CellValue): ReactElement => {
-        const element = find(whereEq({ 'field': data.key}),columnsDefinitions);
-        const renderActions = element?.getActions?.({id: data.row ,row: data.row});
-        const isValueGetter = isNotNil(element?.valueGetter );
-        //const renderValue = ifElse(equals(true), always(element?.valueGetter?.({ row: da })),always(data.value))(isValueGetter)
+        const cellValue = element[field as keyof typeof element] as Maybe<primitive>;
+        const renderActions = column?.getActions?.({ id: row, row: row });
 
-        const isActions = ifElse(
-            equals('actions'),
-            always(renderActions),
-            always(data.value))
-        return <td 
-                className={`mdc-data-table__cell ${element?.cellClassName}`} 
-                key={`${data.key}_${data.value}`} title={data.value?.toString()}>
-                {isActions(data.key)}
+        const renderValue = ifElse(
+            equals(true),
+            always(column?.valueGetter?.({ row: element as T })),
+            always(cellValue),
+        )(isValueGetter);
+
+        const isActions = ifElse(equals('actions'), always(renderActions), always(renderValue));
+
+        const style: CSSProperties = {
+            maxWidth: column?.maxWidth,
+            width: column?.maxWidth ?? CELL_DEFAULT_WIDTH,
+            minWidth: column?.minWidth ?? CELL_DEFAULT_MIN_WIDTH,
+        };
+
+        return (
+            <td
+                className={`mdc-data-table__cell ${column?.cellClassName}`}
+                key={`${field}_${cellValue}`}
+                title={cellValue?.toString()}
+                style={style}
+            >
+                {isActions(field)}
             </td>
+        );
     };
 
-    const renderCell = curry(compose(prepareCell, getValue));
+    const renderCell = curry(compose(prepareCell));
 
     const prepareRow = (obj: object, row: number): unknown => map(renderCell(obj, row), valueKeys);
 
@@ -114,20 +148,6 @@ export const TableComponent = <T,>({
             </tr>
         );
     });
-
-    const headerCheckBox = (): ReactElement => {
-        return (
-            <th
-                className="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox"
-                role="columnheader"
-                scope="col"
-            >
-                <div className="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox">
-                    <CheckBoxInputComponent />
-                </div>
-            </th>
-        );
-    };
 
     /****** */
 
@@ -146,7 +166,12 @@ export const TableComponent = <T,>({
                     </table>
                 </div>
                 {loading && <LinearProgressBar />}
-                <Paginator total={rowCount ?? 0}  pagination={paginationModel} pageSizeOptions={pageSizeOptions} onPaginationModelChange={onPaginationModelChange}/>
+                <Paginator
+                    total={rowCount ?? 0}
+                    pagination={paginationModel}
+                    pageSizeOptions={pageSizeOptions}
+                    onPaginationModelChange={onPaginationModelChange}
+                />
             </div>
         </>
     );

@@ -8,7 +8,7 @@ interface IPaginatorComponent {
     readonly onClick?: () => void;
 }
 
-const PaginatorButtonComponent: FC<IPaginatorComponent> = ({ children , disabled, onClick}): ReactElement => {
+const PaginatorButtonComponent: FC<IPaginatorComponent> = ({ children, disabled, onClick }): ReactElement => {
     const buttonRef = useRef<HTMLButtonElement>(null);
 
     if (buttonRef.current) {

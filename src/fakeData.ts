@@ -1,4 +1,3 @@
-
 export interface User {
     readonly id: number;
     readonly email: string;
@@ -17,15 +16,15 @@ export interface Details {
 export const fakeData: User[] = [
     {
         id: 1,
-        email: 'puddu@email.com',
+        email: 'puddu@email.com 555555555555555555555555',
         name: 'puddu',
         surname: 'mimmo3',
         age: 1,
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 2,
@@ -36,8 +35,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 3,
@@ -48,8 +47,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 4,
@@ -60,8 +59,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 5,
@@ -72,8 +71,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 6,
@@ -84,8 +83,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 7,
@@ -96,8 +95,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 7,
@@ -108,8 +107,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 8,
@@ -120,8 +119,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 9,
@@ -132,8 +131,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 10,
@@ -144,8 +143,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 11,
@@ -156,8 +155,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 12,
@@ -168,8 +167,8 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
     {
         id: 13,
@@ -180,7 +179,7 @@ export const fakeData: User[] = [
         details: {
             address: 'via palermo',
             cap: 90100,
-            city: 'palermo'
-        }
+            city: 'palermo',
+        },
     },
 ];

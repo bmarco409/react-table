@@ -2,7 +2,7 @@ import { createContext, ReactElement, ReactNode, useContext, useMemo, useState }
 import { Pagination } from '../interfaces/pagination';
 import { Maybe, Setter } from '../utils/customTypes';
 
-export interface ITableContext { 
+export interface ITableContext {
     readonly pageSizeOptions: Maybe<number[]>;
     readonly setPageSizeOptions: (values: number[]) => void;
     readonly pagination: Maybe<Pagination>;
@@ -29,7 +29,6 @@ const usePageSizeOptions = (values: Maybe<number[]>): [Maybe<number[]>, Setter<M
     return [pageSizeOptions, setPageSizeOptions];
 };
 
-
 const usePagination = (value: Maybe<Pagination>): [Maybe<Pagination>, Setter<Maybe<Pagination>>] => {
     const [pagination, setPagination] = useState<Maybe<Pagination>>(value);
     return [pagination, setPagination];
@@ -40,17 +39,17 @@ const TableContextProvider = ({ children }: { children: ReactNode }): ReactEleme
 
     const [pagination, setPagination] = usePagination({
         page: 1,
-        pageSize: 0
-    })
+        pageSize: 0,
+    });
 
     const memoizedPageSizeContext = useMemo(
         () => ({
             pageSizeOptions,
             setPageSizeOptions,
             pagination,
-            setPagination
+            setPagination,
         }),
-        [pageSizeOptions,pagination],
+        [pageSizeOptions, pagination],
     );
     return <TableContext.Provider value={memoizedPageSizeContext}>{children}</TableContext.Provider>;
 };

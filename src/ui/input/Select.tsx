@@ -1,22 +1,17 @@
 import { addIndex, always, equals, ifElse, map } from 'ramda';
 import { FC, ReactElement, memo, useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
+import { OPEN_SELECT_CLASS, OPEN_SELECT_LIST_CLASS, SELECT_ITEM_CLASS } from '../../utils/const';
 import { Maybe, primitive } from '../../utils/customTypes';
 import './select.scss';
-
-const OPEN_SELECT_LIST_CLASS = `mdc-menu-surface--open`;
-const OPEN_SELECT_CLASS = `mdc-select--activated`;
-
-const SELECT_ITEM_CLASS = `mdc-list-item--selected`;
 
 interface ISelectComponent {
     readonly values: number[];
     readonly selectedValue: number;
     readonly onValueChange?: (value: number) => void;
-    
 }
 
-const SelectComponent: FC<ISelectComponent> = ({ values , onValueChange , selectedValue}): ReactElement => {
+const SelectComponent: FC<ISelectComponent> = ({ values, onValueChange, selectedValue }): ReactElement => {
     const refSelect = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState<boolean>(false);
     const setSelectClassName = ifElse(equals(true), always(OPEN_SELECT_CLASS), always(``));

@@ -1,5 +1,4 @@
-import { primitive, primitiveArray } from "../utils/customTypes";
-
+import { primitive, primitiveArray } from '../utils/customTypes';
 
 /**
  * advanced filter operat0r

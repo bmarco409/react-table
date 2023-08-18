@@ -10,17 +10,14 @@ import { OutlinedButton } from './ui/button/OutLinedButton';
 import { LeftIcon, RightIcon } from './ui/icons';
 import { TableComponent } from './ui/table/Table';
 
-
-
-
 function App(): ReactElement {
     const [paginationModel, setPaginationModel] = useState<Pagination>({ page: 0, pageSize: 10 });
 
-    const [data, setData] = useState(splitEvery(paginationModel.pageSize,fakeData)[paginationModel.page]);
+    const [data, setData] = useState(splitEvery(paginationModel.pageSize, fakeData)[paginationModel.page]);
 
-    const onPageChange = (model: Pagination): void =>{
+    const onPageChange = (model: Pagination): void => {
         setPaginationModel(model);
-    }
+    };
 
     const params: TableQueryParams = useMemo(
         () => ({
@@ -28,16 +25,14 @@ function App(): ReactElement {
                 ...paginationModel,
             },
             queryOptions: [],
-            orders: []
-    
+            orders: [],
         }),
         [paginationModel],
     );
 
-    useEffect(() =>{
-        setData(splitEvery(paginationModel.pageSize,fakeData)[paginationModel.page] ?? []);
-    },[params]);
-
+    useEffect(() => {
+        setData(splitEvery(paginationModel.pageSize, fakeData)[paginationModel.page] ?? []);
+    }, [params]);
 
     const columns: ICoulmDefinition<User>[] = [
         {
@@ -70,9 +65,25 @@ function App(): ReactElement {
             field: 'details.address',
             headerName: 'address',
             type: 'string',
-            valueGetter: (data: ValueGetter<User>): string =>{
+            valueGetter: (data: ValueGetter<User>): string => {
                 return data.row.details.address;
-            }
+            },
+        },
+        {
+            field: 'details.city',
+            headerName: 'city',
+            type: 'string',
+            valueGetter: (data: ValueGetter<User>): string => {
+                return data.row.details.city;
+            },
+        },
+        {
+            field: 'details.cap',
+            headerName: 'cap',
+            type: 'string',
+            valueGetter: (data: ValueGetter<User>): number => {
+                return data.row.details.cap;
+            },
         },
         {
             field: 'actions',
@@ -80,39 +91,32 @@ function App(): ReactElement {
             type: 'actions',
             cellClassName: 'puddu',
             getActions: ({ id, row }): ReactElement[] => {
-                const onLeftClick = (): void =>{
+                const onLeftClick = (): void => {
                     console.log('Left click');
-                }
-                return [<ActionItemCell 
-                        label='test'
+                };
+                return [
+                    <ActionItemCell
+                        label="test"
                         key={`${id}_0`}
                         rowId={id}
-                        icon={
-                            <LeftIcon width={'24'} height={'auto'} onClick={onLeftClick}/>
-                        }
-                        />,
-                        <ActionItemCell 
-                        label='test2'
-                        key={`${id}_1`}
-                        icon={
-                            <RightIcon width={'24'} height={'auto'}/>
-                        }
-                        />
-                    ]
-            }
-        }
+                        icon={<LeftIcon width={'24'} height={'auto'} onClick={onLeftClick} />}
+                    />,
+                    <ActionItemCell label="test2" key={`${id}_1`} icon={<RightIcon width={'24'} height={'auto'} />} />,
+                ];
+            },
+        },
     ];
 
     return (
         <>
-            <div style={{ width: '100%' , marginBottom: 20 , display: 'flex'}}>
-                 <OutlinedButton label={'Colonne'} />
+            <div style={{ width: '100%', marginBottom: 20, display: 'flex' }}>
+                <OutlinedButton label={'Colonne'} />
             </div>
-            
+
             <TableComponent
                 columnsDefinitions={columns}
                 rows={data}
-                pageSizeOptions={[5,10, 15]}
+                pageSizeOptions={[5, 10, 15]}
                 checkboxSelection
                 showHeaderMenu
                 rowCount={fakeData.length}
