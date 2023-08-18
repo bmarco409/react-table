@@ -5,10 +5,15 @@
     outline: 0px;
 }
 
+.mdc-custom-header-cell:hover>.mdc-custom-wrapper>.mdc-custom-sort-button {
+    visibility: visible;
+}
+
 
 .mdc-custom-sort-button {
     background-color: transparent;
     @extend .no-border;
+    visibility: hidden;
 
     &:focus {
         @extend .no-border;
