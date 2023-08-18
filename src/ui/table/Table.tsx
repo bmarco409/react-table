@@ -119,7 +119,7 @@ export const TableComponent = <T,>({
         const isActions = ifElse(equals('actions'), always(renderActions), always(renderValue));
 
         const style: CSSProperties = {
-            maxWidth: column?.maxWidth,
+            maxWidth: column?.maxWidth ?? CELL_DEFAULT_WIDTH,
             width: column?.maxWidth ?? CELL_DEFAULT_WIDTH,
             minWidth: column?.minWidth ?? CELL_DEFAULT_MIN_WIDTH,
         };
