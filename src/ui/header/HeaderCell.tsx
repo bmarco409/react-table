@@ -43,8 +43,8 @@ const HeaderCellComponent: FC<IHeaderCell> = ({ label, showSortable, showMenu , 
     const renderArrowIcon = (): ReactElement =>{
       
         return ifElse(equals(true),
-            always(<UpArrowIcon width={18} height={'auto'} className="mdc-custom-sort-icon" onClick={onArrowClick}/>),
-            always(<DownArrowIcon width={18} height={'auto'} className="mdc-custom-sort-icon" onClick={onArrowClick}/>)
+            always(<UpArrowIcon width={18} height={'100%'} className="mdc-custom-sort-icon" onClick={onArrowClick}/>),
+            always(<DownArrowIcon width={18} height={'100%'} className="mdc-custom-sort-icon" onClick={onArrowClick}/>)
         )(isAscOrNull(order))   
     }
 

@@ -30,7 +30,7 @@ const MenuComponent: FC<IMenuComponent> = ({ className }): ReactElement => {
         <>
             <div className="mdc-custom-manu-container" ref={refMenu}>
                 <button onClick={openMenu} className={`mdc-custom-dots-button ${className}`}>
-                    <DotsIcon width={18} height={'auto'} />
+                    <DotsIcon width={18} height={'100%'} />
                 </button>
                 <div className="mdc-menu-surface--anchor--absolute">
                     <div

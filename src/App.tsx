@@ -104,9 +104,9 @@ function App(): ReactElement {
                         label="test"
                         key={`${id}_0`}
                         rowId={id}
-                        icon={<LeftIcon width={'24'} height={'auto'} onClick={onLeftClick} />}
+                        icon={<LeftIcon width={'24'} height={'100%'} onClick={onLeftClick} />}
                     />,
-                    <ActionItemCell label="test2" key={`${id}_1`} icon={<RightIcon width={'24'} height={'auto'} />} />,
+                    <ActionItemCell label="test2" key={`${id}_1`} icon={<RightIcon width={'24'} height={'100%'} />} />,
                 ];
             },
         },

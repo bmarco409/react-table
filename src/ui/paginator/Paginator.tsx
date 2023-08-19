@@ -93,16 +93,16 @@ const PaginatorComponent: FC<IPaginator> = ({
                             {firstElementPage}‑{lastElementPage} di {total}
                         </div>
                         <PaginatorButton disabled={isFirstPage} onClick={onFirstPageClick}>
-                            <PageFirstIcon className="mdc-button__icon" width={'24'} height={'auto'} />
+                            <PageFirstIcon className="mdc-button__icon" width={'24'} height={'100%'} />
                         </PaginatorButton>
                         <PaginatorButton onClick={onPrevPageClick} disabled={isFirstPage}>
-                            <LeftIcon className="mdc-button__icon" width={'24'} height={'auto'} />
+                            <LeftIcon className="mdc-button__icon" width={'24'} height={'100%'} />
                         </PaginatorButton>
                         <PaginatorButton onClick={onNextPageClick} disabled={isLastPage}>
-                            <RightIcon className="mdc-button__icon" width={'24'} height={'auto'} />
+                            <RightIcon className="mdc-button__icon" width={'24'} height={'100%'} />
                         </PaginatorButton>
                         <PaginatorButton disabled={isLastPage} onClick={onLastPageClick}>
-                            <PageLastIcon className="mdc-button__icon" width={'24'} height={'auto'} />
+                            <PageLastIcon className="mdc-button__icon" width={'24'} height={'100%'} />
                         </PaginatorButton>
                     </div>
                 </div>
