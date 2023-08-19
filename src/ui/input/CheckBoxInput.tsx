@@ -2,13 +2,15 @@ import { FC, ReactElement, memo } from 'react';
 import { primitive } from '../../utils/customTypes';
 import { CheckBoxIcon } from '../icons/Checkbox';
 
+export type CheckboxValue  = primitive | 'ALL';
+
 interface ICheckBoxInput {
-    readonly value: primitive;
-    readonly onChange?: (value: primitive) => void;
+    readonly value: CheckboxValue ;
+    readonly onChange?: (value: CheckboxValue) => void;
 }
 
 const CheckBoxInput: FC<ICheckBoxInput> = ({ value, onChange }): ReactElement => {
-    const onCheckBoxChange = (value: primitive): void => {
+    const onCheckBoxChange = (value: CheckboxValue): void => {
         onChange?.(value);
     };
     return (

@@ -71,6 +71,10 @@ export const TableComponent = <T,>({
         overflowX: scrollHorizzontal ? 'auto' : TABLE_SCROLL_HORIZZONTAL,
     };
 
+    const onCheckBoxChange = (value: primitive): void =>{
+        console.log('value',value)
+    }
+
     const renderHeaderCell = (data: IHeader): ReactElement => (
         <th
             className={`mdc-data-table__header-cell ${setSortableClass(data.sortable)} mdc-custom-header-cell`}
@@ -98,7 +102,7 @@ export const TableComponent = <T,>({
                 scope="col"
             >
                 <div className="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox">
-                    <CheckBoxInputComponent />
+                    <CheckBoxInputComponent  value={'ALL'} onChange={onCheckBoxChange}/>
                 </div>
             </th>
         );
@@ -106,11 +110,11 @@ export const TableComponent = <T,>({
 
     /**** render Body (BodyComponent)*/
 
-    const rowCheckBox = (): ReactElement => {
+    const rowCheckBox = (element: object, value: primitive): ReactElement => {
         return (
             <td className="mdc-data-table__cell mdc-data-table__cell--checkbox">
                 <div className="mdc-checkbox mdc-data-table__row-checkbox">
-                    <CheckBoxInputComponent />
+                    <CheckBoxInputComponent value={value}/>
                 </div>
             </td>
         );
@@ -158,7 +162,7 @@ export const TableComponent = <T,>({
     const renderRows = rows.map((element, index) => {
         return (
             <tr className="mdc-data-table__row" key={index}>
-                {checkboxSelection && rowCheckBox()}
+                {checkboxSelection && rowCheckBox(element, index)}
                 <>{prepareRow(element, index)}</>
             </tr>
         );

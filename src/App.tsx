@@ -26,7 +26,6 @@ function App(): ReactElement {
     const orderIsInArray = (key: string, orders: Order[]): boolean => any(whereEq({ key }), orders);
 
     const onSortClick = (order: Order): void => {
-        console.log('ordine ', order);
         setOrder((oldState) => {
             let state = clone(oldState);
             const isInArray = orderIsInArray(order.key, oldState ?? []);
