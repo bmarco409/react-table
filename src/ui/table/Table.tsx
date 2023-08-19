@@ -15,8 +15,9 @@ import {
 } from 'ramda';
 import { CSSProperties, ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
+import { Order } from '../../interfaces/order';
 import { Pagination } from '../../interfaces/pagination';
-import { CELL_DEFAULT_MIN_WIDTH, CELL_DEFAULT_WIDTH } from '../../utils/const';
+import { CELL_DEFAULT_MIN_WIDTH, CELL_DEFAULT_WIDTH, TABLE_SCROLL_HORIZZONTAL } from '../../utils/const';
 import { Maybe, primitive } from '../../utils/customTypes';
 import { HeaderCell } from '../header/HeaderCell';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
@@ -34,11 +35,13 @@ export interface ITableComponent<T> {
     readonly loading?: boolean;
     readonly rowCount?: number;
     readonly onPaginationModelChange?: (model: Pagination) => void;
+    readonly scrollHorizzontal?: boolean;
+    readonly onSortClick?: (value: Order) => void;
 }
 interface IHeader {
     readonly headerName: string;
     readonly sortable?: boolean;
-    readonly showHeaderMenu?: boolean;
+    readonly field?: string;
 }
 
 export const TableComponent = <T,>({
@@ -51,16 +54,22 @@ export const TableComponent = <T,>({
     loading,
     rowCount,
     onPaginationModelChange,
+    scrollHorizzontal,
+    onSortClick
 }: ITableComponent<T>): ReactElement => {
     /***render header (HeaderComponent) */
 
-    const pickHeaderAndSortable: (data: ICoulmDefinition<T>) => IHeader = pick(['headerName', 'sortable']);
+    const pickHeaderData: (data: ICoulmDefinition<T>) => IHeader = pick(['headerName', 'sortable', 'field']);
 
-    const getHeaderAndSortable = map(pickHeaderAndSortable)(columnsDefinitions);
+    const getHeaderAndSortable = map(pickHeaderData)(columnsDefinitions);
 
     const isSortable = anyPass([isNil, equals(true)]) as (value: Maybe<boolean>) => boolean;
 
     const setSortableClass = ifElse(isSortable, always('mdc-data-table__header-cell--with-sort'), always(''));
+
+    const tableStyle: CSSProperties = {
+        overflowX: scrollHorizzontal ? 'auto' : TABLE_SCROLL_HORIZZONTAL
+    }
 
     const renderHeaderCell = (data: IHeader): ReactElement => (
         <th
@@ -69,7 +78,13 @@ export const TableComponent = <T,>({
             scope="col"
             key={data.headerName}
         >
-            <HeaderCell label={data.headerName} showSortable={isSortable(data.sortable)} showMenu={showHeaderMenu} />
+            <HeaderCell 
+                label={data.headerName} 
+                showSortable={isSortable(data.sortable)} 
+                showMenu={showHeaderMenu} 
+                field={data.field} 
+                onSortClick={onSortClick}
+                />
         </th>
     );
 
@@ -122,6 +137,7 @@ export const TableComponent = <T,>({
             maxWidth: column?.maxWidth ?? CELL_DEFAULT_WIDTH,
             width: column?.maxWidth ?? CELL_DEFAULT_WIDTH,
             minWidth: column?.minWidth ?? CELL_DEFAULT_MIN_WIDTH,
+            
         };
 
         return (
@@ -154,7 +170,7 @@ export const TableComponent = <T,>({
     return (
         <>
             <div className="mdc-data-table">
-                <div className="mdc-data-table__table-container">
+                <div className="mdc-data-table__table-container" style={tableStyle}>
                     <table className="mdc-data-table__table">
                         <thead>
                             <tr className="mdc-data-table__header-row">

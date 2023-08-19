@@ -4,3 +4,4 @@ export const SELECT_ITEM_CLASS = `mdc-list-item--selected`;
 
 export const CELL_DEFAULT_WIDTH = 100;
 export const CELL_DEFAULT_MIN_WIDTH = 50;
+export const TABLE_SCROLL_HORIZZONTAL = 'hidden';

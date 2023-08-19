@@ -3,6 +3,7 @@ import { ReactElement, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { User, fakeData } from './fakeData';
 import { ICoulmDefinition, ValueGetter } from './interfaces/column-def.interface';
+import { Order } from './interfaces/order';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
 import { ActionItemCell } from './ui/actionsItemCell/ActionItemCell';
@@ -18,6 +19,10 @@ function App(): ReactElement {
     const onPageChange = (model: Pagination): void => {
         setPaginationModel(model);
     };
+
+    const onSortClick = (value: Order): void=> {
+        console.log(value);
+    }
 
     const params: TableQueryParams = useMemo(
         () => ({
@@ -122,6 +127,7 @@ function App(): ReactElement {
                 rowCount={fakeData.length}
                 paginationModel={params.pagination}
                 onPaginationModelChange={onPageChange}
+                onSortClick={onSortClick}
             />
         </>
     );
