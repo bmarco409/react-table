@@ -1,4 +1,4 @@
-import { splitEvery } from 'ramda';
+import { always, any, clone, equals, ifElse, length, reject, splitEvery, whereEq } from 'ramda';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { User, fakeData } from './fakeData';
@@ -10,9 +10,11 @@ import { ActionItemCell } from './ui/actionsItemCell/ActionItemCell';
 import { OutlinedButton } from './ui/button/OutLinedButton';
 import { LeftIcon, RightIcon } from './ui/icons';
 import { TableComponent } from './ui/table/Table';
+import { Maybe } from './utils/customTypes';
 
 function App(): ReactElement {
     const [paginationModel, setPaginationModel] = useState<Pagination>({ page: 0, pageSize: 10 });
+    const [order, setOrder] = useState<Maybe<Order[]>>(undefined);
 
     const [data, setData] = useState(splitEvery(paginationModel.pageSize, fakeData)[paginationModel.page]);
 
@@ -20,9 +22,30 @@ function App(): ReactElement {
         setPaginationModel(model);
     };
 
-    const onSortClick = (value: Order): void=> {
-        console.log(value);
-    }
+    const removeOrderByKey = (key: string, orders: Order[]): Order[] => reject(whereEq({ key }), orders);
+    const orderIsInArray = (key: string, orders: Order[]): boolean => any(whereEq({ key }), orders);
+
+    const onSortClick = (order: Order): void => {
+        console.log('ordine ', order);
+        setOrder((oldState) => {
+            let state = clone(oldState);
+            const isInArray = orderIsInArray(order.key, oldState ?? []);
+            console.info(isInArray);
+            if (orderIsInArray(order.key, oldState ?? [])) {
+                state = removeOrderByKey(order.key, oldState ?? []);
+            }
+
+            if (order.value !== null) {
+                return [...(state ?? []), order];
+            }
+
+            return ifElse(equals(0), always(undefined), always([]))(length(state ?? []));
+        });
+    };
+
+    useEffect(() => {
+        console.info(order);
+    }, [order]);
 
     const params: TableQueryParams = useMemo(
         () => ({

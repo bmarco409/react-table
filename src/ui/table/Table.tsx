@@ -55,7 +55,7 @@ export const TableComponent = <T,>({
     rowCount,
     onPaginationModelChange,
     scrollHorizzontal,
-    onSortClick
+    onSortClick,
 }: ITableComponent<T>): ReactElement => {
     /***render header (HeaderComponent) */
 
@@ -68,8 +68,8 @@ export const TableComponent = <T,>({
     const setSortableClass = ifElse(isSortable, always('mdc-data-table__header-cell--with-sort'), always(''));
 
     const tableStyle: CSSProperties = {
-        overflowX: scrollHorizzontal ? 'auto' : TABLE_SCROLL_HORIZZONTAL
-    }
+        overflowX: scrollHorizzontal ? 'auto' : TABLE_SCROLL_HORIZZONTAL,
+    };
 
     const renderHeaderCell = (data: IHeader): ReactElement => (
         <th
@@ -78,13 +78,13 @@ export const TableComponent = <T,>({
             scope="col"
             key={data.headerName}
         >
-            <HeaderCell 
-                label={data.headerName} 
-                showSortable={isSortable(data.sortable)} 
-                showMenu={showHeaderMenu} 
-                field={data.field} 
+            <HeaderCell
+                label={data.headerName}
+                showSortable={isSortable(data.sortable)}
+                showMenu={showHeaderMenu}
+                field={data.field}
                 onSortClick={onSortClick}
-                />
+            />
         </th>
     );
 
@@ -137,7 +137,6 @@ export const TableComponent = <T,>({
             maxWidth: column?.maxWidth ?? CELL_DEFAULT_WIDTH,
             width: column?.maxWidth ?? CELL_DEFAULT_WIDTH,
             minWidth: column?.minWidth ?? CELL_DEFAULT_MIN_WIDTH,
-            
         };
 
         return (
