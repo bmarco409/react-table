@@ -86,10 +86,15 @@ export const TableComponent = <T,>({
     };
 
     const onCheckBoxChange = (value: RowId): void =>{
-        console.log('value',value)
+        // const test = ifElse(
+        //     isNotNil,
+        //     (val) => reject<RowId>(equals(val), selectedRows),
+        //     always([])
+        // )(found<RowId>(value, selectedRows))
+
     }
 
-    const onHeaderCheckBoxChange = (value: RowId): void =>{
+    const onHeaderCheckBoxChange = (_value: RowId): void =>{
         setAllRowsSelected((oldValue) => !oldValue)
     }
 
@@ -225,3 +230,5 @@ export const TableComponent = <T,>({
 };
 
 export const Table = memo(TableComponent);
+
+

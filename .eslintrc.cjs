@@ -12,5 +12,13 @@ module.exports = {
     'react-refresh/only-export-components': 'warn',
     "@typescript-eslint/explicit-function-return-type": "error",
     "react-hooks/exhaustive-deps": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+      }
+  ],
   },
 }
