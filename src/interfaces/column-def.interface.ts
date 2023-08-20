@@ -39,5 +39,5 @@ interface RowParams {
 }
 
 export interface ValueGetter<T> {
-    readonly row: T;
+    readonly element: T;
 }

@@ -1,7 +1,7 @@
 import {
+    addIndex,
     always,
     anyPass,
-    compose,
     curry,
     equals,
     find,
@@ -11,9 +11,9 @@ import {
     map,
     pick,
     pluck,
-    whereEq,
+    whereEq
 } from 'ramda';
-import { CSSProperties, ReactElement, memo, useState } from 'react';
+import { CSSProperties, ReactElement, memo, useCallback, useEffect, useState } from 'react';
 import { ICoulmDefinition, RowId } from '../../interfaces/column-def.interface';
 import { Order } from '../../interfaces/order';
 import { Pagination } from '../../interfaces/pagination';
@@ -37,6 +37,7 @@ export interface ITableComponent<T> {
     readonly onPaginationModelChange?: (model: Pagination) => void;
     readonly scrollHorizzontal?: boolean;
     readonly onSortClick?: (value: Order) => void;
+    readonly onRowSelectionModelChange? : (rows: RowId[]) => void;
 }
 interface IHeader {
     readonly headerName: string;
@@ -56,10 +57,21 @@ export const TableComponent = <T,>({
     onPaginationModelChange,
     scrollHorizzontal,
     onSortClick,
+    onRowSelectionModelChange,
 }: ITableComponent<T>): ReactElement => {
     /***render header (HeaderComponent) */
 
-    const [allRowsSelected, setAllRowsSelected] = useState<boolean>(false);
+    const [allRowsSelected,setAllRowsSelected] = useState<boolean>(false);
+    const [selectedRows , setSelectedRows] = useState<RowId[]>([]);
+
+    const mapIndex = addIndex<object, number>(map);
+
+    const  rowsIndexValues = useCallback(() => {
+        return mapIndex((_val: object, index: number) => index, rows);
+      }, [rows]);
+
+
+
 
     const pickHeaderData: (data: ICoulmDefinition<T>) => IHeader = pick(['headerName', 'sortable', 'field']);
 
@@ -80,6 +92,15 @@ export const TableComponent = <T,>({
     const onHeaderCheckBoxChange = (value: RowId): void =>{
         setAllRowsSelected((oldValue) => !oldValue)
     }
+
+    useEffect(() =>{
+        allRowsSelected ? setSelectedRows(rowsIndexValues()) :setSelectedRows([])
+    },[allRowsSelected])
+
+    useEffect(() => {
+        console.info(selectedRows)
+        onRowSelectionModelChange?.(selectedRows);
+    },[selectedRows])
 
     const renderHeaderCell = (data: IHeader): ReactElement => (
         <th
@@ -108,7 +129,7 @@ export const TableComponent = <T,>({
                 scope="col"
             >
                 <div className="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox">
-                    <CheckBoxInputComponent  value={'ALL'} onChange={onCheckBoxChange}/>
+                    <CheckBoxInputComponent  value={'ALL'} onChange={onHeaderCheckBoxChange}/>
                 </div>
             </th>
         );
@@ -116,11 +137,12 @@ export const TableComponent = <T,>({
 
     /**** render Body (BodyComponent)*/
 
-    const rowCheckBox = (element: object, index: primitive): ReactElement => {
+    const rowCheckBox = (_element: object, rowIndex: number): ReactElement => {
+        const setSelected = ifElse(isNil,always(false),always(true));
         return (
             <td className="mdc-data-table__cell mdc-data-table__cell--checkbox">
                 <div className="mdc-checkbox mdc-data-table__row-checkbox">
-                    <CheckBoxInputComponent value={index}/>
+                    <CheckBoxInputComponent value={rowIndex} checked={setSelected(selectedRows[rowIndex])} onChange={onCheckBoxChange}/>
                 </div>
             </td>
         );
@@ -128,7 +150,7 @@ export const TableComponent = <T,>({
 
     const valueKeys = pluck('field', columnsDefinitions);
 
-    const prepareCell = (element: object, row: number, field: string): ReactElement => {
+    const renderCell = (element: object, row: number, field: string): ReactElement => {
         const column = find(whereEq({ field: field }), columnsDefinitions);
         const isValueGetter = isNotNil(column?.valueGetter);
 
@@ -137,7 +159,7 @@ export const TableComponent = <T,>({
 
         const renderValue = ifElse(
             equals(true),
-            always(column?.valueGetter?.({ row: element as T })),
+            always(column?.valueGetter?.({ element: element as T })),
             always(cellValue),
         )(isValueGetter);
 
@@ -161,9 +183,9 @@ export const TableComponent = <T,>({
         );
     };
 
-    const renderCell = curry(compose(prepareCell));
+    const curriedRenderCell = curry(renderCell);
 
-    const prepareRow = (obj: object, row: number): unknown => map(renderCell(obj, row), valueKeys);
+    const prepareRow = (obj: object, row: number): unknown => map(curriedRenderCell(obj, row), valueKeys);
 
     const renderRows = rows.map((element, index) => {
         return (

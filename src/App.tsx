@@ -2,7 +2,7 @@ import { always, any, clone, equals, ifElse, length, reject, splitEvery, whereEq
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { User, fakeData } from './fakeData';
-import { ICoulmDefinition, ValueGetter } from './interfaces/column-def.interface';
+import { ICoulmDefinition, RowId, ValueGetter } from './interfaces/column-def.interface';
 import { Order } from './interfaces/order';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
@@ -45,6 +45,10 @@ function App(): ReactElement {
     useEffect(() => {
         console.info(order);
     }, [order]);
+
+    const onSelectionchange = (values: RowId[]): void =>{
+        console.info('selected ',values);
+    }
 
     const params: TableQueryParams = useMemo(
         () => ({
@@ -93,7 +97,7 @@ function App(): ReactElement {
             headerName: 'address',
             type: 'string',
             valueGetter: (data: ValueGetter<User>): string => {
-                return data.row.details.address;
+                return data.element.details.address;
             },
         },
         {
@@ -101,7 +105,7 @@ function App(): ReactElement {
             headerName: 'city',
             type: 'string',
             valueGetter: (data: ValueGetter<User>): string => {
-                return data.row.details.city;
+                return data.element.details.city;
             },
         },
         {
@@ -109,7 +113,7 @@ function App(): ReactElement {
             headerName: 'cap',
             type: 'string',
             valueGetter: (data: ValueGetter<User>): number => {
-                return data.row.details.cap;
+                return data.element.details.cap;
             },
         },
         {
@@ -150,6 +154,7 @@ function App(): ReactElement {
                 paginationModel={params.pagination}
                 onPaginationModelChange={onPageChange}
                 onSortClick={onSortClick}
+                onRowSelectionModelChange={onSelectionchange}
             />
         </>
     );

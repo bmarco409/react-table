@@ -99,18 +99,6 @@ export const fakeData: User[] = [
         },
     },
     {
-        id: 7,
-        email: 'puddu7@email.com',
-        name: '4442eee2',
-        surname: 'dsadsads',
-        age: 12,
-        details: {
-            address: 'via palermo',
-            cap: 90100,
-            city: 'palermo',
-        },
-    },
-    {
         id: 8,
         email: 'puddu8@email.com',
         name: '4442eee2',
@@ -173,6 +161,18 @@ export const fakeData: User[] = [
     {
         id: 13,
         email: 'puddu5@email.com',
+        name: '4442eee2',
+        surname: 'dsadsads',
+        age: 12,
+        details: {
+            address: 'via palermo',
+            cap: 90100,
+            city: 'palermo',
+        },
+    },
+    {
+        id: 14,
+        email: 'puddu7@email.com',
         name: '4442eee2',
         surname: 'dsadsads',
         age: 12,
