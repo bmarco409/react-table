@@ -13,8 +13,8 @@ import {
     pluck,
     whereEq,
 } from 'ramda';
-import { CSSProperties, ReactElement, memo } from 'react';
-import { ICoulmDefinition } from '../../interfaces/column-def.interface';
+import { CSSProperties, ReactElement, memo, useState } from 'react';
+import { ICoulmDefinition, RowId } from '../../interfaces/column-def.interface';
 import { Order } from '../../interfaces/order';
 import { Pagination } from '../../interfaces/pagination';
 import { CELL_DEFAULT_MIN_WIDTH, CELL_DEFAULT_WIDTH, TABLE_SCROLL_HORIZZONTAL } from '../../utils/const';
@@ -59,6 +59,8 @@ export const TableComponent = <T,>({
 }: ITableComponent<T>): ReactElement => {
     /***render header (HeaderComponent) */
 
+    const [allRowsSelected, setAllRowsSelected] = useState<boolean>(false);
+
     const pickHeaderData: (data: ICoulmDefinition<T>) => IHeader = pick(['headerName', 'sortable', 'field']);
 
     const getHeaderAndSortable = map(pickHeaderData)(columnsDefinitions);
@@ -71,8 +73,12 @@ export const TableComponent = <T,>({
         overflowX: scrollHorizzontal ? 'auto' : TABLE_SCROLL_HORIZZONTAL,
     };
 
-    const onCheckBoxChange = (value: primitive): void =>{
+    const onCheckBoxChange = (value: RowId): void =>{
         console.log('value',value)
+    }
+
+    const onHeaderCheckBoxChange = (value: RowId): void =>{
+        setAllRowsSelected((oldValue) => !oldValue)
     }
 
     const renderHeaderCell = (data: IHeader): ReactElement => (
@@ -110,11 +116,11 @@ export const TableComponent = <T,>({
 
     /**** render Body (BodyComponent)*/
 
-    const rowCheckBox = (element: object, value: primitive): ReactElement => {
+    const rowCheckBox = (element: object, index: primitive): ReactElement => {
         return (
             <td className="mdc-data-table__cell mdc-data-table__cell--checkbox">
                 <div className="mdc-checkbox mdc-data-table__row-checkbox">
-                    <CheckBoxInputComponent value={value}/>
+                    <CheckBoxInputComponent value={index}/>
                 </div>
             </td>
         );

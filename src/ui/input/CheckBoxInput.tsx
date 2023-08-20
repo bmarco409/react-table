@@ -1,16 +1,17 @@
 import { FC, ReactElement, memo } from 'react';
-import { primitive } from '../../utils/customTypes';
+import { RowId } from '../../interfaces/column-def.interface';
 import { CheckBoxIcon } from '../icons/Checkbox';
 
-export type CheckboxValue  = primitive | 'ALL';
+
 
 interface ICheckBoxInput {
-    readonly value: CheckboxValue ;
-    readonly onChange?: (value: CheckboxValue) => void;
+    readonly value: RowId ;
+    readonly checked?: boolean;
+    readonly onChange?: (value: RowId) => void;
 }
 
-const CheckBoxInput: FC<ICheckBoxInput> = ({ value, onChange }): ReactElement => {
-    const onCheckBoxChange = (value: CheckboxValue): void => {
+const CheckBoxInput: FC<ICheckBoxInput> = ({ value, checked, onChange }): ReactElement => {
+    const onCheckBoxChange = (value: RowId): void => {
         onChange?.(value);
     };
     return (
@@ -20,6 +21,7 @@ const CheckBoxInput: FC<ICheckBoxInput> = ({ value, onChange }): ReactElement =>
                 className="mdc-checkbox__native-control"
                 onChange={(): void => onCheckBoxChange(value)}
                 value={value}
+                checked={checked}
             />
             <div className="mdc-checkbox__background">
                 <CheckBoxIcon />
