@@ -1,11 +1,10 @@
 import { always, equals, ifElse } from 'ramda';
-import { FC, ReactElement, memo, useRef, useState } from 'react';
+import { FC, HTMLProps, ReactElement, memo, useRef, useState } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
-import { BaseComponentInterface } from '../../shared/baseComponentInterface';
 import { DotsIcon } from '../icons/DotsIcon';
 import './menu.scss';
 
-type IMenuComponent = BaseComponentInterface;
+type IMenuComponent = HTMLProps<HTMLDivElement>
 
 const OPEN_MENU_CLASS = 'mdc-menu-surface--is-open-below mdc-menu-surface--open';
 

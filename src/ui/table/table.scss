@@ -23,7 +23,31 @@ $theme-on-secondary: #ffffff;
     visibility: visible;
 }
 
+.mdc-custom-header-cell:hover .mdc-custom-wrapper .resize-handle {
+    visibility: visible;
+    border-color: #000000;
+}
+
 .secondary-background {
     background-color: $theme-secondary;
     color: white;
+}
+
+
+.resize-handle {
+    display: flex;
+    position: relative;
+    cursor: col-resize;
+    width: 7px;
+    height: 14px;
+    right: 0;
+    top: 0;
+    z-index: 999;
+    border-right: 2px solid transparent;
+    visibility: hidden;
+}
+
+
+.resize-handle.active {
+    border-color: #517ea5;
 }

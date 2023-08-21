@@ -28,8 +28,7 @@ function App(): ReactElement {
     const onSortClick = (order: Order): void => {
         setOrder((oldState) => {
             let state = clone(oldState);
-            const isInArray = orderIsInArray(order.key, oldState ?? []);
-            console.info(isInArray);
+
             if (orderIsInArray(order.key, oldState ?? [])) {
                 state = removeOrderByKey(order.key, oldState ?? []);
             }
@@ -42,12 +41,12 @@ function App(): ReactElement {
         });
     };
 
-    useEffect(() => {
-        console.info(order);
-    }, [order]);
+    // useEffect(() => {
+    //     console.info(order);
+    // }, [order]);
 
     const onSelectionchange = (values: RowId[]): void =>{
-        console.info('selected ',values);
+      //  console.info('selected ',values);
     }
 
     const params: TableQueryParams = useMemo(
