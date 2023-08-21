@@ -2,6 +2,7 @@ import {
     addIndex,
     always,
     anyPass,
+    append,
     curry,
     equals,
     find,
@@ -11,6 +12,7 @@ import {
     map,
     pick,
     pluck,
+    reject,
     whereEq
 } from 'ramda';
 import { CSSProperties, ReactElement, memo, useCallback, useEffect, useState } from 'react';
@@ -19,6 +21,7 @@ import { Order } from '../../interfaces/order';
 import { Pagination } from '../../interfaces/pagination';
 import { CELL_DEFAULT_MIN_WIDTH, CELL_DEFAULT_WIDTH, TABLE_SCROLL_HORIZZONTAL } from '../../utils/const';
 import { Maybe, primitive } from '../../utils/customTypes';
+import { found } from '../../utils/function';
 import { HeaderCell } from '../header/HeaderCell';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
 import { Paginator } from '../paginator/Paginator';
@@ -71,8 +74,6 @@ export const TableComponent = <T,>({
       }, [rows]);
 
 
-
-
     const pickHeaderData: (data: ICoulmDefinition<T>) => IHeader = pick(['headerName', 'sortable', 'field']);
 
     const getHeaderAndSortable = map(pickHeaderData)(columnsDefinitions);
@@ -86,11 +87,12 @@ export const TableComponent = <T,>({
     };
 
     const onCheckBoxChange = (value: RowId): void =>{
-        // const test = ifElse(
-        //     isNotNil,
-        //     (val) => reject<RowId>(equals(val), selectedRows),
-        //     always([])
-        // )(found<RowId>(value, selectedRows))
+        ifElse(
+            isNotNil,
+            always(setSelectedRows(reject<RowId, RowId[]>(equals(value), selectedRows))),
+            always(setSelectedRows(append(value,selectedRows)))
+        )(found<RowId>(value, selectedRows))
+   
 
     }
 
@@ -147,7 +149,7 @@ export const TableComponent = <T,>({
         return (
             <td className="mdc-data-table__cell mdc-data-table__cell--checkbox">
                 <div className="mdc-checkbox mdc-data-table__row-checkbox">
-                    <CheckBoxInputComponent value={rowIndex} checked={setSelected(selectedRows[rowIndex])} onChange={onCheckBoxChange}/>
+                    <CheckBoxInputComponent value={rowIndex} checked={setSelected(found(rowIndex,selectedRows))} onChange={onCheckBoxChange}/>
                 </div>
             </td>
         );
