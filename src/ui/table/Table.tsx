@@ -10,16 +10,17 @@ import {
     isNil,
     isNotNil,
     map,
-    nth,
     pick,
     pluck,
     reject,
-    whereEq
+    whereEq,
 } from 'ramda';
 import { CSSProperties, ReactElement, createRef, memo, useCallback, useEffect, useState } from 'react';
 import { ICoulmDefinition, RowId } from '../../interfaces/column-def.interface';
+import { IHeader } from '../../interfaces/header';
 import { Order } from '../../interfaces/order';
 import { Pagination } from '../../interfaces/pagination';
+import { useResize } from '../../utils/UseResize';
 import { CELL_DEFAULT_MIN_WIDTH, CELL_DEFAULT_WIDTH, TABLE_SCROLL_HORIZZONTAL } from '../../utils/const';
 import { Maybe, primitive } from '../../utils/customTypes';
 import { found } from '../../utils/function';
@@ -43,12 +44,6 @@ export interface ITableComponent<T> {
     readonly onSortClick?: (value: Order) => void;
     readonly onRowSelectionModelChange?: (rows: RowId[]) => void;
 }
-interface IHeader {
-    readonly headerName: string;
-    readonly sortable?: boolean;
-    readonly field?: string;
-    readonly ref?: React.RefObject<HTMLTableCellElement>;
-}
 
 export const TableComponent = <T,>({
     columnsDefinitions,
@@ -64,8 +59,6 @@ export const TableComponent = <T,>({
     onSortClick,
     onRowSelectionModelChange,
 }: ITableComponent<T>): ReactElement => {
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
     const [allRowsSelected, setAllRowsSelected] = useState<boolean>(false);
     const [selectedRows, setSelectedRows] = useState<RowId[]>([]);
 
@@ -79,12 +72,16 @@ export const TableComponent = <T,>({
 
     const pickHeaderData: (data: ICoulmDefinition<T>) => IHeader = pick(['headerName', 'sortable', 'field']);
 
-    const parseHeader = (column : ICoulmDefinition<T>): IHeader => ({
+    const parseHeader = (column: ICoulmDefinition<T>): IHeader => ({
         ...pickHeaderData(column),
-        ref:  createRef<HTMLTableCellElement>()
-    })
+        ref: createRef<HTMLTableCellElement>(),
+    });
 
-    const getHeaderInfo = map(parseHeader, columnsDefinitions)
+    const getHeaderInfo = map(parseHeader, columnsDefinitions);
+
+    const headers = getHeaderInfo;
+
+    const { activeIndex, onMouseDown } = useResize({ columnsDefinitions, headers });
 
     const isSortable = anyPass([isNil, equals(true)]) as (value: Maybe<boolean>) => boolean;
 
@@ -114,7 +111,6 @@ export const TableComponent = <T,>({
         onRowSelectionModelChange?.(selectedRows);
     }, [selectedRows]);
 
-
     const renderHeaderCell = (data: IHeader, index: number): ReactElement => (
         <th
             className={`mdc-data-table__header-cell ${setSortableClass(data.sortable)} mdc-custom-header-cell`}
@@ -130,15 +126,12 @@ export const TableComponent = <T,>({
                 field={data.field}
                 onSortClick={onSortClick}
                 className={`resize-handle ${activeIndex === index ? 'active' : 'idle'}`}
-                onMove={(): void => mouseDown(index)}
-                
+                onMove={(): void => onMouseDown(index)}
             />
         </th>
     );
 
     const mapHeadersWithIndex = addIndex<IHeader, ReactElement>(map);
-
-    const headers = getHeaderInfo;
 
     const renderHeader = mapHeadersWithIndex(renderHeaderCell, getHeaderInfo);
 
@@ -222,77 +215,6 @@ export const TableComponent = <T,>({
     });
 
     /****** */
-
-    /****resize column */
-
-    const mouseMove = useCallback(
-        (e: MouseEvent) => {
-            const column = nth(activeIndex ?? 1000,headers);
-            
-            const gridColumns = headers.map((col, i) => {
-                const column = find(whereEq({ field: col.field }), columnsDefinitions);
-                const values = Array.from(document.getElementsByClassName(`td_${col.field}`));
-                
-                if (i === activeIndex) {
-                    const mousePosition = e.clientX;
-                    const elementPostiion = col.ref?.current?.getBoundingClientRect();
-                    const delta = mousePosition - (elementPostiion?.right ?? 0);
-                 
-                    const width = (col.ref?.current?.offsetWidth ?? 0) + delta;
-                   
-                    values.forEach(element => {
-                        if (element instanceof HTMLElement) {
-                          
-                            element.style.width = `${width}px`; 
-                            element.style.maxWidth = `${width}px`;
-                        }
-                        
-                    });
-                    if (width >= (column?.minWidth ?? CELL_DEFAULT_MIN_WIDTH)) {
-                       
-                        return `${width}px`;
-                    }
-                }
-
-              
-                return `${col.ref?.current?.offsetWidth ?? 0}px`;
-            });
-            // if( tableElement.current){
-            //     console.log('setto')
-            //     tableElement.current.style.gridTemplateColumns = `${gridColumns.join(
-            //         " "
-            //       )}`;
-            // }
-        },
-        [activeIndex, columnsDefinitions],
-    );
-
-    const removeListeners = useCallback(() => {
-        window.removeEventListener('mousemove', mouseMove);
-        window.removeEventListener('mouseup', removeListeners);
-    }, [mouseMove]);
-
-    const mouseUp = useCallback(() => {
-        setActiveIndex(null);
-        removeListeners();
-    }, [setActiveIndex, removeListeners]);
-
-    useEffect(() => {
-        if (activeIndex !== null) {
-            window.addEventListener('mousemove', mouseMove);
-            window.addEventListener('mouseup', mouseUp);
-        }
-
-        return () => {
-            removeListeners();
-        };
-    }, [activeIndex, mouseMove, mouseUp, removeListeners]);
-
-    const mouseDown = (index: number): void => {
-        setActiveIndex(index);
-    };
-
-    /******** */
 
     return (
         <>

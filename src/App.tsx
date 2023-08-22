@@ -80,7 +80,7 @@ function App(): ReactElement {
             field: 'name',
             headerName: 'name',
             type: 'string',
-            sortable: false
+            sortable: false,
         },
         {
             field: 'surname',
