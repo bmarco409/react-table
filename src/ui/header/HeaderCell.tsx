@@ -6,17 +6,24 @@ import { UpArrowIcon } from '../icons/UpArrow';
 import { Menu } from '../menu/Menu';
 import './headerCell.scss';
 
-interface IHeaderCell  extends HTMLProps<HTMLDivElement>{
+interface IHeaderCell extends HTMLProps<HTMLDivElement> {
     readonly label: string;
     readonly showSortable?: boolean;
     readonly showMenu?: boolean;
     readonly field?: string;
     readonly onSortClick?: (value: Order) => void;
     readonly onMove?: () => void;
-  
 }
 
-const HeaderCellComponent: FC<IHeaderCell> = ({ label, showSortable, showMenu, field, onSortClick , className, onMove}): ReactElement => {
+const HeaderCellComponent: FC<IHeaderCell> = ({
+    label,
+    showSortable,
+    showMenu,
+    field,
+    onSortClick,
+    className,
+    onMove,
+}): ReactElement => {
     const [order, setOrder] = useState<OrderValue>(null);
 
     const orderEqualsTo = equals<OrderValue>;
@@ -56,7 +63,7 @@ const HeaderCellComponent: FC<IHeaderCell> = ({ label, showSortable, showMenu, f
     return (
         <>
             <div className={`mdc-data-table__header-cell-wrapper mdc-custom-wrapper`}>
-                <div className={`mdc-data-table__header-cell-label` }>{label}</div>
+                <div className={`mdc-data-table__header-cell-label`}>{label}</div>
                 {showSortable && (
                     <button className="mdc-custom-sort-button" style={setStyle()}>
                         {renderArrowIcon()}

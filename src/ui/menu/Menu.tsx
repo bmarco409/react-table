@@ -4,7 +4,7 @@ import { useOnClickOutside } from 'usehooks-ts';
 import { DotsIcon } from '../icons/DotsIcon';
 import './menu.scss';
 
-type IMenuComponent = HTMLProps<HTMLDivElement>
+type IMenuComponent = HTMLProps<HTMLDivElement>;
 
 const OPEN_MENU_CLASS = 'mdc-menu-surface--is-open-below mdc-menu-surface--open';
 

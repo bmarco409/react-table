@@ -16,7 +16,7 @@ export interface Details {
 export const fakeData: User[] = [
     {
         id: 1,
-        email: 'puddu@email.com 555555555555555555555555',
+        email: 'puddu@email.com',
         name: 'puddu',
         surname: 'mimmo3',
         age: 1,

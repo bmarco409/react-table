@@ -5,19 +5,18 @@ import {
     append,
     curry,
     equals,
-    evolve,
     find,
     ifElse,
     isNil,
     isNotNil,
     map,
+    nth,
     pick,
-    pipe,
     pluck,
     reject,
     whereEq
 } from 'ramda';
-import { CSSProperties, ReactElement, memo, useCallback, useEffect, useRef, useState } from 'react';
+import { CSSProperties, ReactElement, createRef, memo, useCallback, useEffect, useState } from 'react';
 import { ICoulmDefinition, RowId } from '../../interfaces/column-def.interface';
 import { Order } from '../../interfaces/order';
 import { Pagination } from '../../interfaces/pagination';
@@ -42,13 +41,13 @@ export interface ITableComponent<T> {
     readonly onPaginationModelChange?: (model: Pagination) => void;
     readonly scrollHorizzontal?: boolean;
     readonly onSortClick?: (value: Order) => void;
-    readonly onRowSelectionModelChange? : (rows: RowId[]) => void;
+    readonly onRowSelectionModelChange?: (rows: RowId[]) => void;
 }
 interface IHeader {
     readonly headerName: string;
     readonly sortable?: boolean;
     readonly field?: string;
-    readonly ref?: React.RefObject<HTMLTableCellElement>
+    readonly ref?: React.RefObject<HTMLTableCellElement>;
 }
 
 export const TableComponent = <T,>({
@@ -65,27 +64,27 @@ export const TableComponent = <T,>({
     onSortClick,
     onRowSelectionModelChange,
 }: ITableComponent<T>): ReactElement => {
-
-
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
-    const tableElement = useRef<HTMLTableElement>(null);
 
-    const [allRowsSelected,setAllRowsSelected] = useState<boolean>(false);
-    const [selectedRows , setSelectedRows] = useState<RowId[]>([]);
+    const [allRowsSelected, setAllRowsSelected] = useState<boolean>(false);
+    const [selectedRows, setSelectedRows] = useState<RowId[]>([]);
 
     const mapRowsWithIndex = addIndex<object, number>(map);
 
-    const  rowsIndexValues = useCallback(() => {
+    const rowsIndexValues = useCallback(() => {
         return mapRowsWithIndex((_val: object, index: number) => index, rows);
-      }, [rows]);
+    }, [rows]);
 
     /***render header (HeaderComponent) */
 
     const pickHeaderData: (data: ICoulmDefinition<T>) => IHeader = pick(['headerName', 'sortable', 'field']);
 
-    const setRefonHeaderCell = evolve({ ref: useRef<HTMLTableCellElement>}) as (header: IHeader) => IHeader;
+    const parseHeader = (column : ICoulmDefinition<T>): IHeader => ({
+        ...pickHeaderData(column),
+        ref:  createRef<HTMLTableCellElement>()
+    })
 
-    const getHeaderInfo = map(pipe(pickHeaderData,setRefonHeaderCell))(columnsDefinitions);
+    const getHeaderInfo = map(parseHeader, columnsDefinitions)
 
     const isSortable = anyPass([isNil, equals(true)]) as (value: Maybe<boolean>) => boolean;
 
@@ -95,27 +94,26 @@ export const TableComponent = <T,>({
         overflowX: scrollHorizzontal ? 'auto' : TABLE_SCROLL_HORIZZONTAL,
     };
 
-    const onCheckBoxChange = (value: RowId): void =>{
+    const onCheckBoxChange = (value: RowId): void => {
         ifElse(
             isNotNil,
             always(setSelectedRows(reject<RowId, RowId[]>(equals(value), selectedRows))),
-            always(setSelectedRows(append(value,selectedRows)))
-        )(found<RowId>(value, selectedRows))
-   
+            always(setSelectedRows(append(value, selectedRows))),
+        )(found<RowId>(value, selectedRows));
+    };
 
-    }
+    const onHeaderCheckBoxChange = (_value: RowId): void => {
+        setAllRowsSelected((oldValue) => !oldValue);
+    };
 
-    const onHeaderCheckBoxChange = (_value: RowId): void =>{
-        setAllRowsSelected((oldValue) => !oldValue)
-    }
-
-    useEffect(() =>{
-        allRowsSelected ? setSelectedRows(rowsIndexValues()) :setSelectedRows([])
-    },[allRowsSelected])
+    useEffect(() => {
+        allRowsSelected ? setSelectedRows(rowsIndexValues()) : setSelectedRows([]);
+    }, [allRowsSelected]);
 
     useEffect(() => {
         onRowSelectionModelChange?.(selectedRows);
-    },[selectedRows])
+    }, [selectedRows]);
+
 
     const renderHeaderCell = (data: IHeader, index: number): ReactElement => (
         <th
@@ -131,11 +129,9 @@ export const TableComponent = <T,>({
                 showMenu={showHeaderMenu}
                 field={data.field}
                 onSortClick={onSortClick}
-                className={`resize-handle ${
-                    activeIndex === index ? "active" : "idle"
-                  }`}
-
-                onMove={ (): void =>mouseDown(index)}
+                className={`resize-handle ${activeIndex === index ? 'active' : 'idle'}`}
+                onMove={(): void => mouseDown(index)}
+                
             />
         </th>
     );
@@ -143,8 +139,8 @@ export const TableComponent = <T,>({
     const mapHeadersWithIndex = addIndex<IHeader, ReactElement>(map);
 
     const headers = getHeaderInfo;
-    
-    const renderHeader = mapHeadersWithIndex(renderHeaderCell, headers);
+
+    const renderHeader = mapHeadersWithIndex(renderHeaderCell, getHeaderInfo);
 
     const headerCheckBox = (): ReactElement => {
         return (
@@ -154,7 +150,7 @@ export const TableComponent = <T,>({
                 scope="col"
             >
                 <div className={`mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox`}>
-                    <CheckBoxInputComponent  value={'ALL'} onChange={onHeaderCheckBoxChange}/>
+                    <CheckBoxInputComponent value={'ALL'} onChange={onHeaderCheckBoxChange} />
                 </div>
             </th>
         );
@@ -163,11 +159,15 @@ export const TableComponent = <T,>({
     /**** render Body (BodyComponent)*/
 
     const rowCheckBox = (_element: object, rowIndex: number): ReactElement => {
-        const setSelected = ifElse(isNil,always(false),always(true));
+        const setSelected = ifElse(isNil, always(false), always(true));
         return (
             <td className="mdc-data-table__cell mdc-data-table__cell--checkbox">
                 <div className="mdc-checkbox mdc-data-table__row-checkbox">
-                    <CheckBoxInputComponent value={rowIndex} checked={setSelected(found(rowIndex,selectedRows))} onChange={onCheckBoxChange}/>
+                    <CheckBoxInputComponent
+                        value={rowIndex}
+                        checked={setSelected(found(rowIndex, selectedRows))}
+                        onChange={onCheckBoxChange}
+                    />
                 </div>
             </td>
         );
@@ -198,7 +198,7 @@ export const TableComponent = <T,>({
 
         return (
             <td
-                className={`mdc-data-table__cell ${column?.cellClassName}`}
+                className={`mdc-data-table__cell ${column?.cellClassName} td_${field}`}
                 key={`${field}_${cellValue}`}
                 title={cellValue?.toString()}
                 style={style}
@@ -223,69 +223,82 @@ export const TableComponent = <T,>({
 
     /****** */
 
-
     /****resize column */
-        
-       
-    
-        const mouseMove = useCallback(
-            (e: MouseEvent) => {
-              const gridColumns = headers.map((col, i) => {
-                const column = find(whereEq({ field: col.field }), columnsDefinitions);
-              
-                if (i === activeIndex) {
-                    console.info('column',column);
-                  const width = e.clientX -  (col.ref?.current?.offsetLeft ?? 0);
-                    console.log(width);
-                  if (width >= (column?.minWidth ?? CELL_DEFAULT_MIN_WIDTH)) {
-                        return `${width}px`;
-                  }
-                }
-                return `${(col.ref?.current?.offsetLeft ?? 0)}px`;
-              });
-                if( tableElement.current){
-                    console.log('setto')
-                    tableElement.current.style.gridTemplateColumns = `${gridColumns.join(
-                        " "
-                      )}`;
-                }
-              
-            },
-            [activeIndex, headers]
-          );
-        
-          const removeListeners = useCallback(() => {
-            window.removeEventListener("mousemove", mouseMove);
-            window.removeEventListener("mouseup", removeListeners);
-          }, [mouseMove]);
-        
-          const mouseUp = useCallback(() => {
-            setActiveIndex(null);
-            removeListeners();
-          }, [setActiveIndex, removeListeners]);
-        
-          useEffect(() => {
-            if (activeIndex !== null) {
-              window.addEventListener("mousemove", mouseMove);
-              window.addEventListener("mouseup", mouseUp);
-            }
-        
-            return () => {
-              removeListeners();
-            };
-          }, [activeIndex, mouseMove, mouseUp, removeListeners]);
 
-          const mouseDown = (index: number): void => {
-            setActiveIndex(index);
-          };
-    
-        /******** */
+    const mouseMove = useCallback(
+        (e: MouseEvent) => {
+            const column = nth(activeIndex ?? 1000,headers);
+            
+            const gridColumns = headers.map((col, i) => {
+                const column = find(whereEq({ field: col.field }), columnsDefinitions);
+                const values = Array.from(document.getElementsByClassName(`td_${col.field}`));
+                
+                if (i === activeIndex) {
+                    const mousePosition = e.clientX;
+                    const elementPostiion = col.ref?.current?.getBoundingClientRect();
+                    const delta = mousePosition - (elementPostiion?.right ?? 0);
+                 
+                    const width = (col.ref?.current?.offsetWidth ?? 0) + delta;
+                   
+                    values.forEach(element => {
+                        if (element instanceof HTMLElement) {
+                          
+                            element.style.width = `${width}px`; 
+                            element.style.maxWidth = `${width}px`;
+                        }
+                        
+                    });
+                    if (width >= (column?.minWidth ?? CELL_DEFAULT_MIN_WIDTH)) {
+                       
+                        return `${width}px`;
+                    }
+                }
+
+              
+                return `${col.ref?.current?.offsetWidth ?? 0}px`;
+            });
+            // if( tableElement.current){
+            //     console.log('setto')
+            //     tableElement.current.style.gridTemplateColumns = `${gridColumns.join(
+            //         " "
+            //       )}`;
+            // }
+        },
+        [activeIndex, columnsDefinitions],
+    );
+
+    const removeListeners = useCallback(() => {
+        window.removeEventListener('mousemove', mouseMove);
+        window.removeEventListener('mouseup', removeListeners);
+    }, [mouseMove]);
+
+    const mouseUp = useCallback(() => {
+        setActiveIndex(null);
+        removeListeners();
+    }, [setActiveIndex, removeListeners]);
+
+    useEffect(() => {
+        if (activeIndex !== null) {
+            window.addEventListener('mousemove', mouseMove);
+            window.addEventListener('mouseup', mouseUp);
+        }
+
+        return () => {
+            removeListeners();
+        };
+    }, [activeIndex, mouseMove, mouseUp, removeListeners]);
+
+    const mouseDown = (index: number): void => {
+        setActiveIndex(index);
+    };
+
+    /******** */
 
     return (
         <>
             <div className="mdc-data-table">
                 <div className="mdc-data-table__table-container" style={tableStyle}>
-                    <table className="mdc-data-table__table" ref={tableElement}>
+                    <table className="mdc-data-table__table">
                         <thead>
                             <tr className="mdc-data-table__header-row">
                                 {checkboxSelection && headerCheckBox()}
@@ -308,5 +321,3 @@ export const TableComponent = <T,>({
 };
 
 export const Table = memo(TableComponent);
-
-

@@ -2,10 +2,8 @@ import { FC, ReactElement, memo } from 'react';
 import { RowId } from '../../interfaces/column-def.interface';
 import { CheckBoxIcon } from '../icons/Checkbox';
 
-
-
 interface ICheckBoxInput {
-    readonly value: RowId ;
+    readonly value: RowId;
     readonly checked?: boolean;
     readonly onChange?: (value: RowId) => void;
 }

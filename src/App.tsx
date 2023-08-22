@@ -45,9 +45,9 @@ function App(): ReactElement {
     //     console.info(order);
     // }, [order]);
 
-    const onSelectionchange = (values: RowId[]): void =>{
-      //  console.info('selected ',values);
-    }
+    const onSelectionchange = (values: RowId[]): void => {
+        //  console.info('selected ',values);
+    };
 
     const params: TableQueryParams = useMemo(
         () => ({
@@ -80,6 +80,7 @@ function App(): ReactElement {
             field: 'name',
             headerName: 'name',
             type: 'string',
+            sortable: false
         },
         {
             field: 'surname',
