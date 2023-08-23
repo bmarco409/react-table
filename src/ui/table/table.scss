@@ -51,3 +51,9 @@ $theme-on-secondary: #ffffff;
 .resize-handle.active {
     border-color: #517ea5;
 }
+
+.mdc-custom-header-checkbox {
+    width: 44px;
+    max-width: 44px;
+    min-width: 44px;
+}

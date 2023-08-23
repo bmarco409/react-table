@@ -15,7 +15,7 @@ import {
     reject,
     whereEq,
 } from 'ramda';
-import { CSSProperties, ReactElement, createRef, memo, useCallback, useEffect, useState } from 'react';
+import { CSSProperties, ReactElement, createRef, memo, useCallback, useEffect, useRef, useState } from 'react';
 import { ICoulmDefinition, RowId } from '../../interfaces/column-def.interface';
 import { IHeader } from '../../interfaces/header';
 import { Order } from '../../interfaces/order';
@@ -61,7 +61,7 @@ export const TableComponent = <T,>({
 }: ITableComponent<T>): ReactElement => {
     const [allRowsSelected, setAllRowsSelected] = useState<boolean>(false);
     const [selectedRows, setSelectedRows] = useState<RowId[]>([]);
-
+    const tableRef = useRef<HTMLTableElement>(null);
     const mapRowsWithIndex = addIndex<object, number>(map);
 
     const rowsIndexValues = useCallback(() => {
@@ -81,7 +81,7 @@ export const TableComponent = <T,>({
 
     const headers = getHeaderInfo;
 
-    const { activeIndex, onMouseDown } = useResize({ columnsDefinitions, headers });
+    const { activeIndex, onMouseDown } = useResize({ tableRef, columnsDefinitions, headers });
 
     const isSortable = anyPass([isNil, equals(true)]) as (value: Maybe<boolean>) => boolean;
 
@@ -139,9 +139,10 @@ export const TableComponent = <T,>({
     const headerCheckBox = (): ReactElement => {
         return (
             <th
-                className="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox"
+                className="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox mdc-custom-header-checkbox"
                 role="columnheader"
                 scope="col"
+               
             >
                 <div className={`mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox`}>
                     <CheckBoxInputComponent value={'ALL'} onChange={onHeaderCheckBoxChange} />
@@ -222,7 +223,7 @@ export const TableComponent = <T,>({
         <>
             <div className="mdc-data-table">
                 <div className="mdc-data-table__table-container" style={tableStyle}>
-                    <table className="mdc-data-table__table">
+                    <table className="mdc-data-table__table" ref={tableRef}>
                         <thead>
                             <tr className="mdc-data-table__header-row">
                                 {checkboxSelection && headerCheckBox()}
