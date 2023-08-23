@@ -92,11 +92,12 @@ export const TableComponent = <T,>({
     };
 
     const onCheckBoxChange = (value: RowId): void => {
-        ifElse(
+        const updatedSelected = ifElse(
             isNotNil,
-            always(setSelectedRows(reject<RowId, RowId[]>(equals(value), selectedRows))),
-            always(setSelectedRows(append(value, selectedRows))),
+            always(reject<RowId, RowId[]>(equals(value), selectedRows)),
+            always(append(value, selectedRows)),
         )(found<RowId>(value, selectedRows));
+        setSelectedRows(updatedSelected);
     };
 
     const onHeaderCheckBoxChange = (_value: RowId): void => {
