@@ -21,7 +21,7 @@ import { IHeader } from '../../interfaces/header';
 import { Order } from '../../interfaces/order';
 import { Pagination } from '../../interfaces/pagination';
 import { useResize } from '../../utils/UseResize';
-import { CELL_DEFAULT_MIN_WIDTH, CELL_DEFAULT_WIDTH, TABLE_SCROLL_HORIZZONTAL } from '../../utils/const';
+import { TABLE_SCROLL_HORIZZONTAL } from '../../utils/const';
 import { Maybe, primitive } from '../../utils/customTypes';
 import { found } from '../../utils/function';
 import { HeaderCell } from '../header/HeaderCell';
@@ -155,7 +155,7 @@ export const TableComponent = <T,>({
     const rowCheckBox = (_element: object, rowIndex: number): ReactElement => {
         const setSelected = ifElse(isNil, always(false), always(true));
         return (
-            <td className="mdc-data-table__cell mdc-data-table__cell--checkbox">
+            <td className="mdc-data-table__cell mdc-data-table__cell--checkbox mdc-custom-checkbox-cell" role='cell'>
                 <div className="mdc-checkbox mdc-data-table__row-checkbox">
                     <CheckBoxInputComponent
                         value={rowIndex}
@@ -184,18 +184,19 @@ export const TableComponent = <T,>({
 
         const isActions = ifElse(equals('actions'), always(renderActions), always(renderValue));
 
-        const style: CSSProperties = {
-            maxWidth: column?.maxWidth ?? CELL_DEFAULT_WIDTH,
-            width: column?.maxWidth ?? CELL_DEFAULT_WIDTH,
-            minWidth: column?.minWidth ?? CELL_DEFAULT_MIN_WIDTH,
-        };
+        // const style: CSSProperties = {
+        //     maxWidth: column?.maxWidth ?? CELL_DEFAULT_WIDTH,
+        //     width: column?.width ?? CELL_DEFAULT_WIDTH,
+        //     minWidth: column?.minWidth ?? CELL_DEFAULT_MIN_WIDTH,
+        // };
 
         return (
             <td
                 className={`mdc-data-table__cell ${column?.cellClassName} td_${field}`}
                 key={`${field}_${cellValue}`}
                 title={cellValue?.toString()}
-                style={style}
+                //style={style}
+                role='cell'
             >
                 {isActions(field)}
             </td>

@@ -2,7 +2,7 @@ import { always, any, clone, equals, ifElse, length, reject, splitEvery, whereEq
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { User, fakeData } from './fakeData';
-import { ICoulmDefinition, RowId, ValueGetter } from './interfaces/column-def.interface';
+import { ICoulmDefinition, RowId } from './interfaces/column-def.interface';
 import { Order } from './interfaces/order';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
@@ -75,47 +75,48 @@ function App(): ReactElement {
             headerName: 'email',
             type: 'string',
             sortable: false,
+           
         },
-        {
-            field: 'name',
-            headerName: 'name',
-            type: 'string',
-            sortable: false,
-        },
-        {
-            field: 'surname',
-            headerName: 'surname',
-            type: 'string',
-        },
-        {
-            field: 'age',
-            headerName: 'age',
-            type: 'number',
-        },
-        {
-            field: 'details.address',
-            headerName: 'address',
-            type: 'string',
-            valueGetter: (data: ValueGetter<User>): string => {
-                return data.element.details.address;
-            },
-        },
-        {
-            field: 'details.city',
-            headerName: 'city',
-            type: 'string',
-            valueGetter: (data: ValueGetter<User>): string => {
-                return data.element.details.city;
-            },
-        },
-        {
-            field: 'details.cap',
-            headerName: 'cap',
-            type: 'string',
-            valueGetter: (data: ValueGetter<User>): number => {
-                return data.element.details.cap;
-            },
-        },
+        // {
+        //     field: 'name',
+        //     headerName: 'name',
+        //     type: 'string',
+        //     sortable: false,
+        // },
+        // {
+        //     field: 'surname',
+        //     headerName: 'surname',
+        //     type: 'string',
+        // },
+        // {
+        //     field: 'age',
+        //     headerName: 'age',
+        //     type: 'number',
+        // },
+        // {
+        //     field: 'details.address',
+        //     headerName: 'address',
+        //     type: 'string',
+        //     valueGetter: (data: ValueGetter<User>): string => {
+        //         return data.element.details.address;
+        //     },
+        // },
+        // {
+        //     field: 'details.city',
+        //     headerName: 'city',
+        //     type: 'string',
+        //     valueGetter: (data: ValueGetter<User>): string => {
+        //         return data.element.details.city;
+        //     },
+        // },
+        // {
+        //     field: 'details.cap',
+        //     headerName: 'cap',
+        //     type: 'string',
+        //     valueGetter: (data: ValueGetter<User>): number => {
+        //         return data.element.details.cap;
+        //     },
+        // },
         {
             field: 'actions',
             headerName: 'actions',
@@ -155,6 +156,7 @@ function App(): ReactElement {
                 onPaginationModelChange={onPageChange}
                 onSortClick={onSortClick}
                 onRowSelectionModelChange={onSelectionchange}
+                scrollHorizzontal={true}
             />
         </>
     );

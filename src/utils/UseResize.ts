@@ -1,4 +1,4 @@
-import { isNotNil, nth } from 'ramda';
+import { find, isNotNil, lte, nth, whereEq } from 'ramda';
 import { useCallback, useEffect, useState } from 'react';
 import { ICoulmDefinition } from '../interfaces/column-def.interface';
 import { IHeader } from '../interfaces/header';
@@ -19,16 +19,18 @@ export const useResize = <T>({
 
             if (isNotNil(column)) {
                 const values = Array.from(document.getElementsByClassName(`td_${column.field}`));
+                const columnDef = find(whereEq({ field: column.field }), columnsDefinitions);
                 const mousePosition = e.clientX;
                 const elementPostiion = column.ref?.current?.getBoundingClientRect();
                 const delta = mousePosition - (elementPostiion?.right ?? 0);
 
                 const width = (column.ref?.current?.offsetWidth ?? 0) + delta;
-
+                const maxWidth =  columnDef?.maxWidth ?? Number.MAX_SAFE_INTEGER;
                 values.forEach((element) => {
-                    if (element instanceof HTMLElement) {
+                    if (element instanceof HTMLElement && lte(width,maxWidth)) {
                         element.style.width = `${width}px`;
-                        element.style.maxWidth = `${width}px`;
+                        // element.style.maxWidth = `${width}px`;
+                        // element.style.minWidth = `${width}px`;
                     }
                 });
             }

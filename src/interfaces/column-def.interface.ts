@@ -19,6 +19,7 @@ export interface ICoulmDefinition<T> {
      * @default 100
      */
     readonly width?: number;
+    readonly resizable?: boolean;
 }
 
 export type ColumnType =
