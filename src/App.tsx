@@ -6,9 +6,7 @@ import { ICoulmDefinition, RowId } from './interfaces/column-def.interface';
 import { Order } from './interfaces/order';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
-import { ActionItemCell } from './ui/actionsItemCell/ActionItemCell';
 import { OutlinedButton } from './ui/button/OutLinedButton';
-import { LeftIcon, RightIcon } from './ui/icons';
 import { TableComponent } from './ui/table/Table';
 import { Maybe } from './utils/customTypes';
 
@@ -75,13 +73,14 @@ function App(): ReactElement {
             headerName: 'email',
             type: 'string',
             sortable: false,
+           // width: 200
         },
-        // {
-        //     field: 'name',
-        //     headerName: 'name',
-        //     type: 'string',
-        //     sortable: false,
-        // },
+        {
+            field: 'name',
+            headerName: 'name',
+            type: 'string',
+            sortable: false,
+        },
         // {
         //     field: 'surname',
         //     headerName: 'surname',
@@ -116,26 +115,26 @@ function App(): ReactElement {
         //         return data.element.details.cap;
         //     },
         // },
-        {
-            field: 'actions',
-            headerName: 'actions',
-            type: 'actions',
-            cellClassName: 'puddu',
-            getActions: ({ id, row }): ReactElement[] => {
-                const onLeftClick = (): void => {
-                    console.log('Left click');
-                };
-                return [
-                    <ActionItemCell
-                        label="test"
-                        key={`${id}_0`}
-                        rowId={id}
-                        icon={<LeftIcon width={'24'} height={'100%'} onClick={onLeftClick} />}
-                    />,
-                    <ActionItemCell label="test2" key={`${id}_1`} icon={<RightIcon width={'24'} height={'100%'} />} />,
-                ];
-            },
-        },
+        // {
+        //     field: 'actions',
+        //     headerName: 'actions',
+        //     type: 'actions',
+        //     cellClassName: 'puddu',
+        //     getActions: ({ id, row }): ReactElement[] => {
+        //         const onLeftClick = (): void => {
+        //             console.log('Left click');
+        //         };
+        //         return [
+        //             <ActionItemCell
+        //                 label="test"
+        //                 key={`${id}_0`}
+        //                 rowId={id}
+        //                 icon={<LeftIcon width={'24'} height={'100%'} onClick={onLeftClick} />}
+        //             />,
+        //             <ActionItemCell label="test2" key={`${id}_1`} icon={<RightIcon width={'24'} height={'100%'} />} />,
+        //         ];
+        //     },
+        // },
     ];
 
     return (
@@ -155,7 +154,7 @@ function App(): ReactElement {
                 onPaginationModelChange={onPageChange}
                 onSortClick={onSortClick}
                 onRowSelectionModelChange={onSelectionchange}
-                scrollHorizzontal={true}
+                scrollHorizzontal={false}
             />
         </>
     );

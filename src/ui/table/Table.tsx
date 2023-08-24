@@ -1,6 +1,7 @@
 import {
     addIndex,
     always,
+    any,
     anyPass,
     append,
     curry,
@@ -12,8 +13,11 @@ import {
     map,
     pick,
     pluck,
+    reduce,
     reject,
-    whereEq,
+    subtract,
+    sum,
+    whereEq
 } from 'ramda';
 import { CSSProperties, ReactElement, createRef, memo, useCallback, useEffect, useRef, useState } from 'react';
 import { ICoulmDefinition, RowId } from '../../interfaces/column-def.interface';
@@ -150,6 +154,42 @@ export const TableComponent = <T,>({
         );
     };
 
+       /*** */
+       const sumHeadersWidth = (total: number, data:  IHeader ):number =>sum([total ,data.ref?.current?.offsetWidth ?? 0]);
+       const autoFitColumn = (data: ICoulmDefinition<T>): boolean => isNil(data.width);
+   
+       const emptyCell = (): ReactElement =>{
+           const tableWidth = tableRef.current?.offsetWidth ?? 0;
+           const columnsWidth = reduce(sumHeadersWidth,0, headers)
+           let width = 'auto';
+           const test = any(autoFitColumn, columnsDefinitions)
+           console.log('autofit', test)
+           if(subtract(tableWidth, columnsWidth) > 0 && test){
+               width = '0px';
+           }
+           return (
+               <td
+                   className={`mdc-data-table__cell`}
+                   key={`empty`}
+                   style={{ width }}
+                   role="cell"
+               />
+                   
+           )
+       }
+       const emptyHeader = (): ReactElement => {
+           return (
+           <th
+               className={`mdc-data-table__header-cell`}
+               role="columnheader"
+               scope="col"
+               key={'empty'}
+              
+           />
+           )}
+   
+       /******** */
+
     /**** render Body (BodyComponent)*/
 
     const rowCheckBox = (_element: object, rowIndex: number): ReactElement => {
@@ -184,25 +224,25 @@ export const TableComponent = <T,>({
 
         const isActions = ifElse(equals('actions'), always(renderActions), always(renderValue));
 
-        // const style: CSSProperties = {
-        //     maxWidth: column?.maxWidth ?? CELL_DEFAULT_WIDTH,
-        //     width: column?.width ?? CELL_DEFAULT_WIDTH,
-        //     minWidth: column?.minWidth ?? CELL_DEFAULT_MIN_WIDTH,
-        // };
+        const style: CSSProperties = {
+            maxWidth: column?.maxWidth ?? 'auto',
+            width: column?.width ?? 'auto',
+            minWidth: column?.minWidth ?? 'auto',
+        };
 
         return (
             <td
                 className={`mdc-data-table__cell ${column?.cellClassName} td_${field}`}
                 key={`${field}_${cellValue}`}
                 title={cellValue?.toString()}
-                //style={style}
-                style={{ position: 'relative' }}
+                style={style}
                 role="cell"
             >
                 {isActions(field)}
             </td>
         );
     };
+    
 
     const curriedRenderCell = curry(renderCell);
 
@@ -213,11 +253,16 @@ export const TableComponent = <T,>({
             <tr className="mdc-data-table__row" key={index}>
                 {checkboxSelection && rowCheckBox(element, index)}
                 <>{prepareRow(element, index)}</>
+                {emptyCell()}
             </tr>
         );
     });
 
     /****** */
+
+
+ 
+   
 
     return (
         <>
@@ -228,6 +273,7 @@ export const TableComponent = <T,>({
                             <tr className="mdc-data-table__header-row">
                                 {checkboxSelection && headerCheckBox()}
                                 {renderHeader}
+                                {emptyHeader()}
                             </tr>
                         </thead>
                         <tbody className="mdc-data-table__content">{renderRows}</tbody>

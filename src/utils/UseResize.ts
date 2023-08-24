@@ -61,7 +61,7 @@ export const useResize = <T>({
                     console.log('test dir', direction);
                     if (lt(tableMinWidth, tableWidth)) {
                         console.log('test');
-                        tableRef.current.style.width = ``;
+                        tableRef.current.style.width = `${tableWidth}px`;
                         
                     } else {
                         console.log('test1');
