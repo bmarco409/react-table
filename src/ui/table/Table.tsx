@@ -142,7 +142,6 @@ export const TableComponent = <T,>({
                 className="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox mdc-custom-header-checkbox"
                 role="columnheader"
                 scope="col"
-               
             >
                 <div className={`mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox`}>
                     <CheckBoxInputComponent value={'ALL'} onChange={onHeaderCheckBoxChange} />
@@ -156,7 +155,7 @@ export const TableComponent = <T,>({
     const rowCheckBox = (_element: object, rowIndex: number): ReactElement => {
         const setSelected = ifElse(isNil, always(false), always(true));
         return (
-            <td className="mdc-data-table__cell mdc-data-table__cell--checkbox mdc-custom-checkbox-cell" role='cell'>
+            <td className="mdc-data-table__cell mdc-data-table__cell--checkbox mdc-custom-checkbox-cell" role="cell">
                 <div className="mdc-checkbox mdc-data-table__row-checkbox">
                     <CheckBoxInputComponent
                         value={rowIndex}
@@ -197,7 +196,8 @@ export const TableComponent = <T,>({
                 key={`${field}_${cellValue}`}
                 title={cellValue?.toString()}
                 //style={style}
-                role='cell'
+                style={{ position: 'relative' }}
+                role="cell"
             >
                 {isActions(field)}
             </td>
