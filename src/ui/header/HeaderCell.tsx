@@ -1,20 +1,29 @@
 import { always, cond, either, equals, ifElse } from 'ramda';
-import { CSSProperties, FC, ReactElement, memo, useState } from 'react';
+import { CSSProperties, FC, HTMLProps, ReactElement, memo, useState } from 'react';
 import { Order, OrderValue } from '../../interfaces/order';
 import { DownArrowIcon } from '../icons';
 import { UpArrowIcon } from '../icons/UpArrow';
 import { Menu } from '../menu/Menu';
 import './headerCell.scss';
 
-interface IHeaderCell {
+interface IHeaderCell extends HTMLProps<HTMLDivElement> {
     readonly label: string;
     readonly showSortable?: boolean;
     readonly showMenu?: boolean;
     readonly field?: string;
     readonly onSortClick?: (value: Order) => void;
+    readonly onMove?: () => void;
 }
 
-const HeaderCellComponent: FC<IHeaderCell> = ({ label, showSortable, showMenu, field, onSortClick }): ReactElement => {
+const HeaderCellComponent: FC<IHeaderCell> = ({
+    label,
+    showSortable,
+    showMenu,
+    field,
+    onSortClick,
+    className,
+    onMove,
+}): ReactElement => {
     const [order, setOrder] = useState<OrderValue>(null);
 
     const orderEqualsTo = equals<OrderValue>;
@@ -53,14 +62,15 @@ const HeaderCellComponent: FC<IHeaderCell> = ({ label, showSortable, showMenu, f
 
     return (
         <>
-            <div className="mdc-data-table__header-cell-wrapper mdc-custom-wrapper">
-                <div className="mdc-data-table__header-cell-label">{label}</div>
+            <div className={`mdc-data-table__header-cell-wrapper mdc-custom-wrapper`}>
+                <div className={`mdc-data-table__header-cell-label`}>{label}</div>
                 {showSortable && (
                     <button className="mdc-custom-sort-button" style={setStyle()}>
                         {renderArrowIcon()}
                     </button>
                 )}
                 {showMenu && <Menu className="margin-left-auto" />}
+                <div className={className} onMouseDown={onMove}></div>
             </div>
         </>
     );

@@ -2,13 +2,11 @@ import { always, any, clone, equals, ifElse, length, reject, splitEvery, whereEq
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { User, fakeData } from './fakeData';
-import { ICoulmDefinition, RowId, ValueGetter } from './interfaces/column-def.interface';
+import { ICoulmDefinition, RowId } from './interfaces/column-def.interface';
 import { Order } from './interfaces/order';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
-import { ActionItemCell } from './ui/actionsItemCell/ActionItemCell';
 import { OutlinedButton } from './ui/button/OutLinedButton';
-import { LeftIcon, RightIcon } from './ui/icons';
 import { TableComponent } from './ui/table/Table';
 import { Maybe } from './utils/customTypes';
 
@@ -28,8 +26,7 @@ function App(): ReactElement {
     const onSortClick = (order: Order): void => {
         setOrder((oldState) => {
             let state = clone(oldState);
-            const isInArray = orderIsInArray(order.key, oldState ?? []);
-            console.info(isInArray);
+
             if (orderIsInArray(order.key, oldState ?? [])) {
                 state = removeOrderByKey(order.key, oldState ?? []);
             }
@@ -42,13 +39,13 @@ function App(): ReactElement {
         });
     };
 
-    useEffect(() => {
-        console.info(order);
-    }, [order]);
+    // useEffect(() => {
+    //     console.info(order);
+    // }, [order]);
 
-    const onSelectionchange = (values: RowId[]): void =>{
-        console.info('selected ',values);
-    }
+    const onSelectionchange = (values: RowId[]): void => {
+        //  console.info('selected ',values);
+    };
 
     const params: TableQueryParams = useMemo(
         () => ({
@@ -70,72 +67,79 @@ function App(): ReactElement {
             field: 'id',
             headerName: 'id',
             type: 'number',
+            width: 200,
+            minWidth: 200
+
         },
         {
             field: 'email',
             headerName: 'email',
             type: 'string',
             sortable: false,
+           // width: 200,
+           // minWidth: 200
         },
         {
             field: 'name',
             headerName: 'name',
             type: 'string',
+            sortable: false,
+            //width: 200,
         },
-        {
-            field: 'surname',
-            headerName: 'surname',
-            type: 'string',
-        },
-        {
-            field: 'age',
-            headerName: 'age',
-            type: 'number',
-        },
-        {
-            field: 'details.address',
-            headerName: 'address',
-            type: 'string',
-            valueGetter: (data: ValueGetter<User>): string => {
-                return data.element.details.address;
-            },
-        },
-        {
-            field: 'details.city',
-            headerName: 'city',
-            type: 'string',
-            valueGetter: (data: ValueGetter<User>): string => {
-                return data.element.details.city;
-            },
-        },
-        {
-            field: 'details.cap',
-            headerName: 'cap',
-            type: 'string',
-            valueGetter: (data: ValueGetter<User>): number => {
-                return data.element.details.cap;
-            },
-        },
-        {
-            field: 'actions',
-            headerName: 'actions',
-            type: 'actions',
-            cellClassName: 'puddu',
-            getActions: ({ id, row }): ReactElement[] => {
-                const onLeftClick = (): void => {
-                    console.log('Left click');
-                };
-                return [
-                    <ActionItemCell
-                        label="test"
-                        key={`${id}_0`}
-                        rowId={id}
-                        icon={<LeftIcon width={'24'} height={'100%'} onClick={onLeftClick} />}
-                    />,
-                    <ActionItemCell label="test2" key={`${id}_1`} icon={<RightIcon width={'24'} height={'100%'} />} />,
-                ];
-            },
-        },
+        // {
+        //     field: 'surname',
+        //     headerName: 'surname',
+        //     type: 'string',
+        // },
+        // {
+        //     field: 'age',
+        //     headerName: 'age',
+        //     type: 'number',
+        // },
+        // {
+        //     field: 'details.address',
+        //     headerName: 'address',
+        //     type: 'string',
+        //     valueGetter: (data: ValueGetter<User>): string => {
+        //         return data.element.details.address;
+        //     },
+        // },
+        // {
+        //     field: 'details.city',
+        //     headerName: 'city',
+        //     type: 'string',
+        //     valueGetter: (data: ValueGetter<User>): string => {
+        //         return data.element.details.city;
+        //     },
+        // },
+        // {
+        //     field: 'details.cap',
+        //     headerName: 'cap',
+        //     type: 'string',
+        //     valueGetter: (data: ValueGetter<User>): number => {
+        //         return data.element.details.cap;
+        //     },
+        // },
+        // {
+        //     field: 'actions',
+        //     headerName: 'actions',
+        //     type: 'actions',
+        //     cellClassName: 'puddu',
+        //     getActions: ({ id, row }): ReactElement[] => {
+        //         const onLeftClick = (): void => {
+        //             console.log('Left click');
+        //         };
+        //         return [
+        //             <ActionItemCell
+        //                 label="test"
+        //                 key={`${id}_0`}
+        //                 rowId={id}
+        //                 icon={<LeftIcon width={'24'} height={'100%'} onClick={onLeftClick} />}
+        //             />,
+        //             <ActionItemCell label="test2" key={`${id}_1`} icon={<RightIcon width={'24'} height={'100%'} />} />,
+        //         ];
+        //     },
+        // },
     ];
 
     return (
@@ -155,6 +159,7 @@ function App(): ReactElement {
                 onPaginationModelChange={onPageChange}
                 onSortClick={onSortClick}
                 onRowSelectionModelChange={onSelectionchange}
+                scrollHorizzontal={false}
             />
         </>
     );
