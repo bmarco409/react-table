@@ -1,7 +1,6 @@
 import {
     addIndex,
     always,
-    any,
     anyPass,
     append,
     curry,
@@ -13,19 +12,16 @@ import {
     map,
     pick,
     pluck,
-    reduce,
     reject,
-    subtract,
-    sum,
-    whereEq
+    whereEq,
 } from 'ramda';
 import { CSSProperties, ReactElement, createRef, memo, useCallback, useEffect, useRef, useState } from 'react';
 import { ICoulmDefinition, RowId } from '../../interfaces/column-def.interface';
 import { IHeader } from '../../interfaces/header';
 import { Order } from '../../interfaces/order';
 import { Pagination } from '../../interfaces/pagination';
+import { UseApplyStyle } from '../../utils/UseApplyStyle';
 import { useResize } from '../../utils/UseResize';
-import { TABLE_SCROLL_HORIZZONTAL } from '../../utils/const';
 import { Maybe, primitive } from '../../utils/customTypes';
 import { found } from '../../utils/function';
 import { HeaderCell } from '../header/HeaderCell';
@@ -68,6 +64,13 @@ export const TableComponent = <T,>({
     const tableRef = useRef<HTMLTableElement>(null);
     const mapRowsWithIndex = addIndex<object, number>(map);
 
+    const { emptyCell, emptyHeader, tableStyle } = UseApplyStyle(
+        columnsDefinitions,
+        tableRef,
+        scrollHorizzontal,
+        checkboxSelection,
+    );
+
     const rowsIndexValues = useCallback(() => {
         return mapRowsWithIndex((_val: object, index: number) => index, rows);
     }, [rows]);
@@ -90,10 +93,6 @@ export const TableComponent = <T,>({
     const isSortable = anyPass([isNil, equals(true)]) as (value: Maybe<boolean>) => boolean;
 
     const setSortableClass = ifElse(isSortable, always('mdc-data-table__header-cell--with-sort'), always(''));
-
-    const tableStyle: CSSProperties = {
-        overflowX: scrollHorizzontal ? 'auto' : TABLE_SCROLL_HORIZZONTAL,
-    };
 
     const onCheckBoxChange = (value: RowId): void => {
         const updatedSelected = ifElse(
@@ -154,42 +153,6 @@ export const TableComponent = <T,>({
         );
     };
 
-       /*** */
-       const sumHeadersWidth = (total: number, data:  IHeader ):number =>sum([total ,data.ref?.current?.offsetWidth ?? 0]);
-       const autoFitColumn = (data: ICoulmDefinition<T>): boolean => isNil(data.width);
-   
-       const emptyCell = (): ReactElement =>{
-           const tableWidth = tableRef.current?.offsetWidth ?? 0;
-           const columnsWidth = reduce(sumHeadersWidth,0, headers)
-           let width = 'auto';
-           const test = any(autoFitColumn, columnsDefinitions)
-           console.log('autofit', test)
-           if(subtract(tableWidth, columnsWidth) > 0 && test){
-               width = '0px';
-           }
-           return (
-               <td
-                   className={`mdc-data-table__cell`}
-                   key={`empty`}
-                   style={{ width }}
-                   role="cell"
-               />
-                   
-           )
-       }
-       const emptyHeader = (): ReactElement => {
-           return (
-           <th
-               className={`mdc-data-table__header-cell`}
-               role="columnheader"
-               scope="col"
-               key={'empty'}
-              
-           />
-           )}
-   
-       /******** */
-
     /**** render Body (BodyComponent)*/
 
     const rowCheckBox = (_element: object, rowIndex: number): ReactElement => {
@@ -242,7 +205,6 @@ export const TableComponent = <T,>({
             </td>
         );
     };
-    
 
     const curriedRenderCell = curry(renderCell);
 
@@ -253,27 +215,23 @@ export const TableComponent = <T,>({
             <tr className="mdc-data-table__row" key={index}>
                 {checkboxSelection && rowCheckBox(element, index)}
                 <>{prepareRow(element, index)}</>
-                {emptyCell()}
+                {emptyCell}
             </tr>
         );
     });
 
     /****** */
 
-
- 
-   
-
     return (
         <>
-            <div className="mdc-data-table">
-                <div className="mdc-data-table__table-container" style={tableStyle}>
-                    <table className="mdc-data-table__table" ref={tableRef}>
+            <div className="mdc-data-table" >
+                <div className="mdc-data-table__table-container" >
+                    <table className="mdc-data-table__table" ref={tableRef} style={tableStyle}>
                         <thead>
                             <tr className="mdc-data-table__header-row">
                                 {checkboxSelection && headerCheckBox()}
                                 {renderHeader}
-                                {emptyHeader()}
+                                {emptyHeader}
                             </tr>
                         </thead>
                         <tbody className="mdc-data-table__content">{renderRows}</tbody>
