@@ -68,21 +68,23 @@ function App(): ReactElement {
             headerName: 'id',
             type: 'number',
             width: 200,
+            minWidth: 200
+
         },
         {
             field: 'email',
             headerName: 'email',
             type: 'string',
             sortable: false,
-            width: 200,
-            minWidth: 200
+           // width: 200,
+           // minWidth: 200
         },
         {
             field: 'name',
             headerName: 'name',
             type: 'string',
             sortable: false,
-            width: 200,
+            //width: 200,
         },
         // {
         //     field: 'surname',
