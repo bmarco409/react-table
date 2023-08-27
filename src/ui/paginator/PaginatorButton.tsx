@@ -14,7 +14,7 @@ const PaginatorButtonComponent: FC<IPaginatorComponent> = ({ children, disabled,
     useEffect(() => {
         if (buttonRef.current) {
             const rippleButton = new MDCRipple(buttonRef.current);
-            rippleButton.activate;
+            rippleButton.initialize();
             rippleButton.unbounded = true;
         }
     }, [buttonRef]);

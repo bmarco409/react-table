@@ -1,26 +1,43 @@
 import { MDCSwitch } from '@material/switch/component';
-import { ReactElement, memo, useEffect, useRef } from 'react';
+import { always, equals, ifElse } from 'ramda';
+import { FC, ReactElement, memo, useEffect, useRef } from 'react';
 import { Maybe } from '../../utils/customTypes';
+import { SwitchOffIcon } from '../icons/SwitchOff';
+import { SwitchOnIcon } from '../icons/SwitchOn';
 import './switch.scss';
 
-const SwitchComponent = (): ReactElement => {
+interface ISwitch {
+    readonly enabled?: boolean;
+    readonly label?: string;
+    readonly selected?: boolean;
+}
+
+const SELECTED_CLASS = 'mdc-switch--selected';
+const UNSELETED_CLASS = 'mdc-switch--unselected';
+
+const SwitchComponent: FC<ISwitch> = ({ enabled, label , selected}): ReactElement => {
+    const isSelected = equals<Maybe<boolean>>(true);
     const switchRef = useRef<HTMLButtonElement>(null);
-    let button: Maybe<MDCSwitch>  =  undefined;
-    useEffect(() =>{
-        if( switchRef.current){
-            button = new MDCSwitch(switchRef.current)
-            button.initialize()
+    let button: Maybe<MDCSwitch> = undefined;
+    const setSelectedClass = ifElse(isSelected,always(SELECTED_CLASS),always(UNSELETED_CLASS))(selected);
+    const setAriaChecked = ifElse(isSelected, always(true),always(false))(selected);
+    useEffect(() => {
+        if (switchRef.current) {
+            button = new MDCSwitch(switchRef.current);
+            button.initialize();
         }
-    },[switchRef])
+    }, [switchRef]);
+    
+
     return (
         <>
             <button
-                id="basic-switch"
-                className="mdc-switch mdc-switch--unselected"
+                className={`mdc-switch ${setSelectedClass} mdc-custom-switch`}
                 type="button"
                 role="switch"
-                aria-checked="false"
+                aria-checked={setAriaChecked}
                 ref={switchRef}
+                disabled={enabled ? !enabled : false}
             >
                 <div className="mdc-switch__track"></div>
                 <div className="mdc-switch__handle-track">
@@ -30,17 +47,13 @@ const SwitchComponent = (): ReactElement => {
                         </div>
                         <div className="mdc-switch__ripple"></div>
                         <div className="mdc-switch__icons">
-                            <svg className="mdc-switch__icon mdc-switch__icon--on" viewBox="0 0 24 24">
-                                <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" />
-                            </svg>
-                            <svg className="mdc-switch__icon mdc-switch__icon--off" viewBox="0 0 24 24">
-                                <path d="M20 13H4v-2h16v2z" />
-                            </svg>
+                            <SwitchOnIcon />
+                            <SwitchOffIcon />
                         </div>
                     </div>
                 </div>
             </button>
-            <label htmlFor="basic-switch">off/on</label>
+            <label htmlFor="basic-switch">{label}</label>
         </>
     );
 };

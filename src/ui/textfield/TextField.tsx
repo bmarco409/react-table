@@ -17,7 +17,7 @@ const TextFieldComponent: FC<ITextField> = ({ hintText, placeHolder }): ReactEle
             textField = new MDCTextField(textfieldRef.current);
         }
     }, [textfieldRef]);
-    
+
     const onFocus = (): void => {
         textField?.initialize();
     };

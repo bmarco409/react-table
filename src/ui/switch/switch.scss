@@ -1,1 +1,10 @@
 @use '@material/switch/styles';
+
+
+.mdc-custom-switch {
+    outline: none !important;
+
+    &:hover {
+        @extend .mdc-custom-switch;
+    }
+}

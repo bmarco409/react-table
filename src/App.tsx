@@ -7,7 +7,8 @@ import { Order } from './interfaces/order';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
 import { OutlinedButton } from './ui/button/OutLinedButton';
-import { HidableColumsMenu } from './ui/hidableColumnsMenu/HidableComunsMenu';
+import { HidableColumsMenuComponent } from './ui/hidableColumnsMenu/HidableComunsMenu';
+import { Switch } from './ui/switch/Switch';
 import { TableComponent } from './ui/table/Table';
 import { Maybe } from './utils/customTypes';
 
@@ -146,7 +147,8 @@ function App(): ReactElement {
         <>
             <div style={{ width: '100%', marginBottom: 20, display: 'flex' }}>
                 <OutlinedButton label={'Colonne'} />
-                <HidableColumsMenu open={true} />
+                <HidableColumsMenuComponent columnsDefinitions={columns} open={false} />
+                <Switch selected></Switch>
             </div>
 
             <TableComponent

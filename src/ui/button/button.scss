@@ -1,1 +1,9 @@
 @use "@material/button/styles";
+
+.mdc-custom-button {
+    outline: none !important;
+
+    &:hover {
+        @extend .mdc-custom-button;
+    }
+}
