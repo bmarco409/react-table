@@ -21,16 +21,12 @@ export const UseApplyStyle = <T,>(
 
     const sumColumnsWisth = checkboxWidth + reduce(sumColumnWidth, 0, columnsDefinitions);
     const calculateTableWidth = (): Maybe<number> => {
-        return ifElse(
-            equals<Maybe<boolean>>(false),
-            always(undefined),
-            always(sumColumnsWisth),
-        )(scrollHorizzontal);
+        return ifElse(equals<Maybe<boolean>>(false), always(undefined), always(sumColumnsWisth))(scrollHorizzontal);
     };
     useLayoutEffect(() => {
-        console.log('table width layout',tableRef?.current?.clientWidth);
-        setTableWidth(tableRef?.current?.clientWidth ?? 0)
-      }, []);
+        console.log('table width layout', tableRef?.current?.clientWidth);
+        setTableWidth(tableRef?.current?.clientWidth ?? 0);
+    }, []);
 
     const emptyCell = (): ReactElement => {
         if (allFixedColumns && sumColumnsWisth < tableWidth) {
@@ -40,15 +36,7 @@ export const UseApplyStyle = <T,>(
     };
     const emptyHeader = (): ReactElement => {
         if (allFixedColumns && sumColumnsWisth < tableWidth) {
-            return (
-                <th
-                    className={`mdc-data-table__header-cell`}
-                    role="columnheader"
-                    scope="col"
-                    key={'empty'}
-                   
-                />
-            );
+            return <th className={`mdc-data-table__header-cell`} role="columnheader" scope="col" key={'empty'} />;
         }
         return <></>;
     };

@@ -20,5 +20,6 @@ module.exports = {
           "caughtErrorsIgnorePattern": "^_"
       }
   ],
+  "init-declarations": ["error", "always"],
   },
 }

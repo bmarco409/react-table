@@ -1,5 +1,5 @@
 import { MDCRipple } from '@material/ripple/component';
-import { FC, ReactElement, ReactNode, memo, useRef } from 'react';
+import { FC, ReactElement, ReactNode, memo, useEffect, useRef } from 'react';
 import './paginatorButton.scss';
 
 interface IPaginatorComponent {
@@ -11,11 +11,13 @@ interface IPaginatorComponent {
 const PaginatorButtonComponent: FC<IPaginatorComponent> = ({ children, disabled, onClick }): ReactElement => {
     const buttonRef = useRef<HTMLButtonElement>(null);
 
-    if (buttonRef.current) {
-        const rippleButton = new MDCRipple(buttonRef.current);
-        rippleButton.activate;
-        rippleButton.unbounded = true;
-    }
+    useEffect(() => {
+        if (buttonRef.current) {
+            const rippleButton = new MDCRipple(buttonRef.current);
+            rippleButton.activate;
+            rippleButton.unbounded = true;
+        }
+    }, [buttonRef]);
 
     return (
         <>

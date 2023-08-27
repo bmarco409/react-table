@@ -20,6 +20,7 @@ export interface ICoulmDefinition<T> {
      */
     readonly width?: number;
     readonly resizable?: boolean;
+    readonly hideable?: boolean;
 }
 
 export type ColumnType =

@@ -7,6 +7,7 @@ import { Order } from './interfaces/order';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
 import { OutlinedButton } from './ui/button/OutLinedButton';
+import { HidableColumsMenu } from './ui/hidableColumnsMenu/HidableComunsMenu';
 import { TableComponent } from './ui/table/Table';
 import { Maybe } from './utils/customTypes';
 
@@ -68,16 +69,15 @@ function App(): ReactElement {
             headerName: 'id',
             type: 'number',
             width: 200,
-            minWidth: 200
-
+            minWidth: 200,
         },
         {
             field: 'email',
             headerName: 'email',
             type: 'string',
             sortable: false,
-           // width: 200,
-           // minWidth: 200
+            // width: 200,
+            // minWidth: 200
         },
         {
             field: 'name',
@@ -146,6 +146,7 @@ function App(): ReactElement {
         <>
             <div style={{ width: '100%', marginBottom: 20, display: 'flex' }}>
                 <OutlinedButton label={'Colonne'} />
+                <HidableColumsMenu open={true} />
             </div>
 
             <TableComponent

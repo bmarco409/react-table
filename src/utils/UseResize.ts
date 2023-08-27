@@ -66,7 +66,6 @@ export const useResize = <T>({
                 //     }
                 // }
                 lastPosition = e.pageX;
-               
             }
         },
         [activeIndex, columnsDefinitions],

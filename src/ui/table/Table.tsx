@@ -224,8 +224,8 @@ export const TableComponent = <T,>({
 
     return (
         <>
-            <div className="mdc-data-table" >
-                <div className="mdc-data-table__table-container" >
+            <div className="mdc-data-table">
+                <div className="mdc-data-table__table-container">
                     <table className="mdc-data-table__table" ref={tableRef} style={tableStyle}>
                         <thead>
                             <tr className="mdc-data-table__header-row">
