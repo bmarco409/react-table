@@ -1,4 +1,4 @@
-import { always, anyPass, equals, filter, ifElse, propEq } from 'ramda';
+import { always, equals, ifElse, map } from 'ramda';
 import { ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { Maybe } from '../../utils/customTypes';
@@ -15,12 +15,21 @@ interface IHidableColumnsMenu <T>{
 
 export const HidableColumsMenuComponent = <T,>({ open, columnsDefinitions }: IHidableColumnsMenu<T>): ReactElement => {
     const setOpenClass = ifElse(equals<Maybe<boolean>>(true), always(OPEN_MENU_CLASS), always(``));
-    //const hidableCondition = either(where({ hidable: true}),where({ hidable: undefined}));
-    const hidableCondition = anyPass([propEq('hidable', true), propEq('hidable', undefined)]);
+    
+    const isHidable = (column: ICoulmDefinition<T>): boolean => {
+        return column.hideable === true || column.hideable === undefined;
+    };
 
-    const columnsHidamble = filter(hidableCondition,columnsDefinitions );
-
-    console.info(columnsHidamble)
+    
+    const renderSwitch = (value: ICoulmDefinition<T>): ReactElement => {
+        console.log('hide', isHidable(value))
+        return (
+            <li className="mdc-list-item" role="menuitem" key={value.field}>
+                <Switch key={value.field} label={value.field} disable={!isHidable(value)} selected/>
+            </li>
+        )
+    }
+        
 
     return (
         <>
@@ -29,10 +38,9 @@ export const HidableColumsMenuComponent = <T,>({ open, columnsDefinitions }: IHi
                     <li className="mdc-list-item" role="menuitem">
                         <TextField hintText="Trova colonna" placeHolder="Nome Colonna" />
                     </li>
-
-                    <li className="mdc-list-item" role="menuitem">
-                        <Switch></Switch>
-                    </li>
+ 
+                    {map(renderSwitch,columnsDefinitions)}
+                    
                 </ul>
             </div>
         </>

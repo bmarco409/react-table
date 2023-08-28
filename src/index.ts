@@ -1,2 +1,4 @@
+export { HidableColumsMenuComponent } from './ui/hidableColumnsMenu/HidableComunsMenu';
 export * from './ui/icons';
-export { Table } from './ui/table/Table';
+export { TableComponent } from './ui/table/Table';
+

@@ -7,15 +7,17 @@ import { SwitchOnIcon } from '../icons/SwitchOn';
 import './switch.scss';
 
 interface ISwitch {
-    readonly enabled?: boolean;
+    readonly disable?: boolean;
     readonly label?: string;
     readonly selected?: boolean;
+    readonly showIcons?: boolean;
 }
 
 const SELECTED_CLASS = 'mdc-switch--selected';
 const UNSELETED_CLASS = 'mdc-switch--unselected';
 
-const SwitchComponent: FC<ISwitch> = ({ enabled, label , selected}): ReactElement => {
+const SwitchComponent: FC<ISwitch> = ({ disable, label , selected, showIcons}): ReactElement => {
+  
     const isSelected = equals<Maybe<boolean>>(true);
     const switchRef = useRef<HTMLButtonElement>(null);
     let button: Maybe<MDCSwitch> = undefined;
@@ -37,7 +39,7 @@ const SwitchComponent: FC<ISwitch> = ({ enabled, label , selected}): ReactElemen
                 role="switch"
                 aria-checked={setAriaChecked}
                 ref={switchRef}
-                disabled={enabled ? !enabled : false}
+                disabled={disable ? disable : false}
             >
                 <div className="mdc-switch__track"></div>
                 <div className="mdc-switch__handle-track">
@@ -47,8 +49,11 @@ const SwitchComponent: FC<ISwitch> = ({ enabled, label , selected}): ReactElemen
                         </div>
                         <div className="mdc-switch__ripple"></div>
                         <div className="mdc-switch__icons">
-                            <SwitchOnIcon />
-                            <SwitchOffIcon />
+                            {showIcons && <>
+                                <SwitchOnIcon />
+                                <SwitchOffIcon />
+                            </>
+                            }
                         </div>
                     </div>
                 </div>

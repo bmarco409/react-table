@@ -23,12 +23,12 @@ const TextFieldComponent: FC<ITextField> = ({ hintText, placeHolder }): ReactEle
     };
     return (
         <>
-            <label className="mdc-text-field mdc-text-field--filled" ref={textfieldRef} onFocus={onFocus}>
+            <label className="mdc-text-field mdc-text-field--filled mdc-custom-textfield" ref={textfieldRef} onFocus={onFocus}>
                 <span className="mdc-text-field__ripple"></span>
                 <span className="mdc-floating-label" id="my-label-id">
                     {hintText}
                 </span>
-                <input className="mdc-text-field__input" type="text" placeholder={placeHolder} />
+                <input className="mdc-text-field__input" type="text" placeholder={placeHolder}  />
                 <span className="mdc-line-ripple"></span>
             </label>
         </>

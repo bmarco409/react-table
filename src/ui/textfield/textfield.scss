@@ -4,3 +4,14 @@
 @use "@material/textfield";
 
 @include textfield.core-styles;
+
+
+
+.mdc-custom-textfield {
+    @include textfield.fill-color(#ffffff);
+    @include textfield.disabled-fill-color(#ffffff);
+
+    &:focus {
+        @extend .mdc-custom-textfield;
+    }
+}
