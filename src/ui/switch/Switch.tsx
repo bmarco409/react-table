@@ -16,20 +16,18 @@ interface ISwitch {
 const SELECTED_CLASS = 'mdc-switch--selected';
 const UNSELETED_CLASS = 'mdc-switch--unselected';
 
-const SwitchComponent: FC<ISwitch> = ({ disable, label , selected, showIcons}): ReactElement => {
-  
+const SwitchComponent: FC<ISwitch> = ({ disable, label, selected, showIcons }): ReactElement => {
     const isSelected = equals<Maybe<boolean>>(true);
     const switchRef = useRef<HTMLButtonElement>(null);
     let button: Maybe<MDCSwitch> = undefined;
-    const setSelectedClass = ifElse(isSelected,always(SELECTED_CLASS),always(UNSELETED_CLASS))(selected);
-    const setAriaChecked = ifElse(isSelected, always(true),always(false))(selected);
+    const setSelectedClass = ifElse(isSelected, always(SELECTED_CLASS), always(UNSELETED_CLASS))(selected);
+    const setAriaChecked = ifElse(isSelected, always(true), always(false))(selected);
     useEffect(() => {
         if (switchRef.current) {
             button = new MDCSwitch(switchRef.current);
             button.initialize();
         }
     }, [switchRef]);
-    
 
     return (
         <>
@@ -49,11 +47,12 @@ const SwitchComponent: FC<ISwitch> = ({ disable, label , selected, showIcons}): 
                         </div>
                         <div className="mdc-switch__ripple"></div>
                         <div className="mdc-switch__icons">
-                            {showIcons && <>
-                                <SwitchOnIcon />
-                                <SwitchOffIcon />
-                            </>
-                            }
+                            {showIcons && (
+                                <>
+                                    <SwitchOnIcon />
+                                    <SwitchOffIcon />
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -7,3 +7,7 @@
         @extend .mdc-custom-button;
     }
 }
+
+.mdc-custom-button-icon {
+    display: contents !important;
+}

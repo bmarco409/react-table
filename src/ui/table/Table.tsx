@@ -24,6 +24,7 @@ import { UseApplyStyle } from '../../utils/UseApplyStyle';
 import { useResize } from '../../utils/UseResize';
 import { Maybe, primitive } from '../../utils/customTypes';
 import { found } from '../../utils/function';
+import { HeaderActionMenu } from '../HeaderAction/HeaderActionMenu';
 import { HeaderCell } from '../header/HeaderCell';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
 import { Paginator } from '../paginator/Paginator';
@@ -226,6 +227,7 @@ export const TableComponent = <T,>({
         <>
             <div className="mdc-data-table">
                 <div className="mdc-data-table__table-container">
+                    <HeaderActionMenu />
                     <table className="mdc-data-table__table" ref={tableRef} style={tableStyle}>
                         <thead>
                             <tr className="mdc-data-table__header-row">

@@ -67,9 +67,9 @@ function App(): ReactElement {
             field: 'id',
             headerName: 'id',
             type: 'number',
-            width: 200,
-            minWidth: 200,
-            hideable: false
+            // width: 200,
+            // minWidth: 200,
+            hideable: false,
         },
         {
             field: 'email',

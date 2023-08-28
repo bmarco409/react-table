@@ -8,28 +8,26 @@ import './hidableCoumnsMenu.scss';
 
 const OPEN_MENU_CLASS = 'mdc-menu-surface--open';
 
-interface IHidableColumnsMenu <T>{
+interface IHidableColumnsMenu<T> {
     readonly open?: boolean;
     readonly columnsDefinitions: ICoulmDefinition<T>[];
 }
 
 export const HidableColumsMenuComponent = <T,>({ open, columnsDefinitions }: IHidableColumnsMenu<T>): ReactElement => {
     const setOpenClass = ifElse(equals<Maybe<boolean>>(true), always(OPEN_MENU_CLASS), always(``));
-    
+
     const isHidable = (column: ICoulmDefinition<T>): boolean => {
         return column.hideable === true || column.hideable === undefined;
     };
 
-    
     const renderSwitch = (value: ICoulmDefinition<T>): ReactElement => {
-        console.log('hide', isHidable(value))
+        console.log('hide', isHidable(value));
         return (
             <li className="mdc-list-item" role="menuitem" key={value.field}>
-                <Switch key={value.field} label={value.field} disable={!isHidable(value)} selected/>
+                <Switch key={value.field} label={value.field} disable={!isHidable(value)} selected />
             </li>
-        )
-    }
-        
+        );
+    };
 
     return (
         <>
@@ -38,9 +36,8 @@ export const HidableColumsMenuComponent = <T,>({ open, columnsDefinitions }: IHi
                     <li className="mdc-list-item" role="menuitem">
                         <TextField hintText="Trova colonna" placeHolder="Nome Colonna" />
                     </li>
- 
-                    {map(renderSwitch,columnsDefinitions)}
-                    
+
+                    {map(renderSwitch, columnsDefinitions)}
                 </ul>
             </div>
         </>
