@@ -19,12 +19,14 @@ export const HidableColumsMenuComponent = <T,>({ open, columnsDefinitions }: IHi
 
     const isHidable = (column: ICoulmDefinition<T>): boolean => {
         return column.hideable === true || column.hideable === undefined;
-    };
+    };onchange
+
+    onchange
 
     const renderSwitch = (value: ICoulmDefinition<T>): ReactElement => {
         return (
             <li className="mdc-list-item" role="menuitem" key={value.field}>
-                <Switch key={value.field} label={value.headerName} disable={!isHidable(value)} selected />
+                <Switch key={value.field} label={value.headerName} disable={!isHidable(value)} selected/>
             </li>
         );
     };
