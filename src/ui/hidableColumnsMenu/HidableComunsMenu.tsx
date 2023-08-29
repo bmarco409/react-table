@@ -2,6 +2,7 @@ import { always, equals, ifElse, map } from 'ramda';
 import { ReactElement, memo } from 'react';
 import { ICoulmDefinition } from '../../interfaces/column-def.interface';
 import { Maybe } from '../../utils/customTypes';
+import { TextButton } from '../button/TextButton';
 import { Switch } from '../switch/Switch';
 import { TextField } from '../textfield/TextField';
 import './hidableCoumnsMenu.scss';
@@ -21,7 +22,6 @@ export const HidableColumsMenuComponent = <T,>({ open, columnsDefinitions }: IHi
     };
 
     const renderSwitch = (value: ICoulmDefinition<T>): ReactElement => {
-        console.log('hide', isHidable(value));
         return (
             <li className="mdc-list-item" role="menuitem" key={value.field}>
                 <Switch key={value.field} label={value.field} disable={!isHidable(value)} selected />
@@ -39,6 +39,10 @@ export const HidableColumsMenuComponent = <T,>({ open, columnsDefinitions }: IHi
 
                     {map(renderSwitch, columnsDefinitions)}
                 </ul>
+                <div>
+                    <TextButton size='medium' label='nascondi tutte'/>
+                    <TextButton size='medium' label='visualizza tutte'/>
+                </div>
             </div>
         </>
     );

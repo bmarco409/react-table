@@ -4,6 +4,7 @@ import {
     anyPass,
     append,
     curry,
+    either,
     equals,
     find,
     ifElse,
@@ -26,6 +27,7 @@ import { Maybe, primitive } from '../../utils/customTypes';
 import { found } from '../../utils/function';
 import { HeaderActionMenu } from '../HeaderAction/HeaderActionMenu';
 import { HeaderCell } from '../header/HeaderCell';
+import { HidableColumsMenuComponent } from '../hidableColumnsMenu/HidableComunsMenu';
 import { CheckBoxInputComponent } from '../input/CheckBoxInput';
 import { Paginator } from '../paginator/Paginator';
 import { LinearProgressBar } from '../progressBar/LinearProgressBar';
@@ -44,6 +46,9 @@ export interface ITableComponent<T> {
     readonly scrollHorizzontal?: boolean;
     readonly onSortClick?: (value: Order) => void;
     readonly onRowSelectionModelChange?: (rows: RowId[]) => void;
+    readonly hideColumnFilter?: boolean;
+    readonly hideColumnSelector?: boolean;
+    readonly hideDensitySelector?: boolean;
 }
 
 export const TableComponent = <T,>({
@@ -59,6 +64,9 @@ export const TableComponent = <T,>({
     scrollHorizzontal,
     onSortClick,
     onRowSelectionModelChange,
+    hideColumnFilter,
+    hideColumnSelector,
+    hideDensitySelector
 }: ITableComponent<T>): ReactElement => {
     const [allRowsSelected, setAllRowsSelected] = useState<boolean>(false);
     const [selectedRows, setSelectedRows] = useState<RowId[]>([]);
@@ -77,6 +85,31 @@ export const TableComponent = <T,>({
     }, [rows]);
 
     /***render header (HeaderComponent) */
+    const isVisibleActionHeader = either(equals<Maybe<boolean>>(false), isNil);
+
+    const showActionHeader = isVisibleActionHeader(hideColumnFilter) || 
+        isVisibleActionHeader(hideColumnSelector) || 
+        isVisibleActionHeader(hideDensitySelector);
+
+
+    const renderActionMenu = (): ReactElement =>{
+        if(!showActionHeader){
+            return <></>
+        }
+
+        const onColumnsClick = (): void =>{
+            return;
+        }
+
+        return (
+            <HeaderActionMenu className="mdc-custom-header-menu" 
+                hideColumnFilter={hideColumnFilter} 
+                hideColumnSelector={hideColumnSelector} 
+                hideDensitySelector={hideDensitySelector}
+                onColumnsClick={onColumnsClick}
+            />
+        )
+    }
 
     const pickHeaderData: (data: ICoulmDefinition<T>) => IHeader = pick(['headerName', 'sortable', 'field']);
 
@@ -227,8 +260,9 @@ export const TableComponent = <T,>({
         <>
             <div className="mdc-data-table">
                 <div className="mdc-data-table__table-container">
-                    <HeaderActionMenu />
+                    {renderActionMenu()}
                     <table className="mdc-data-table__table" ref={tableRef} style={tableStyle}>
+                        <HidableColumsMenuComponent columnsDefinitions={columnsDefinitions} open={true}/>
                         <thead>
                             <tr className="mdc-data-table__header-row">
                                 {checkboxSelection && headerCheckBox()}

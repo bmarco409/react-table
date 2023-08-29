@@ -25,9 +25,9 @@ export const useResize = <T>({
                 const values = Array.from(document.getElementsByClassName(`td_${column.field}`));
                 const columnDef = find(whereEq({ field: column.field }), columnsDefinitions);
                 let width = column.ref?.current?.offsetWidth ?? 0;
-                console.log('base width', width);
+
                 //**** */
-                console.log(columnDef?.field);
+
                 const direction = mouseDirection(e, lastPosition);
                 if (lastPosition === 0) {
                     delta = 0;
@@ -42,8 +42,6 @@ export const useResize = <T>({
                 // const width = (column.ref?.current?.offsetWidth ?? 0) + delta;
                 const maxWidth = columnDef?.maxWidth ?? Number.MAX_SAFE_INTEGER;
                 const minWidth = columnDef?.minWidth ?? Number.MIN_SAFE_INTEGER;
-
-                console.log('width', width);
 
                 values.forEach((element) => {
                     if (element instanceof HTMLElement && lte(width, maxWidth) && gte(width, minWidth)) {

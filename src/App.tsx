@@ -2,7 +2,7 @@ import { always, any, clone, equals, ifElse, length, reject, splitEvery, whereEq
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { User, fakeData } from './fakeData';
-import { ICoulmDefinition, RowId } from './interfaces/column-def.interface';
+import { ICoulmDefinition, RowId, ValueGetter } from './interfaces/column-def.interface';
 import { Order } from './interfaces/order';
 import { Pagination } from './interfaces/pagination';
 import { TableQueryParams } from './interfaces/tableQueryParam';
@@ -86,32 +86,32 @@ function App(): ReactElement {
             sortable: false,
             //width: 200,
         },
-        // {
-        //     field: 'surname',
-        //     headerName: 'surname',
-        //     type: 'string',
-        // },
-        // {
-        //     field: 'age',
-        //     headerName: 'age',
-        //     type: 'number',
-        // },
-        // {
-        //     field: 'details.address',
-        //     headerName: 'address',
-        //     type: 'string',
-        //     valueGetter: (data: ValueGetter<User>): string => {
-        //         return data.element.details.address;
-        //     },
-        // },
-        // {
-        //     field: 'details.city',
-        //     headerName: 'city',
-        //     type: 'string',
-        //     valueGetter: (data: ValueGetter<User>): string => {
-        //         return data.element.details.city;
-        //     },
-        // },
+        {
+            field: 'surname',
+            headerName: 'surname',
+            type: 'string',
+        },
+        {
+            field: 'age',
+            headerName: 'age',
+            type: 'number',
+        },
+        {
+            field: 'details.address',
+            headerName: 'address',
+            type: 'string',
+            valueGetter: (data: ValueGetter<User>): string => {
+                return data.element.details.address;
+            },
+        },
+        {
+            field: 'details.city',
+            headerName: 'city',
+            type: 'string',
+            valueGetter: (data: ValueGetter<User>): string => {
+                return data.element.details.city;
+            },
+        },
         // {
         //     field: 'details.cap',
         //     headerName: 'cap',

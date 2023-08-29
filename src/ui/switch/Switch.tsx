@@ -57,7 +57,7 @@ const SwitchComponent: FC<ISwitch> = ({ disable, label, selected, showIcons }): 
                     </div>
                 </div>
             </button>
-            <label htmlFor="basic-switch">{label}</label>
+            <label htmlFor="basic-switch" className='mdc-custom-switch-label'>{label}</label>
         </>
     );
 };
