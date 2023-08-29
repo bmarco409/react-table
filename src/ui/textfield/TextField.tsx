@@ -6,9 +6,10 @@ import './textfield.scss';
 interface ITextField {
     readonly hintText?: string;
     readonly placeHolder?: string;
+    readonly className?: string;
 }
 
-const TextFieldComponent: FC<ITextField> = ({ hintText, placeHolder }): ReactElement => {
+const TextFieldComponent: FC<ITextField> = ({ hintText, placeHolder , className}): ReactElement => {
     const textfieldRef = useRef<HTMLLabelElement>(null);
     let textField: Maybe<MDCTextField> = undefined;
 
@@ -24,7 +25,7 @@ const TextFieldComponent: FC<ITextField> = ({ hintText, placeHolder }): ReactEle
     return (
         <>
             <label
-                className="mdc-text-field mdc-text-field--filled mdc-custom-textfield"
+                className={`mdc-text-field mdc-text-field--filled mdc-custom-textfield ${className}`}
                 ref={textfieldRef}
                 onFocus={onFocus}
             >

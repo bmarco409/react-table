@@ -11,12 +11,13 @@ interface ISwitch {
     readonly label?: string;
     readonly selected?: boolean;
     readonly showIcons?: boolean;
+    readonly onChange?: (selected: boolean) => void;
 }
 
 const SELECTED_CLASS = 'mdc-switch--selected';
 const UNSELETED_CLASS = 'mdc-switch--unselected';
 
-const SwitchComponent: FC<ISwitch> = ({ disable, label, selected, showIcons }): ReactElement => {
+const SwitchComponent: FC<ISwitch> = ({ disable, label, selected, showIcons, onChange }): ReactElement => {
     const isSelected = equals<Maybe<boolean>>(true);
     const switchRef = useRef<HTMLButtonElement>(null);
     let button: Maybe<MDCSwitch> = undefined;
@@ -38,6 +39,7 @@ const SwitchComponent: FC<ISwitch> = ({ disable, label, selected, showIcons }): 
                 aria-checked={setAriaChecked}
                 ref={switchRef}
                 disabled={disable ? disable : false}
+                onClick={(): void => onChange?.(button?.selected ?? false)}
             >
                 <div className="mdc-switch__track"></div>
                 <div className="mdc-switch__handle-track">
