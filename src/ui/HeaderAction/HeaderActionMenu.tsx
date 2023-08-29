@@ -25,6 +25,7 @@ const HeaderActionMenuComponent: FC<IHeaderActionMenu> = ({
 }): ReactElement => {
     const isVisible = either(equals<Maybe<boolean>>(false), isNil);
 
+
     return (
         <>
             <div className={`header-row-menu ${className}`}>

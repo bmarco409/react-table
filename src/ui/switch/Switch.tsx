@@ -27,6 +27,7 @@ const SwitchComponent: FC<ISwitch> = ({ disable, label, selected, showIcons, onC
         if (switchRef.current) {
             button = new MDCSwitch(switchRef.current);
             button.initialize();
+            button.selected;
         }
     }, [switchRef]);
 
@@ -39,7 +40,7 @@ const SwitchComponent: FC<ISwitch> = ({ disable, label, selected, showIcons, onC
                 aria-checked={setAriaChecked}
                 ref={switchRef}
                 disabled={disable ? disable : false}
-                onClick={(): void => onChange?.(button?.selected ?? false)}
+                onClick={(): void => onChange?.(button?.selected ?? false )}
             >
                 <div className="mdc-switch__track"></div>
                 <div className="mdc-switch__handle-track">
@@ -59,7 +60,9 @@ const SwitchComponent: FC<ISwitch> = ({ disable, label, selected, showIcons, onC
                     </div>
                 </div>
             </button>
-            <label htmlFor="basic-switch" className='mdc-custom-switch-label'>{label}</label>
+            <label htmlFor="basic-switch" className="mdc-custom-switch-label">
+                {label}
+            </label>
         </>
     );
 };

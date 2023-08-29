@@ -8,7 +8,7 @@ interface ICheckBoxInput {
     readonly onChange?: (value: RowId) => void;
 }
 
-const CheckBoxInput: FC<ICheckBoxInput> = ({ value, checked, onChange }): ReactElement => {
+const CheckBoxComponent: FC<ICheckBoxInput> = ({ value, checked, onChange }): ReactElement => {
     const onCheckBoxChange = (value: RowId): void => {
         onChange?.(value);
     };
@@ -30,4 +30,4 @@ const CheckBoxInput: FC<ICheckBoxInput> = ({ value, checked, onChange }): ReactE
     );
 };
 
-export const CheckBoxInputComponent = memo(CheckBoxInput);
+export const Checkbox = memo(CheckBoxComponent);

@@ -21,6 +21,7 @@ export interface ICoulmDefinition<T> {
     readonly width?: number;
     readonly resizable?: boolean;
     readonly hideable?: boolean;
+    readonly hide?: boolean;
 }
 
 export type ColumnType =
@@ -42,4 +43,9 @@ interface RowParams {
 
 export interface ValueGetter<T> {
     readonly element: T;
+}
+
+export interface HideColumnValue {
+    readonly field: string;
+    readonly state: boolean;
 }

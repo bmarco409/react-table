@@ -4,7 +4,7 @@ import { ICoulmDefinition } from '../interfaces/column-def.interface';
 import { TABLE_SCROLL_HORIZZONTAL } from './const';
 import { Maybe } from './customTypes';
 
-export const UseApplyStyle = <T,>(
+export const useApplyStyle = <T,>(
     columnsDefinitions: ICoulmDefinition<T>[],
     tableRef: React.RefObject<HTMLTableElement>,
     scrollHorizzontal?: boolean,

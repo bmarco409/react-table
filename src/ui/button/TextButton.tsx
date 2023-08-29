@@ -6,14 +6,15 @@ import { UseButton } from './useButton';
 interface ITextButton extends IButton {
     readonly icon?: ReactNode;
     readonly label?: string;
+    readonly onClick?: () => void;
 }
 
-const TextButtonComponent: FC<ITextButton> = ({ icon, label, size }): ReactElement => {
+const TextButtonComponent: FC<ITextButton> = ({ icon, label, size , onClick}): ReactElement => {
     const { buttonRef, style } = UseButton({ size });
 
     return (
         <>
-            <button className="mdc-button mdc-button--icon-leading mdc-custom-button" style={style} ref={buttonRef}>
+            <button className="mdc-button mdc-button--icon-leading mdc-custom-button" style={style} ref={buttonRef} onClick={onClick}>
                 <span className="mdc-button__ripple"></span>
                 <span className="mdc-button__touch"></span>
                 {icon && (

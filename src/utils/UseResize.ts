@@ -1,5 +1,5 @@
 import { compose, find, gte, isNotNil, lte, nth, replace, trim, whereEq } from 'ramda';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ICoulmDefinition } from '../interfaces/column-def.interface';
 import { IHeader } from '../interfaces/header';
 import { Nullable } from './customTypes';
@@ -14,7 +14,6 @@ export const useResize = <T>({
     headers: IHeader[];
 }): { activeIndex: Nullable<number>; onMouseDown: (index: number) => void } => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
-    const tableMinWidth = useMemo(() => tableRef.current?.offsetWidth ?? 0, [headers]);
     let lastPosition = 0;
     let delta = 0;
     const mouseMove = useCallback(

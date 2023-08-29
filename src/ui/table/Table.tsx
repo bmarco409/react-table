@@ -4,7 +4,6 @@ import {
     anyPass,
     append,
     curry,
-    either,
     equals,
     find,
     ifElse,
@@ -14,21 +13,20 @@ import {
     pick,
     pluck,
     reject,
-    whereEq,
+    whereEq
 } from 'ramda';
 import { CSSProperties, ReactElement, createRef, memo, useCallback, useEffect, useRef, useState } from 'react';
-import { ICoulmDefinition, RowId } from '../../interfaces/column-def.interface';
+import { HideColumnValue, ICoulmDefinition, RowId } from '../../interfaces/column-def.interface';
 import { IHeader } from '../../interfaces/header';
 import { Order } from '../../interfaces/order';
 import { Pagination } from '../../interfaces/pagination';
-import { UseApplyStyle } from '../../utils/UseApplyStyle';
+import { useApplyStyle } from '../../utils/UseApplyStyle';
+import { UseaHeaderActionMenu } from '../../utils/UseHeaderActionMenu';
 import { useResize } from '../../utils/UseResize';
 import { Maybe, primitive } from '../../utils/customTypes';
 import { found } from '../../utils/function';
-import { HeaderActionMenu } from '../HeaderAction/HeaderActionMenu';
 import { HeaderCell } from '../header/HeaderCell';
-import { HidableColumsMenuComponent } from '../hidableColumnsMenu/HidableComunsMenu';
-import { CheckBoxInputComponent } from '../input/CheckBoxInput';
+import { Checkbox } from '../input/CheckBoxInput';
 import { Paginator } from '../paginator/Paginator';
 import { LinearProgressBar } from '../progressBar/LinearProgressBar';
 import './table.scss';
@@ -49,6 +47,7 @@ export interface ITableComponent<T> {
     readonly hideColumnFilter?: boolean;
     readonly hideColumnSelector?: boolean;
     readonly hideDensitySelector?: boolean;
+    readonly onHideColumnChange?: (value: HideColumnValue) => void;
 }
 
 export const TableComponent = <T,>({
@@ -66,14 +65,15 @@ export const TableComponent = <T,>({
     onRowSelectionModelChange,
     hideColumnFilter,
     hideColumnSelector,
-    hideDensitySelector
+    hideDensitySelector,
+    onHideColumnChange
 }: ITableComponent<T>): ReactElement => {
     const [allRowsSelected, setAllRowsSelected] = useState<boolean>(false);
     const [selectedRows, setSelectedRows] = useState<RowId[]>([]);
     const tableRef = useRef<HTMLTableElement>(null);
     const mapRowsWithIndex = addIndex<object, number>(map);
 
-    const { emptyCell, emptyHeader, tableStyle } = UseApplyStyle(
+    const { emptyCell, emptyHeader, tableStyle } = useApplyStyle(
         columnsDefinitions,
         tableRef,
         scrollHorizzontal,
@@ -85,31 +85,10 @@ export const TableComponent = <T,>({
     }, [rows]);
 
     /***render header (HeaderComponent) */
-    const isVisibleActionHeader = either(equals<Maybe<boolean>>(false), isNil);
 
-    const showActionHeader = isVisibleActionHeader(hideColumnFilter) || 
-        isVisibleActionHeader(hideColumnSelector) || 
-        isVisibleActionHeader(hideDensitySelector);
+    const { actionMenu, columnHideableMenu} = UseaHeaderActionMenu({columnsDefinitions,hideColumnFilter,
+        hideColumnSelector, hideDensitySelector, onHideColumnChange })
 
-
-    const renderActionMenu = (): ReactElement =>{
-        if(!showActionHeader){
-            return <></>
-        }
-
-        const onColumnsClick = (): void =>{
-            return;
-        }
-
-        return (
-            <HeaderActionMenu className="mdc-custom-header-menu" 
-                hideColumnFilter={hideColumnFilter} 
-                hideColumnSelector={hideColumnSelector} 
-                hideDensitySelector={hideDensitySelector}
-                onColumnsClick={onColumnsClick}
-            />
-        )
-    }
 
     const pickHeaderData: (data: ICoulmDefinition<T>) => IHeader = pick(['headerName', 'sortable', 'field']);
 
@@ -181,7 +160,7 @@ export const TableComponent = <T,>({
                 scope="col"
             >
                 <div className={`mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox`}>
-                    <CheckBoxInputComponent value={'ALL'} onChange={onHeaderCheckBoxChange} />
+                    <Checkbox value={'ALL'} onChange={onHeaderCheckBoxChange} />
                 </div>
             </th>
         );
@@ -194,7 +173,7 @@ export const TableComponent = <T,>({
         return (
             <td className="mdc-data-table__cell mdc-data-table__cell--checkbox mdc-custom-checkbox-cell" role="cell">
                 <div className="mdc-checkbox mdc-data-table__row-checkbox">
-                    <CheckBoxInputComponent
+                    <Checkbox
                         value={rowIndex}
                         checked={setSelected(found(rowIndex, selectedRows))}
                         onChange={onCheckBoxChange}
@@ -260,9 +239,9 @@ export const TableComponent = <T,>({
         <>
             <div className="mdc-data-table">
                 <div className="mdc-data-table__table-container">
-                    {renderActionMenu()}
+                    {actionMenu}
+                    {columnHideableMenu}
                     <table className="mdc-data-table__table" ref={tableRef} style={tableStyle}>
-                        <HidableColumsMenuComponent columnsDefinitions={columnsDefinitions} open={true}/>
                         <thead>
                             <tr className="mdc-data-table__header-row">
                                 {checkboxSelection && headerCheckBox()}

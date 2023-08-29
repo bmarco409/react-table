@@ -9,7 +9,7 @@ interface ITextField {
     readonly className?: string;
 }
 
-const TextFieldComponent: FC<ITextField> = ({ hintText, placeHolder , className}): ReactElement => {
+const TextFieldComponent: FC<ITextField> = ({ hintText, placeHolder, className }): ReactElement => {
     const textfieldRef = useRef<HTMLLabelElement>(null);
     let textField: Maybe<MDCTextField> = undefined;
 
