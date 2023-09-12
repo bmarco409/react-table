@@ -1,6 +1,6 @@
 import { MDCSwitch } from '@material/switch/component';
 import { always, equals, ifElse } from 'ramda';
-import { FC, ReactElement, memo, useEffect, useRef } from 'react';
+import { FC, ReactElement, memo, useEffect, useRef, useState } from 'react';
 import { Maybe } from '../../utils/customTypes';
 import { SwitchOffIcon } from '../icons/SwitchOff';
 import { SwitchOnIcon } from '../icons/SwitchOn';
@@ -17,19 +17,27 @@ interface ISwitch {
 const SELECTED_CLASS = 'mdc-switch--selected';
 const UNSELETED_CLASS = 'mdc-switch--unselected';
 
-const SwitchComponent: FC<ISwitch> = ({ disable, label, selected, showIcons, onChange }): ReactElement => {
+const SwitchComponent: FC<ISwitch> = ({ disable, label, selected, showIcons, onChange}): ReactElement => {
     const isSelected = equals<Maybe<boolean>>(true);
     const switchRef = useRef<HTMLButtonElement>(null);
     let button: Maybe<MDCSwitch> = undefined;
     const setSelectedClass = ifElse(isSelected, always(SELECTED_CLASS), always(UNSELETED_CLASS))(selected);
     const setAriaChecked = ifElse(isSelected, always(true), always(false))(selected);
+    const [checked, setCheckd] = useState<boolean>(isSelected(selected))
     useEffect(() => {
         if (switchRef.current) {
             button = new MDCSwitch(switchRef.current);
-            button.initialize();
-            button.selected;
+            button?.initialize();
+          
         }
     }, [switchRef]);
+
+    const onCheckedChange = (): void =>{
+        onChange?.(!checked);
+        setCheckd((prevState) => !prevState);
+
+    }
+    
 
     return (
         <>
@@ -40,7 +48,7 @@ const SwitchComponent: FC<ISwitch> = ({ disable, label, selected, showIcons, onC
                 aria-checked={setAriaChecked}
                 ref={switchRef}
                 disabled={disable ? disable : false}
-                onClick={(): void => onChange?.(button?.selected ?? false )}
+                onClick={onCheckedChange}
             >
                 <div className="mdc-switch__track"></div>
                 <div className="mdc-switch__handle-track">

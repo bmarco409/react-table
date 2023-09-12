@@ -4,7 +4,9 @@ import {
     anyPass,
     append,
     curry,
+    either,
     equals,
+    filter,
     find,
     ifElse,
     isNil,
@@ -12,6 +14,7 @@ import {
     map,
     pick,
     pluck,
+    propSatisfies,
     reject,
     whereEq
 } from 'ramda';
@@ -84,6 +87,9 @@ export const TableComponent = <T,>({
         return mapRowsWithIndex((_val: object, index: number) => index, rows);
     }, [rows]);
 
+
+    const filterHide = either(propSatisfies(equals(true), 'hide'),propSatisfies(isNil, 'hide'));
+       
     /***render header (HeaderComponent) */
 
     const { actionMenu, columnHideableMenu} = UseaHeaderActionMenu({columnsDefinitions,hideColumnFilter,
@@ -97,9 +103,8 @@ export const TableComponent = <T,>({
         ref: createRef<HTMLTableCellElement>(),
     });
 
-    const getHeaderInfo = map(parseHeader, columnsDefinitions);
+    const headers = map(parseHeader, filter(filterHide,columnsDefinitions));
 
-    const headers = getHeaderInfo;
 
     const { activeIndex, onMouseDown } = useResize({ tableRef, columnsDefinitions, headers });
 
@@ -150,7 +155,7 @@ export const TableComponent = <T,>({
 
     const mapHeadersWithIndex = addIndex<IHeader, ReactElement>(map);
 
-    const renderHeader = mapHeadersWithIndex(renderHeaderCell, getHeaderInfo);
+    const renderHeader = mapHeadersWithIndex(renderHeaderCell, headers);
 
     const headerCheckBox = (): ReactElement => {
         return (

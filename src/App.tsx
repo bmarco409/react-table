@@ -128,21 +128,17 @@ function App(): ReactElement {
     };
 
     const hideColumn = (value: HideColumnValue): void =>{
+        console.log('value',value)
 
-        const updated = columns.reduce((acc, c) =>{
-            if(c.field !== value.field){
-                acc.push(c)
-            }else{
-                if(value.state){
-                    acc.push({
-                        ...c,
-                        hide: value.state
-                    })
+        const updated = columns.map((column) => {
+            if(column.field === value.field){
+                return {
+                    ...column,
+                    hide: value.state
                 }
             }
-            
-            return acc;
-        }, [] as ICoulmDefinition<User>[] )
+            return column;
+        })
 
         setColumns(updated);
     

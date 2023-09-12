@@ -1,5 +1,5 @@
 import { either, equals, isNil } from "ramda";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useState } from "react";
 import { HideColumnValue, ICoulmDefinition } from "../interfaces/column-def.interface";
 import { HeaderActionMenu } from "../ui/HeaderAction/HeaderActionMenu";
 import { HidableColumsMenuComponent } from "../ui/hidableColumnsMenu/HidableComunsMenu";
@@ -25,7 +25,6 @@ export const UseaHeaderActionMenu = <T,>({
     const showActionHeader = isVisibleActionHeader(hideColumnFilter) || 
         isVisibleActionHeader(hideColumnSelector) || 
         isVisibleActionHeader(hideDensitySelector);
-        useEffect(() =>{ console.log('H ',showHideableMenu)},[showHideableMenu]);
 
     const renderActionMenu = (): ReactElement =>{
         if(!showActionHeader){
