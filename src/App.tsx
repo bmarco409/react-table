@@ -170,7 +170,7 @@ function App(): ReactElement {
                  */}
             </div>
 
-            <TableComponent
+            <TableComponent<User>
                 columnsDefinitions={columns}
                 rows={data}
                 pageSizeOptions={[5, 10, 15]}

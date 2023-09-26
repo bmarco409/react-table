@@ -16,7 +16,7 @@ export const UseButton = ({
 } => {
     const isSmall = equals<Maybe<Size>>('small');
     const isMedium = equals<Maybe<Size>>('medium');
-    //const isLarge = equals<Size>('large');
+    const isLarge = equals<Maybe<Size>>('large');
 
     const buttonRef = useRef<HTMLButtonElement>(null);
     let button: Maybe<MDCRipple> = undefined;
@@ -31,12 +31,14 @@ export const UseButton = ({
     const setHeight = cond([
         [isSmall, always(30)],
         [isMedium, always(36)],
+        [isLarge, always(42)],
         [T, always(undefined)],
     ]);
 
     const setFontsize = cond([
         [isSmall, always('0.8125rem')],
         [isMedium, always('0.875rem')],
+        [isMedium, always('0.9375rem')],
         [T, always(undefined)],
     ]);
 

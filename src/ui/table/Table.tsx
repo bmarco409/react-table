@@ -3,7 +3,7 @@ import {
     always,
     anyPass,
     append,
-    curry,
+    dissoc,
     either,
     equals,
     filter,
@@ -36,7 +36,7 @@ import './table.scss';
 
 export interface ITableComponent<T> {
     readonly columnsDefinitions: ICoulmDefinition<T>[];
-    readonly rows: object[];
+    readonly rows: T[];
     readonly pageSizeOptions: number[];
     readonly paginationModel: Pagination;
     readonly checkboxSelection?: boolean;
@@ -74,7 +74,7 @@ export const TableComponent = <T,>({
     const [allRowsSelected, setAllRowsSelected] = useState<boolean>(false);
     const [selectedRows, setSelectedRows] = useState<RowId[]>([]);
     const tableRef = useRef<HTMLTableElement>(null);
-    const mapRowsWithIndex = addIndex<object, number>(map);
+    const mapRowsWithIndex = addIndex<T, number>(map);
 
     const { emptyCell, emptyHeader, tableStyle } = useApplyStyle(
         columnsDefinitions,
@@ -84,11 +84,16 @@ export const TableComponent = <T,>({
     );
 
     const rowsIndexValues = useCallback(() => {
-        return mapRowsWithIndex((_val: object, index: number) => index, rows);
+        return mapRowsWithIndex((_val: T, index: number) => index, rows);
     }, [rows]);
 
 
-    const filterHide = either(propSatisfies(equals(true), 'hide'),propSatisfies(isNil, 'hide'));
+    const filterHide: (obj:  ICoulmDefinition<T>) => boolean = either(
+        propSatisfies(equals(true), 'hide'),
+        propSatisfies(isNil, 'hide')
+    );
+
+    const columnsWithoutHide = filter(filterHide,columnsDefinitions)
        
     /***render header (HeaderComponent) */
 
@@ -103,7 +108,7 @@ export const TableComponent = <T,>({
         ref: createRef<HTMLTableCellElement>(),
     });
 
-    const headers = map(parseHeader, filter(filterHide,columnsDefinitions));
+    const headers = map(parseHeader, columnsWithoutHide);
 
 
     const { activeIndex, onMouseDown } = useResize({ tableRef, columnsDefinitions, headers });
@@ -173,7 +178,7 @@ export const TableComponent = <T,>({
 
     /**** render Body (BodyComponent)*/
 
-    const rowCheckBox = (_element: object, rowIndex: number): ReactElement => {
+    const rowCheckBox = (_element: T, rowIndex: number): ReactElement => {
         const setSelected = ifElse(isNil, always(false), always(true));
         return (
             <td className="mdc-data-table__cell mdc-data-table__cell--checkbox mdc-custom-checkbox-cell" role="cell">
@@ -188,9 +193,9 @@ export const TableComponent = <T,>({
         );
     };
 
-    const valueKeys = pluck('field', columnsDefinitions);
+    const valueKeys = pluck('field',columnsWithoutHide);
 
-    const renderCell = (element: object, row: number, field: string): ReactElement => {
+    const renderCell = (element: T, row: number, field: string): ReactElement => {
         const column = find(whereEq({ field: field }), columnsDefinitions);
         const isValueGetter = isNotNil(column?.valueGetter);
 
@@ -224,15 +229,21 @@ export const TableComponent = <T,>({
         );
     };
 
-    const curriedRenderCell = curry(renderCell);
 
-    const prepareRow = (obj: object, row: number): unknown => map(curriedRenderCell(obj, row), valueKeys);
+   
+    //const prepareRow = (obj: T, row: number): unknown => map(curriedRenderCell(obj, row), valueKeys)
+
+    const removeHideProperty  = (prop: keyof object, obj: object) : object => dissoc(prop, obj)
+
+    //const puddu = keys()
+
 
     const renderRows = rows.map((element, index) => {
         return (
             <tr className="mdc-data-table__row" key={index}>
                 {checkboxSelection && rowCheckBox(element, index)}
-                <>{prepareRow(element, index)}</>
+                {valueKeys.map((key) => renderCell(element,index,key)) }
+                {/* <>{prepareRow(element, index)}</> */}
                 {emptyCell}
             </tr>
         );
